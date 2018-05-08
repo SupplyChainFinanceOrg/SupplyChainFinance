@@ -9,3 +9,9 @@ CREATE TABLE `tb_att_apply` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ---------------------------------------------------------------------------
+
+-----------------------字段-----------------------------------------------
+ALTER TABLE `tb_comp`
+CHANGE COLUMN `employees
+_count` `employees_count`  int(20) NULL DEFAULT NULL COMMENT '员工数量' AFTER `comp_email`
+---------------------------------------------------------------------
