@@ -1,0 +1,57 @@
+<% layout('/layouts/default.html'){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header with-border">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> 查看合同内容
+			</div>
+			<ul class="nav nav-tabs pull-right">
+				<li class="active"><a 
+					style="text-decoration: none; color: #969696;cursor: pointer;" data-toggle="tab"
+					aria-expanded="true" onclick="chengeTab(1)">合同1</a></li>
+				<li class=""><a 
+					style="text-decoration: none; color: #969696;cursor: pointer;" data-toggle="tab"
+					aria-expanded="false" onclick="chengeTab(2)">合同2</a></li>
+				<li class=""><a 
+					style="text-decoration: none; color: #969696;cursor: pointer;" data-toggle="tab"
+					aria-expanded="false" onclick="chengeTab(3)">合同3</a></li>
+				<li class=""><a 
+					style="text-decoration: none; color: #969696;cursor: pointer;" data-toggle="tab"
+					aria-expanded="false" onclick="chengeTab(4)">合同4</a></li>
+			</ul>
+		</div>
+		<div id="tab-1" style="padding: 50px;">1111111 ${printStr}</div>
+		<div id="tab-2" style="padding: 50px;display: none;">2222222 ${printStr}</div>
+		<div id="tab-3" style="padding: 50px;display: none;">3333333 ${printStr}</div>
+		<div id="tab-4" style="padding: 50px;display: none;">4444444 ${printStr}</div>
+	</div>
+</div>
+<% } %>
+<script>
+	function chengeTab(index) {
+		if (index == 1) {
+			document.getElementById("tab-1").style.display="";//显示
+			document.getElementById("tab-2").style.display="none";//隐藏
+			document.getElementById("tab-3").style.display="none";//显示
+			document.getElementById("tab-4").style.display="none";//隐藏
+		}
+		if (index == 2) {
+			document.getElementById("tab-1").style.display="none";//显示
+			document.getElementById("tab-2").style.display="";//隐藏
+			document.getElementById("tab-3").style.display="none";//显示
+			document.getElementById("tab-4").style.display="none";//隐藏
+		}
+		if (index == 3) {
+			document.getElementById("tab-1").style.display="none";//显示
+			document.getElementById("tab-2").style.display="none";//隐藏
+			document.getElementById("tab-3").style.display="";//显示
+			document.getElementById("tab-4").style.display="none";//隐藏
+		}
+		if (index == 4) {
+			document.getElementById("tab-1").style.display="none";//显示
+			document.getElementById("tab-2").style.display="none";//隐藏
+			document.getElementById("tab-3").style.display="none";//显示
+			document.getElementById("tab-4").style.display="";//隐藏
+		}
+	}
+</script>

@@ -17,16 +17,15 @@ demoMode: false
 #============================#
 #===== Database sttings =====#
 #============================#
-
 # 数据库连接
 jdbc: 
   
   # Mysql 数据库配置
   type: mysql
   driver: com.mysql.jdbc.Driver
-  url: jdbc:mysql://159.65.108.22:3306/jeesite?useUnicode=true&characterEncoding=utf-8 
+  url: jdbc:mysql://127.0.0.1:3306/jeesite?useUnicode=true&characterEncoding=utf-8 
   username: root
-  password: Gyl2018.b
+  password: hanzl
   testSql: SELECT 1
 #
 #  # Oracle 数据库配置
@@ -395,7 +394,7 @@ jdbc:
 #===== Message settings =====#
 #============================#
 
-#msg:
+msg:
 #
 #  # 是否开启实时发送消息（保存消息后立即检查未读消息并发送），分布式部署下请单独配置消息发送服务，不建议开启此选项。
 #  realtime:
@@ -403,7 +402,7 @@ jdbc:
 #    enabled: true
 #    # 消息发送任务Bean名称
 #    sendTaskBeanName: msgLocalSendTask
-#
+# 你
 #  # 邮件发送参数
 #  email:
 #    fromAddress: test@163.com
@@ -414,9 +413,9 @@ jdbc:
 #
 #  # 短信网关
 #  sms:
-#    url: http://host:port/msg/sendSms
-#    data: account=demo&pswd=demo&product=
-#    suffix: 【JeeSite】
+   url: http://host:port/msg/sendSms
+   data: account=demo&pswd=demo&product=
+   suffix: 【大雁金服】
 #
 #  # 微信相关
 #  weixin:
@@ -456,3 +455,5 @@ jdbc:
 #===== Project settings =====#
 #============================#
 
+#html 转换 pdf 字体路径
+fontPath : d:/simsun.ttc
