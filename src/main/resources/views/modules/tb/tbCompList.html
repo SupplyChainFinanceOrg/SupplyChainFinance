@@ -1,14 +1,14 @@
-<% layout('/layouts/default.html', {title: 'tb_comp管理', libs: ['dataGrid']}){ %>
+<% layout('/layouts/default.html', {title: '企业管理', libs: ['dataGrid']}){ %>
 <div class="main-content">
 	<div class="box box-main">
 		<div class="box-header">
 			<div class="box-title">
-				<i class="fa fa-list-alt"></i> ${text('tb_comp管理')}
+				<i class="fa fa-list-alt"></i> ${text('企业管理')}
 			</div>
 			<div class="box-tools pull-right">
 				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
 				<% if(hasPermi('tb:tbComp:edit')){ %>
-					<a href="${ctx}/tb/tbComp/form" class="btn btn-default btnTool" title="${text('新增tb_comp')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+					<a href="${ctx}/tb/tbComp/form" class="btn btn-default btnTool" title="${text('新增企业')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
 				<% } %>
 			</div>
 		</div>
@@ -48,7 +48,6 @@
 				<div class="form-group">
 					<label class="control-label">公司性质id：</label>
 					<div class="control-inline">
-						<#form:input path="natureId" maxlength="2" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -58,15 +57,20 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">企业类型 0借款企业 1核心企业 2金融机构：</label>
+					<label class="control-label">员工数量：</label>
 					<div class="control-inline">
-						<#form:input path="compType" maxlength="1" class="form-control width-120"/>
+						<#form:input path="employeesCount" maxlength="20" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">企业类型：</label>
+					<div class="control-inline width-120">
+						<#form:select path="compType" dictType="company_type" blankOption="true" class="form-control"/>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="control-label">审核状态：</label>
-					<div class="control-inline">
-						<#form:input path="applyState" maxlength="11" class="form-control width-120"/>
+					<div class="control-inline width-120">
 					</div>
 				</div>
 				<div class="form-group">
@@ -88,12 +92,6 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">员工数量：</label>
-					<div class="control-inline">
-						<#form:input path="employeesCount" maxlength="20" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
 					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
 					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
 				</div>
@@ -110,31 +108,37 @@ $('#dataGrid').dataGrid({
 	searchForm: $("#searchForm"),
 	columnModel: [
 		{header:'企业名称', name:'compName', index:'a.comp_name', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
-			return '<a href="${ctx}/tb/tbComp/form?id='+row.id+'" class="btnList" data-title="${text('编辑tb_comp')}">'+(val||row.id)+'</a>';
+			return '<a href="${ctx}/tb/tbComp/form?id='+row.id+'" class="btnList" data-title="${text('编辑企业')}">'+(val||row.id)+'</a>';
 		}},
-		{header:'统一社会信用代码', name:'compCode', index:'a.comp_code', width:150, align:"left"},
+		{header:'信用代码', name:'compCode', index:'a.comp_code', width:150, align:"left"},
 		{header:'注册资金', name:'registerMoney', index:'a.register_money', width:150, align:"left"},
 		{header:'企业法人', name:'compLegalPerson', index:'a.comp_legal_person', width:150, align:"left"},
 		{header:'企业联系人', name:'compContact', index:'a.comp_contact', width:150, align:"left"},
-		{header:'公司性质id', name:'natureId', index:'a.nature_id', width:150, align:"center"},
+		{header:'公司性质', name:'natureId', index:'a.nature_id', width:150, align:"center", formatter: function(val, obj, row, act){
+			return js.getDictLabel(${@DictUtils.getDictListJson('')}, val, '${text('未知')}', true);
+		}},
 		{header:'所属行业', name:'industry', index:'a.industry', width:150, align:"left"},
-		{header:'企业类型 0借款企业 1核心企业 2金融机构', name:'compType', index:'a.comp_type', width:150, align:"center"},
-		{header:'审核状态', name:'applyState', index:'a.apply_state', width:150, align:"center"},
+		{header:'员工数量', name:'employeesCount', index:'a.employees_count', width:150, align:"center"},
+		{header:'企业类型', name:'compType', index:'a.comp_type', width:150, align:"center", formatter: function(val, obj, row, act){
+			return js.getDictLabel(${@DictUtils.getDictListJson('company_type')}, val, '${text('未知')}', true);
+		}},
+		{header:'审核状态', name:'applyState', index:'a.apply_state', width:150, align:"center", formatter: function(val, obj, row, act){
+			return js.getDictLabel(${@DictUtils.getDictListJson('')}, val, '${text('未知')}', true);
+		}},
 		{header:'注册日期', name:'applyDate', index:'a.apply_date', width:150, align:"center"},
 		{header:'操作人', name:'operationUserId', index:'a.operation_user_id', width:150, align:"left"},
 		{header:'操作时间', name:'operationData', index:'a.operation_data', width:150, align:"center"},
-		{header:'员工数量', name:'employeesCount', index:'a.employees_count', width:150, align:"center"},
 		{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('tb:tbComp:edit')){ %>
-				actions.push('<a href="${ctx}/tb/tbComp/form?id='+row.id+'" class="btnList" title="${text('编辑tb_comp')}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/tb/tbComp/form?id='+row.id+'" class="btnList" title="${text('编辑企业')}"><i class="fa fa-pencil"></i></a>&nbsp;');
 				if (row.status == Global.STATUS_NORMAL){
-					actions.push('<a href="${ctx}/tb/tbComp/disable?id='+row.id+'" class="btnList" title="${text('停用tb_comp')}" data-confirm="${text('确认要停用该tb_comp吗？')}"><i class="glyphicon glyphicon-ban-circle"></i></a>&nbsp;');
+					actions.push('<a href="${ctx}/tb/tbComp/disable?id='+row.id+'" class="btnList" title="${text('停用企业')}" data-confirm="${text('确认要停用该企业吗？')}"><i class="glyphicon glyphicon-ban-circle"></i></a>&nbsp;');
 				}
 				if (row.status == Global.STATUS_DISABLE){
-					actions.push('<a href="${ctx}/tb/tbComp/enable?id='+row.id+'" class="btnList" title="${text('启用tb_comp')}" data-confirm="${text('确认要启用该tb_comp吗？')}"><i class="glyphicon glyphicon-ok-circle"></i></a>&nbsp;');
+					actions.push('<a href="${ctx}/tb/tbComp/enable?id='+row.id+'" class="btnList" title="${text('启用企业')}" data-confirm="${text('确认要启用该企业吗？')}"><i class="glyphicon glyphicon-ok-circle"></i></a>&nbsp;');
 				}
-				actions.push('<a href="${ctx}/tb/tbComp/delete?id='+row.id+'" class="btnList" title="${text('删除tb_comp')}" data-confirm="${text('确认要删除该tb_comp吗？')}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/tb/tbComp/delete?id='+row.id+'" class="btnList" title="${text('删除企业')}" data-confirm="${text('确认要删除该企业吗？')}"><i class="fa fa-trash-o"></i></a>&nbsp;');
 			<% } %>
 			return actions.join('');
 		}}

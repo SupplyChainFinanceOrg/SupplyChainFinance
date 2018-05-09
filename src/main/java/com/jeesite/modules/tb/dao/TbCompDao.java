@@ -10,7 +10,7 @@ import com.jeesite.modules.tb.entity.TbComp;
 /**
  * tb_compDAO接口
  * @author zheng
- * @version 2018-05-08
+ * @version 2018-05-09
  */
 @MyBatisDao
 public interface TbCompDao extends CrudDao<TbComp> {

@@ -25,7 +25,7 @@ import com.jeesite.modules.tb.service.TbCompService;
 /**
  * tb_compController
  * @author zheng
- * @version 2018-05-08
+ * @version 2018-05-09
  */
 @Controller
 @RequestMapping(value = "${adminPath}/tb/tbComp")
@@ -72,24 +72,20 @@ public class TbCompController extends BaseController {
 		model.addAttribute("tbComp", tbComp);
 		return "modules/tb/tbCompForm";
 	}
-	@RequestMapping(value = "regUser")
-	public String reguser(TbComp tbComp, Model model) {
-		model.addAttribute("tbComp", tbComp);
-		return "modules/tb/tbCompForm";
-	}
+
 	/**
-	 * 保存tb_comp
+	 * 保存企业
 	 */
 	@RequiresPermissions("tb:tbComp:edit")
 	@PostMapping(value = "save")
 	@ResponseBody
 	public String save(@Validated TbComp tbComp) {
 		tbCompService.save(tbComp);
-		return renderResult(Global.TRUE, "保存tb_comp成功！");
+		return renderResult(Global.TRUE, "保存企业成功！");
 	}
 	
 	/**
-	 * 停用tb_comp
+	 * 停用企业
 	 */
 	@RequiresPermissions("tb:tbComp:edit")
 	@RequestMapping(value = "disable")
@@ -97,11 +93,11 @@ public class TbCompController extends BaseController {
 	public String disable(TbComp tbComp) {
 		tbComp.setStatus(TbComp.STATUS_DISABLE);
 		tbCompService.updateStatus(tbComp);
-		return renderResult(Global.TRUE, "停用tb_comp成功");
+		return renderResult(Global.TRUE, "停用企业成功");
 	}
 	
 	/**
-	 * 启用tb_comp
+	 * 启用企业
 	 */
 	@RequiresPermissions("tb:tbComp:edit")
 	@RequestMapping(value = "enable")
@@ -109,18 +105,18 @@ public class TbCompController extends BaseController {
 	public String enable(TbComp tbComp) {
 		tbComp.setStatus(TbComp.STATUS_NORMAL);
 		tbCompService.updateStatus(tbComp);
-		return renderResult(Global.TRUE, "启用tb_comp成功");
+		return renderResult(Global.TRUE, "启用企业成功");
 	}
 	
 	/**
-	 * 删除tb_comp
+	 * 删除企业
 	 */
 	@RequiresPermissions("tb:tbComp:edit")
 	@RequestMapping(value = "delete")
 	@ResponseBody
 	public String delete(TbComp tbComp) {
 		tbCompService.delete(tbComp);
-		return renderResult(Global.TRUE, "删除tb_comp成功！");
+		return renderResult(Global.TRUE, "删除企业成功！");
 	}
 	
 }

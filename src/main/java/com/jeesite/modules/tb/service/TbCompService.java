@@ -17,7 +17,7 @@ import com.jeesite.modules.file.utils.FileUploadUtils;
 /**
  * tb_compService
  * @author zheng
- * @version 2018-05-08
+ * @version 2018-05-09
  */
 @Service
 @Transactional(readOnly=true)

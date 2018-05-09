@@ -17,7 +17,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * tb_compEntity
  * @author zheng
- * @version 2018-05-08
+ * @version 2018-05-09
  */
 @Table(name="tb_comp", alias="a", columns={
 		@Column(name="id", attrName="id", label="id", isPK=true),
@@ -43,7 +43,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="comp_phone", attrName="compPhone", label="公司电话"),
 		@Column(name="comp_email", attrName="compEmail", label="公司邮箱"),
 		@Column(name="employees_count", attrName="employeesCount", label="员工数量"),
-		@Column(name="comp_type", attrName="compType", label="企业类型 0借款企业 1核心企业 2金融机构"),
+		@Column(name="comp_type", attrName="compType", label="企业类型"),
 		@Column(name="apply_state", attrName="applyState", label="审核状态"),
 		@Column(name="apply_date", attrName="applyDate", label="注册日期"),
 		@Column(name="operation_user_id", attrName="operationUserId", label="操作人"),
@@ -51,7 +51,6 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="comp_profile_attachment", attrName="compProfileAttachment", label="企业简介附件"),
 		@Column(name="articles_association", attrName="articlesAssociation", label="企业章程附件  核心企业上传"),
 		@Column(name="capital_verification_report", attrName="capitalVerificationReport", label="验资报告附件  核心企业上传"),
-		@Column(name="employees_count", attrName="employeesCount", label="员工数量"),
 	}, orderBy="a.id DESC"
 )
 public class TbComp extends DataEntity<TbComp> {
@@ -79,7 +78,7 @@ public class TbComp extends DataEntity<TbComp> {
 	private String compPhone;		// 公司电话
 	private String compEmail;		// 公司邮箱
 	private Long employeesCount;		// 员工数量
-	private Integer compType;		// 企业类型 0借款企业 1核心企业 2金融机构
+	private Integer compType;		// 企业类型
 	private Long applyState;		// 审核状态
 	private Date applyDate;		// 注册日期
 	private String operationUserId;		// 操作人
@@ -277,7 +276,13 @@ public class TbComp extends DataEntity<TbComp> {
 		this.compEmail = compEmail;
 	}
 	
-	
+	public Long getEmployeesCount() {
+		return employeesCount;
+	}
+
+	public void setEmployeesCount(Long employeesCount) {
+		this.employeesCount = employeesCount;
+	}
 	
 	public Integer getCompType() {
 		return compType;
@@ -347,14 +352,6 @@ public class TbComp extends DataEntity<TbComp> {
 
 	public void setCapitalVerificationReport(String capitalVerificationReport) {
 		this.capitalVerificationReport = capitalVerificationReport;
-	}
-	
-	public Long getEmployeesCount() {
-		return employeesCount;
-	}
-
-	public void setEmployeesCount(Long employeesCount) {
-		this.employeesCount = employeesCount;
 	}
 	
 }
