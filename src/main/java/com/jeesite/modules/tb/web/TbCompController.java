@@ -72,7 +72,11 @@ public class TbCompController extends BaseController {
 		model.addAttribute("tbComp", tbComp);
 		return "modules/tb/tbCompForm";
 	}
-
+	@RequestMapping(value = "regUser")
+	public String reguser(TbComp tbComp, Model model) {
+		model.addAttribute("tbComp", tbComp);
+		return "modules/tb/tbCompForm";
+	}
 	/**
 	 * 保存tb_comp
 	 */
