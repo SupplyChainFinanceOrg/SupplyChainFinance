@@ -1,0 +1,75 @@
+<% layout('/layouts/default.html', {title: '生成配置管理', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa fa-code"></i> 生成配置管理  ${isNotBlank(genTable.parentTableName) ? '( '+genTable.parentTableName+' )' : ''}
+			</div>
+			<div class="box-tools pull-right">
+				<a href="#" class="btn btn-default" id="btnSearch" title="查询"><i class="fa fa-filter"></i> 查询</a>
+				<% if(hasPermi('gen:genTable:edit')){ %>
+					<a href="${ctx}/gen/genTable/form" class="btn btn-default btnTool" title="新增生成配置"><i class="fa fa-plus"></i> 新增</a>
+				<% } %>
+			</div>
+		</div>
+		<div class="box-body">
+			<#form:form id="searchForm" model="${genTable}" action="${ctx}/gen/genTable/listData" method="post" class="form-inline "
+					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
+				<#form:hidden path="parentTableName_isNull"/>
+				<div class="form-group">
+					<label class="control-label">表名：</label>
+					<div class="control-inline">
+						<#form:input path="tableName_like" maxlength="100" class="form-control"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">表说明：</label>
+					<div class="control-inline">
+						<#form:input path="comments" maxlength="100" class="form-control"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-sm">查询</button>
+					<button type="reset" class="btn btn-default btn-sm">重置</button>
+				</div>
+			</#form:form>			
+			<table id="dataGrid"></table>
+			<div id="dataGridPage"></div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+// 初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [
+		{header:'表名', name:'tableName', index:'a.table_name', width:200, align:"left", frozen:true, formatter: function(val, obj, row, act){
+			return '<a href="${ctx}/gen/genTable/form?tableName='+row.tableName+'" class="btnList" data-title="编辑生成配置">'+(val||row.id)+'</a>';
+		}},
+		{header:'表说明', name:'comments', index:'a.comments', width:200, align:"left"},
+		{header:'父表名', name:'parentTableName', hidden:${isBlank(genTable.parentTableName)}, index:'a.parent_table_name', width:200, align:"left"},
+		{header:'子表数', name:'childNum',hidden:${!isBlank(genTable.parentTableName)}, sortable:false, width:80, fixed:true, align:"center", formatter: function(val, obj, row, act){
+			return ('<a href="${ctx}/gen/genTable/list?parentTableName='+row.tableName+'" class="btnList" title="查询子表">&nbsp;&nbsp; '+val+' &nbsp;&nbsp;</a>');
+		}},
+		{header:'功能作者', name:'functionAuthor', index:'a.function_author', width:100, align:"center"},
+		{header:'创建时间', name:'createDate', index:'a.create_date', width:150, fixed:true, align:"center"},
+		{header:'操作', name:'actions', width:100, sortable:false, title:false, formatter: function(val, obj, row, act){
+			var actions = [];
+			<% if(hasPermi('gen:genTable:edit')){ %>
+			actions.push('<a href="${ctx}/gen/genTable/form?tableName='+row.tableName+'&op=step2" class="btnList" title="编辑生成配置"><i class="fa fa-pencil"></i></a>&nbsp;');
+			actions.push('<a href="${ctx}/gen/genTable/delete?tableName='+row.tableName+'" class="btnList" title="删除生成配置" data-confirm="确认要删除该表吗？"><i class="fa fa-trash-o"></i></a>&nbsp;');
+			if (!row.parentExists){
+				actions.push('<a href="${ctx}/gen/genTable/form?tableName='+row.tableName+'&op=step3" class="btnList" title="生成代码"><i class="fa fa-bug"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/gen/genTable/createMenu?tableName='+row.tableName+'" class="btnList" title="创建菜单"><i class="fa fa-bars"></i></a>&nbsp;');
+			}
+			<% } %>
+			return actions.join('');
+		}}
+	],
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+		
+	}
+});
+</script>

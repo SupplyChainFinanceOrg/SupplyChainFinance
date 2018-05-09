@@ -1,0 +1,48 @@
+<% layout('/layouts/default.html', {title: '代码生成管理', libs: ['validate']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa fa-code"></i> ${genTable.isNewRecord ? '新增配置' : '编辑配置'}
+			</div>
+			<div class="box-tools pull-right">
+				<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+			</div>
+		</div>
+		<#form:form id="inputForm" model="${genTable}" action="" method="post" class="form-horizontal">
+			<div class="box-body">
+				<div class="form-unit">基本信息</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group">
+							<label class="control-label col-sm-2">选择表：</label>
+							<div class="col-sm-6">
+								<input type="hidden" name="isNewRecord" value="true"/>
+								<#form:select path="tableName" items="${tableList}" itemLabel="tableNameAndComments" itemValue="tableName" class="form-control"/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="box-footer">
+				<div class="row">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button type="submit" class="btn btn-sm btn-primary" id="btnSubmit"><i class="fa fa-arrow-circle-right"></i> 下一步</button>&nbsp;
+						<button type="button" class="btn btn-sm btn-default" id="btnCancel" onclick="js.closeCurrentTabPage()"><i class="fa fa-reply-all"></i> 关 闭</button>
+					</div>
+				</div>
+			</div>
+		</#form:form>
+	</div>
+</div>
+<% } %>
+<script>
+<% if(isNotBlank(message!)){ %>
+js.showMessage('${message}', null, null, 60000);
+<% } %>
+$("#inputForm").validate({
+	submitHandler: function(form){
+		form.submit();
+    }
+});
+</script>
