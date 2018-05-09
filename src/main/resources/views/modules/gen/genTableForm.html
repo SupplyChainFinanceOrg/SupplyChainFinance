@@ -1,0 +1,310 @@
+<% layout('/layouts/default.html', {title: '代码生成管理', libs: ['validate', 'dataGrid']}){ %>
+<div class="main-content">
+	<div class="nav-tabs-custom nav-main">
+		<ul class="nav nav-tabs pull-right">
+			<li class="${op == 'step3' ? 'active' : ''}"><a href="#tab-3" data-toggle="tab">生成信息</a></li>
+			<li class="${op == 'step2' ? 'active' : ''}"><a href="#tab-2" data-toggle="tab">字段信息</a></li>
+			<li class="${op == 'step1' ? 'active' : ''}"><a href="#tab-1" data-toggle="tab">基本信息</a></li>
+			<li class="pull-left header">
+				<i class="fa fa-code"></i> ${genTable.isNewRecord ? '新增生成配置' : '编辑生成配置'}
+			</li>
+		</ul>
+		<#form:form id="inputForm" model="${genTable}" action="${ctx}/gen/genTable/save" method="post" class="form-horizontal">
+			<div class="tab-content">
+				<div class="tab-pane ${op == 'step1' ? 'active' : ''}" id="tab-1">
+					<div class="box-body">
+						<div class="form-unit">基本信息</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="">
+										<span class="required">*</span> 表名：<i class="fa icon-question hide"></i></label>
+									<div class="col-sm-8">
+										<#form:hidden path="isNewRecord"/>
+										<#form:input path="tableName" maxlength="64" class="form-control required"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="">
+										<span class="required">*</span> 表说明：<i class="fa icon-question hide"></i></label>
+									<div class="col-sm-8">
+										<#form:input path="comments" maxlength="500" class="form-control required"/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="">
+										<span class="required">*</span> 实体类名称：<i class="fa icon-question hide"></i></label>
+									<div class="col-sm-8">
+										<#form:input path="className" maxlength="100" class="form-control required"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="该功能的创始人">
+										<span class="required">*</span> 功能作者：<i class="fa icon-question"></i></label>
+									<div class="col-sm-8">
+										<#form:input path="functionAuthor" maxlength="50" class="form-control required"/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="">
+										<span class="required hide">*</span> 关联父表的表名：<i class="fa icon-question hide"></i></label>
+									<div class="col-sm-8">
+										<#form:select path="parentTableName" items="${tableList}" itemLabel="tableNameAndComments" itemValue="tableName" blankOption="true" maxlength="64" class="form-control"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="">
+										<span class="required hide">*</span> 本表关联的外键名：<i class="fa icon-question hide"></i></label>
+									<div class="col-sm-8">
+										<#form:select path="parentTableFkName" items="${genTable.columnList}" itemLabel="columnNameAndComments" itemValue="columnName" blankOption="true" maxlength="64" class="form-control"/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="form-group">
+									<label class="control-label col-sm-2" title="">
+										<span class="required hide">*</span> 备注信息：<i class="fa icon-question hide"></i></label>
+									<div class="col-sm-10">
+										<#form:textarea path="remarks" rows="4" maxlength="500" class="form-control"/>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="tab-pane ${op == 'step2' ? 'active' : ''}" id="tab-2">
+					<div class="box-body">
+						<table id="dataGrid"></table>
+					</div>
+				</div>
+				<div class="tab-pane ${op == 'step3' ? 'active' : ''}" id="tab-3">
+					<div class="box-body">
+						<% if(genTable.parentExists){ %>
+							<div class="alert alert-info alert-dismissible">
+								<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+								<h4><i class="icon fa fa-info"></i> 提示！</h4>
+								配置信息已为您保存，子表不需要配置生成信息，父表生成时会自动为您生成子表代码。<br/>
+								因为您设置了“关联父表的表名”和“本表关联的外键名”，则表示本生成为“子表”配置。
+								<a href="${ctx}/gen/genTable/form?tableName=test_data&op=step3">【点击进入主表生成】</a>
+							</div>
+						<% }else{ %>
+						<div class="form-unit">生成信息</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="">
+										<span class="required">*</span> 生成模板：<i class="fa icon-question hide"></i></label>
+									<div class="col-sm-8">
+										<#form:select path="tplCategory" items="${config.tplCategoryList}" itemLabel="label" itemValue="value" blankOption="true" class="form-control required"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="生成路径结构：{包名}/{模块名}/{分层(dao,entity,service,web)}/{子模块名}/{java类}
+可在参数设置里设置：“gen.defaultPackageName” 的键值，来修改此默认值。">
+										<span class="required">*</span> 生成包路径：<i class="fa icon-question"></i></label>
+									<div class="col-sm-8">
+										<#form:input path="packageName" maxlength="500" class="form-control required"/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="可理解为子系统名，例如 sys">
+										<span class="required">*</span> 生成模块名：<i class="fa icon-question"></i></label>
+									<div class="col-sm-8">
+										<#form:input path="moduleName" maxlength="30" class="form-control required"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="可选，{分层(entity/dao/service/controller)}/{子模块名}/">
+										<span class="required hide">*</span> 生成子模块名：<i class="fa icon-question"></i></label>
+									<div class="col-sm-8">
+										<#form:input path="subModuleName" maxlength="30" class="form-control"/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="用作类描述">
+										<span class="required">*</span> 生成功能名：<i class="fa icon-question"></i></label>
+									<div class="col-sm-8">
+										<#form:input path="functionName" maxlength="200" class="form-control required"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="用作功能提示，如：保存“某某”成功">
+										<span class="required">*</span> 功能名（简写）：<i class="fa icon-question"></i></label>
+									<div class="col-sm-8">
+										<#form:input path="functionNameSimple" maxlength="50" class="form-control required"/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="form-group">
+									<label class="control-label col-sm-2" title="填写磁盘绝对路径，若不填写，则生成到当前Web项目下">
+										<span class="required hide">*</span> 生成基础路径：<i class="fa icon-question"></i></label>
+									<div class="col-sm-10">
+										<div class="input-group input-group-sm">
+											<#form:input path="genBaseDir" maxlength="2000" class="form-control"/>
+											<span class="input-group-btn">
+												<button type="button" id="btnDefaultBaseDir" class="btn btn-info btn-flat"><i
+													class="fa fa-refresh"></i> 设置默认基础路径</button>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-unit">其它选项</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="是否有停用启用功能">
+										<span class="required hide">*</span> 是否有停用启用：<i class="fa icon-question"></i></label>
+									<div class="col-sm-8">
+										<#form:radio name="optionMap['isHaveDisableEnable']" dictType="sys_yes_no"
+											value="${@StringUtils.defaultString(genTable.optionMap['isHaveDisableEnable'], @Global.NO)}"
+											class="form-control"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="是否有删除功能">
+										<span class="required hide">*</span> 是否有删除功能：<i class="fa icon-question"></i></label>
+									<div class="col-sm-8">
+										<#form:radio name="optionMap['isHaveDelete']" dictType="sys_yes_no"
+											value="${@StringUtils.defaultString(genTable.optionMap['isHaveDelete'], @Global.YES)}"
+											class="form-control"/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row options treeGrid hide">
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="树显示的编码字段名，如果自定义主键，则请选择主键，否则选择：ViewCode">
+										<span class="required hide">*</span> 树显示编码字段：<i class="fa icon-question"></i></label>
+									<div class="col-sm-8">
+										<#form:select name="optionMap['treeViewCode']" items="${genTable.columnList}"
+											itemLabel="columnNameAndComments" itemValue="columnName" blankOption="true"
+											value="${genTable.optionMap['treeViewCode']}" class="form-control required"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="树节点的显示名称字段名， 如：OfficeName">
+										<span class="required hide">*</span> 树显示名称字段：<i class="fa icon-question"></i></label>
+									<div class="col-sm-8">
+										<#form:select name="optionMap['treeViewName']" items="${genTable.columnList}"
+											itemLabel="columnNameAndComments" itemValue="columnName" blankOption="true"
+											value="${genTable.optionMap['treeViewName']}" class="form-control required"/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="是否支持可上传图片">
+										<span class="required hide">*</span> 是否可上传图片：<i class="fa icon-question"></i></label>
+									<div class="col-sm-8">
+										<#form:radio name="optionMap['isImageUpload']" dictType="sys_yes_no"
+											value="${@StringUtils.defaultString(genTable.optionMap['isImageUpload'], @Global.NO)}"
+											class="form-control"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="是否支持可上传附件">
+										<span class="required hide">*</span> 是否可上传附件：<i class="fa icon-question"></i></label>
+									<div class="col-sm-8">
+										<#form:radio name="optionMap['isFileUpload']" dictType="sys_yes_no"
+											value="${@StringUtils.defaultString(genTable.optionMap['isFileUpload'], @Global.NO)}"
+											class="form-control"/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<% } %>
+					</div>
+				</div>
+			</div>
+			<div class="box-footer">
+				<div class="row">
+					<div class="col-sm-offset-2 col-sm-10">
+						<% if (hasPermi('gen:genTable:edit')){ %>
+							<#form:hidden path="genFlag"/>
+							<% if(op != 'step3' && genTable.genFlag != '0'){ %>
+								<button id="btnNext" type="submit" class="btn btn-sm btn-primary"
+									onclick="$('#genFlag').val('0');" title="保存并进入到下一步配置。"><i class="fa fa-arrow-circle-right"></i> 下一步</button>&nbsp;
+								<button id="btnSave" type="submit" class="btn btn-sm btn-primary ${op == 'step1' ? 'hide' : ''}"
+									onclick="$('#genFlag').val('');" title="先保存起来，不进行下一步。"><i class="fa fa-check"></i> 保存并关闭</button>&nbsp;
+							<% } else if (!genTable.parentExists){ %>
+								<button id="btnSubmit" type="submit" class="btn btn-sm btn-primary"
+									onclick="$('#genFlag').val('1');" title="输出到控制台，不生成文件。"><i class="fa fa-check"></i> 保存并编译</button>&nbsp;
+								<button id="btnSubmitAndGen" type="submit" class="btn btn-sm btn-danger"
+									onclick="$('#genFlag').val('2');" title="输出到控制台，并生成文件。"><i class="fa fa-bug"></i> 保存并生成代码</button>&nbsp;
+							<% }else{ %>
+								<button id="btnSave" type="submit" class="btn btn-sm btn-primary" onclick="$('#genFlag').val('');"><i class="fa fa-check"></i> 保 存</button>&nbsp;
+							<% } %>
+						<% } %>
+						<button type="button" class="btn btn-sm btn-default" id="btnCancel" onclick="js.closeCurrentTabPage()"><i class="fa fa-reply-all"></i> 关 闭</button>
+						<% if (!genTable.parentExists){ %>
+						&nbsp;&nbsp; <#form:checkbox path="replaceFile" label="是否替换现有文件" class="form-control" title="如果生成文件已经存在，选中该选项原文件则被覆盖。"/>
+						<% } %>
+					</div>
+				</div>
+			</div>
+		</#form:form>
+	</div>
+</div>
+<% } %>
+<script>
+var op = '${op}',
+tableName = '${genTable.tableName}',
+columnList = ${toJson(genTable.columnList)},
+config = {
+	attrTypeList: ${toJson(config.attrTypeList)},
+	queryTypeList: ${toJson(config.queryTypeList)},
+	showTypeList: ${toJson(config.showTypeList)},
+	fieldValidList: ${toJson(config.fieldValidList)}
+}
+</script>
+<script src="${ctxStatic}/jqGrid/4.7/plugins/jquery.tablednd.js?${_version}"></script>
+<script src="${ctxStatic}/modules/gen/genTableForm.js?${_version}"></script>
+<script id="treeselectTpl" type="text/template">//<!--<div>
+<#form:treeselect id="{{d.id}}" title="{{d.title}}" name="{{d.name}}" value="{{d.value}}"
+	labelName="{{d.labelName}}" labelValue="{{d.labelValue}}" url="{{d.url}}"
+	class="{{d.cssClass}}" btnClass="btn-sm" allowClear="true"/>
+</div>//--></script>

@@ -1,0 +1,273 @@
+<% layout('/layouts/default.html', {title: '债务申请管理', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> ${text('债务申请管理')}
+			</div>
+			<div class="box-tools pull-right">
+				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
+				<% if(hasPermi('apply:tbLoanApply:edit')){ %>
+					<a href="${ctx}/apply/tbLoanApply/form" class="btn btn-default btnTool" title="${text('新增债务申请')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+				<% } %>
+			</div>
+		</div>
+		<div class="box-body">
+			<#form:form id="searchForm" model="${tbLoanApply}" action="${ctx}/apply/tbLoanApply/listData" method="post" class="form-inline hide"
+					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
+				<div class="form-group">
+					<label class="control-label">企业名称：</label>
+					<div class="control-inline">
+						<#form:input path="compName" maxlength="100" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">统一社会信用代码：</label>
+					<div class="control-inline">
+						<#form:input path="compCode" maxlength="50" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">企业法人：</label>
+					<div class="control-inline">
+						<#form:input path="compLegalPerson" maxlength="20" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">企业联系人：</label>
+					<div class="control-inline">
+						<#form:input path="compContact" maxlength="20" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">公司性质id：</label>
+					<div class="control-inline">
+						<#form:input path="natureId" maxlength="2" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">所属行业：</label>
+					<div class="control-inline">
+						<#form:input path="industry" maxlength="20" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">是否特殊行业 0否 1是：</label>
+					<div class="control-inline">
+						<#form:input path="speciaIndustry" maxlength="1" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">企业id：</label>
+					<div class="control-inline">
+						<#form:input path="compId" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">用户id：</label>
+					<div class="control-inline">
+						<#form:input path="userId" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">借款金额：</label>
+					<div class="control-inline">
+						<#form:input path="loanAmount" maxlength="20" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">借款人姓名：</label>
+					<div class="control-inline">
+						<#form:input path="loanName" maxlength="20" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">借款产品id：</label>
+					<div class="control-inline">
+						<#form:input path="productId" maxlength="11" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">借款期限 关联产品类型表：</label>
+					<div class="control-inline">
+						<#form:input path="loanTime" maxlength="11" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">核心企业合作年限 关联COO表：</label>
+					<div class="control-inline">
+						<#form:input path="cooperationId" maxlength="11" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">企业房产 0自有 1租赁 2其他：</label>
+					<div class="control-inline">
+						<#form:input path="compHouse" maxlength="1" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">企业土地 0划拨 1出让 2租赁：</label>
+					<div class="control-inline">
+						<#form:input path="compLand" maxlength="1" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">居住情况 0自有房产 1租赁 2其他：</label>
+					<div class="control-inline">
+						<#form:input path="livingSituation" maxlength="1" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">申请时间：</label>
+					<div class="control-inline">
+						<#form:input path="applyTime" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">申请状态：</label>
+					<div class="control-inline">
+						<#form:input path="applyState" maxlength="11" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">授权核心企业id：</label>
+					<div class="control-inline">
+						<#form:input path="coreCompId" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">实际居住地址：</label>
+					<div class="control-inline">
+						<#form:input path="actualLivingAddress" maxlength="500" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">家庭联系人1：</label>
+					<div class="control-inline">
+						<#form:input path="householdContacts1" maxlength="20" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">家庭联系人2：</label>
+					<div class="control-inline">
+						<#form:input path="householdContacts2" maxlength="20" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">家庭联系人1关系 0父母 1配偶 2子女：</label>
+					<div class="control-inline">
+						<#form:input path="householdContacts1Relationship" maxlength="1" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">家庭联系人2关系 0父母 1配偶 2子女：</label>
+					<div class="control-inline">
+						<#form:input path="householdContacts2Relationship" maxlength="1" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">家庭联系人1 电话：</label>
+					<div class="control-inline">
+						<#form:input path="householdContacts1Phone" maxlength="20" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">家庭联系人2 电话：</label>
+					<div class="control-inline">
+						<#form:input path="householdContacts2Phone" maxlength="20" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">其他联系人1：</label>
+					<div class="control-inline">
+						<#form:input path="otherContacts1" maxlength="20" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">其他联系人1关系 0亲属 1朋友 2同事：</label>
+					<div class="control-inline">
+						<#form:input path="otherContacts1Relationship" maxlength="1" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">其他联系人1电话：</label>
+					<div class="control-inline">
+						<#form:input path="otherContacts1Phone" maxlength="20" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">其他联系人2电话：</label>
+					<div class="control-inline">
+						<#form:input path="otherContacts2Phone" maxlength="20" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
+					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
+				</div>
+			</#form:form>
+			<table id="dataGrid"></table>
+			<div id="dataGridPage"></div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+// 初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [
+		{header:'企业名称', name:'compName', index:'a.comp_name', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+			return '<a href="${ctx}/apply/tbLoanApply/form?id='+row.id+'" class="btnList" data-title="${text('编辑债务申请')}">'+(val||row.id)+'</a>';
+		}},
+		{header:'统一社会信用代码', name:'compCode', index:'a.comp_code', width:150, align:"left"},
+		{header:'企业法人', name:'compLegalPerson', index:'a.comp_legal_person', width:150, align:"left"},
+		{header:'企业联系人', name:'compContact', index:'a.comp_contact', width:150, align:"left"},
+		{header:'公司性质id', name:'natureId', index:'a.nature_id', width:150, align:"center"},
+		{header:'所属行业', name:'industry', index:'a.industry', width:150, align:"left"},
+		{header:'是否特殊行业 0否 1是', name:'speciaIndustry', index:'a.specia_industry', width:150, align:"center"},
+		{header:'企业id', name:'compId', index:'a.comp_id', width:150, align:"left"},
+		{header:'用户id', name:'userId', index:'a.user_id', width:150, align:"left"},
+		{header:'借款金额', name:'loanAmount', index:'a.loan_amount', width:150, align:"left"},
+		{header:'借款人姓名', name:'loanName', index:'a.loan_name', width:150, align:"left"},
+		{header:'借款产品id', name:'productId', index:'a.product_id', width:150, align:"center"},
+		{header:'借款期限 关联产品类型表', name:'loanTime', index:'a.loan_time', width:150, align:"center"},
+		{header:'核心企业合作年限 关联COO表', name:'cooperationId', index:'a.cooperation_id', width:150, align:"center"},
+		{header:'企业房产 0自有 1租赁 2其他', name:'compHouse', index:'a.comp_house', width:150, align:"center"},
+		{header:'企业土地 0划拨 1出让 2租赁', name:'compLand', index:'a.comp_land', width:150, align:"center"},
+		{header:'居住情况 0自有房产 1租赁 2其他', name:'livingSituation', index:'a.living_situation', width:150, align:"center"},
+		{header:'申请时间', name:'applyTime', index:'a.apply_time', width:150, align:"center"},
+		{header:'申请状态', name:'applyState', index:'a.apply_state', width:150, align:"center"},
+		{header:'授权核心企业id', name:'coreCompId', index:'a.core_comp_id', width:150, align:"left"},
+		{header:'实际居住地址', name:'actualLivingAddress', index:'a.actual_living_address', width:150, align:"left"},
+		{header:'家庭联系人1', name:'householdContacts1', index:'a.household_contacts1', width:150, align:"left"},
+		{header:'家庭联系人2', name:'householdContacts2', index:'a.household_contacts2', width:150, align:"left"},
+		{header:'家庭联系人1关系 0父母 1配偶 2子女', name:'householdContacts1Relationship', index:'a.household_contacts1_relationship', width:150, align:"center"},
+		{header:'家庭联系人2关系 0父母 1配偶 2子女', name:'householdContacts2Relationship', index:'a.household_contacts2_relationship', width:150, align:"center"},
+		{header:'家庭联系人1 电话', name:'householdContacts1Phone', index:'a.household_contacts1_phone', width:150, align:"left"},
+		{header:'家庭联系人2 电话', name:'householdContacts2Phone', index:'a.household_contacts2_phone', width:150, align:"left"},
+		{header:'其他联系人1', name:'otherContacts1', index:'a.other_contacts1', width:150, align:"left"},
+		{header:'其他联系人1关系 0亲属 1朋友 2同事', name:'otherContacts1Relationship', index:'a.other_contacts1_relationship', width:150, align:"center"},
+		{header:'其他联系人1电话', name:'otherContacts1Phone', index:'a.other_contacts1_phone', width:150, align:"left"},
+		{header:'其他联系人2电话', name:'otherContacts2Phone', index:'a.other_contacts2_phone', width:150, align:"left"},
+		{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+			var actions = [];
+			<% if(hasPermi('apply:tbLoanApply:edit')){ %>
+				actions.push('<a href="${ctx}/apply/tbLoanApply/form?id='+row.id+'" class="btnList" title="${text('编辑债务申请')}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				if (row.status == Global.STATUS_NORMAL){
+					actions.push('<a href="${ctx}/apply/tbLoanApply/disable?id='+row.id+'" class="btnList" title="${text('停用债务申请')}" data-confirm="${text('确认要停用该债务申请吗？')}"><i class="glyphicon glyphicon-ban-circle"></i></a>&nbsp;');
+				}
+				if (row.status == Global.STATUS_DISABLE){
+					actions.push('<a href="${ctx}/apply/tbLoanApply/enable?id='+row.id+'" class="btnList" title="${text('启用债务申请')}" data-confirm="${text('确认要启用该债务申请吗？')}"><i class="glyphicon glyphicon-ok-circle"></i></a>&nbsp;');
+				}
+				actions.push('<a href="${ctx}/apply/tbLoanApply/delete?id='+row.id+'" class="btnList" title="${text('删除债务申请')}" data-confirm="${text('确认要删除该债务申请吗？')}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+			<% } %>
+			return actions.join('');
+		}}
+	],
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+		
+	}
+});
+</script>

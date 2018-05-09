@@ -1,0 +1,119 @@
+<% layout('/layouts/default.html', {title: '附件管理', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> ${text('附件管理')}
+			</div>
+			<div class="box-tools pull-right">
+				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
+				<% if(hasPermi('attachment:tbLoanAttachment:edit')){ %>
+					<a href="${ctx}/attachment/tbLoanAttachment/form" class="btn btn-default btnTool" title="${text('新增附件')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+				<% } %>
+			</div>
+		</div>
+		<div class="box-body">
+			<#form:form id="searchForm" model="${tbLoanAttachment}" action="${ctx}/attachment/tbLoanAttachment/listData" method="post" class="form-inline hide"
+					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
+				<div class="form-group">
+					<label class="control-label">附件名称：</label>
+					<div class="control-inline">
+						<#form:input path="attachmentName" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">附件备注：</label>
+					<div class="control-inline">
+						<#form:input path="attachmentRemar" maxlength="500" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">附件类型 0企业 1个人：</label>
+					<div class="control-inline">
+						<#form:input path="attachmentType" maxlength="1" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">0可见 1不可见：</label>
+					<div class="control-inline">
+						<#form:input path="isCoreVisible" maxlength="1" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">0可见 1不可见：</label>
+					<div class="control-inline">
+						<#form:input path="isBankVisible" maxlength="1" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">是否删除 0否 1是：</label>
+					<div class="control-inline">
+						<#form:input path="isdel" maxlength="1" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">附件名称：</label>
+					<div class="control-inline">
+						<#form:input path="attachmentName" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">附件备注：</label>
+					<div class="control-inline">
+						<#form:input path="attachmentRemar" maxlength="500" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">附件类型 0企业 1个人：</label>
+					<div class="control-inline">
+						<#form:input path="attachmentType" maxlength="1" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
+					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
+				</div>
+			</#form:form>
+			<table id="dataGrid"></table>
+			<div id="dataGridPage"></div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+// 初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [
+		{header:'附件名称', name:'attachmentName', index:'a.attachment_name', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+			return '<a href="${ctx}/attachment/tbLoanAttachment/form?id='+row.id+'" class="btnList" data-title="${text('编辑附件')}">'+(val||row.id)+'</a>';
+		}},
+		{header:'附件备注', name:'attachmentRemar', index:'a.attachment_remar', width:150, align:"left"},
+		{header:'附件类型 0企业 1个人', name:'attachmentType', index:'a.attachment_type', width:150, align:"center"},
+		{header:'0可见 1不可见', name:'isCoreVisible', index:'a.is_core_visible', width:150, align:"center"},
+		{header:'0可见 1不可见', name:'isBankVisible', index:'a.is_bank_visible', width:150, align:"center"},
+		{header:'是否删除 0否 1是', name:'isdel', index:'a.isdel', width:150, align:"center"},
+		{header:'附件名称', name:'attachmentName', index:'a.attachment_name', width:150, align:"left"},
+		{header:'附件备注', name:'attachmentRemar', index:'a.attachment_remar', width:150, align:"left"},
+		{header:'附件类型 0企业 1个人', name:'attachmentType', index:'a.attachment_type', width:150, align:"center"},
+		{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+			var actions = [];
+			<% if(hasPermi('attachment:tbLoanAttachment:edit')){ %>
+				actions.push('<a href="${ctx}/attachment/tbLoanAttachment/form?id='+row.id+'" class="btnList" title="${text('编辑附件')}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				if (row.status == Global.STATUS_NORMAL){
+					actions.push('<a href="${ctx}/attachment/tbLoanAttachment/disable?id='+row.id+'" class="btnList" title="${text('停用附件')}" data-confirm="${text('确认要停用该附件吗？')}"><i class="glyphicon glyphicon-ban-circle"></i></a>&nbsp;');
+				}
+				if (row.status == Global.STATUS_DISABLE){
+					actions.push('<a href="${ctx}/attachment/tbLoanAttachment/enable?id='+row.id+'" class="btnList" title="${text('启用附件')}" data-confirm="${text('确认要启用该附件吗？')}"><i class="glyphicon glyphicon-ok-circle"></i></a>&nbsp;');
+				}
+				actions.push('<a href="${ctx}/attachment/tbLoanAttachment/delete?id='+row.id+'" class="btnList" title="${text('删除附件')}" data-confirm="${text('确认要删除该附件吗？')}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+			<% } %>
+			return actions.join('');
+		}}
+	],
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+		
+	}
+});
+</script>

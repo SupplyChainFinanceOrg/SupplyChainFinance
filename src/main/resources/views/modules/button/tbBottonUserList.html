@@ -1,0 +1,98 @@
+<% layout('/layouts/default.html', {title: '按钮用户管理', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> ${text('按钮用户管理')}
+			</div>
+			<div class="box-tools pull-right">
+				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
+				<% if(hasPermi('button:tbBottonUser:edit')){ %>
+					<a href="${ctx}/button/tbBottonUser/form" class="btn btn-default btnTool" title="${text('新增按钮用户')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+				<% } %>
+			</div>
+		</div>
+		<div class="box-body">
+			<#form:form id="searchForm" model="${tbBottonUser}" action="${ctx}/button/tbBottonUser/listData" method="post" class="form-inline hide"
+					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
+				<div class="form-group">
+					<label class="control-label">借款id：</label>
+					<div class="control-inline">
+						<#form:input path="borrowId" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">用户id：</label>
+					<div class="control-inline">
+						<#form:input path="userCode" maxlength="100" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">按钮id：</label>
+					<div class="control-inline">
+						<#form:input path="buttonId" maxlength="11" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">状态id：</label>
+					<div class="control-inline">
+						<#form:input path="stateId" maxlength="11" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">资源id：</label>
+					<div class="control-inline">
+						<#form:input path="sourceId" maxlength="100" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">角色id：</label>
+					<div class="control-inline">
+						<#form:input path="roleCode" maxlength="100" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
+					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
+				</div>
+			</#form:form>
+			<table id="dataGrid"></table>
+			<div id="dataGridPage"></div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+// 初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [
+		{header:'借款id', name:'borrowId', index:'a.borrow_id', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+			return '<a href="${ctx}/button/tbBottonUser/form?borrowId='+row.borrowId+'" class="btnList" data-title="${text('编辑按钮用户')}">'+(val||row.id)+'</a>';
+		}},
+		{header:'用户id', name:'userCode', index:'a.user_code', width:150, align:"left"},
+		{header:'按钮id', name:'buttonId', index:'a.button_id', width:150, align:"left"},
+		{header:'状态id', name:'stateId', index:'a.state_id', width:150, align:"left"},
+		{header:'资源id', name:'sourceId', index:'a.source_id', width:150, align:"left"},
+		{header:'角色id', name:'roleCode', index:'a.role_code', width:150, align:"left"},
+		{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+			var actions = [];
+			<% if(hasPermi('button:tbBottonUser:edit')){ %>
+				actions.push('<a href="${ctx}/button/tbBottonUser/form?borrowId='+row.borrowId+'" class="btnList" title="${text('编辑按钮用户')}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				if (row.status == Global.STATUS_NORMAL){
+					actions.push('<a href="${ctx}/button/tbBottonUser/disable?borrowId='+row.borrowId+'" class="btnList" title="${text('停用按钮用户')}" data-confirm="${text('确认要停用该按钮用户吗？')}"><i class="glyphicon glyphicon-ban-circle"></i></a>&nbsp;');
+				}
+				if (row.status == Global.STATUS_DISABLE){
+					actions.push('<a href="${ctx}/button/tbBottonUser/enable?borrowId='+row.borrowId+'" class="btnList" title="${text('启用按钮用户')}" data-confirm="${text('确认要启用该按钮用户吗？')}"><i class="glyphicon glyphicon-ok-circle"></i></a>&nbsp;');
+				}
+				actions.push('<a href="${ctx}/button/tbBottonUser/delete?borrowId='+row.borrowId+'" class="btnList" title="${text('删除按钮用户')}" data-confirm="${text('确认要删除该按钮用户吗？')}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+			<% } %>
+			return actions.join('');
+		}}
+	],
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+		
+	}
+});
+</script>
