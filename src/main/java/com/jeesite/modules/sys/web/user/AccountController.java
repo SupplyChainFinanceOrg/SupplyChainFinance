@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,6 +27,7 @@ import com.jeesite.modules.sys.service.UserService;
 import com.jeesite.modules.sys.utils.UserUtils;
 import com.jeesite.modules.sys.utils.ValidCodeUtils;
 import com.jeesite.modules.tb.entity.TbComp;
+import com.jeesite.modules.tb.service.TbCompService;
 
 /**
  * 账号自助服务Controller
@@ -39,6 +41,8 @@ public class AccountController extends BaseController{
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private TbCompService tbCompService;
 	/**
 	 * 忘记密码页面
 	 */
@@ -49,7 +53,17 @@ public class AccountController extends BaseController{
 	}
 	@RequestMapping(value = "reguser")
 	public String reguser(TbComp tbComp, Model model) {
-		return "modules/tb/tbCompForm";
+		model.addAttribute("tbComp", tbComp);
+		return "modules/tb/compReg";
+	}
+	@RequestMapping(value = "syRegPre")
+	public String syRegPre(Model model) {
+		return "modules/sys/sysRegPre";
+	}
+	@PostMapping(value = "savereg")
+	public String savereg(@Validated TbComp tbComp) {
+		tbCompService.save(tbComp);
+		return renderResult(Global.TRUE, "信息已保存，请等待管理员审核！");
 	}
 	/**
 	 * 获取短信、邮件验证码
