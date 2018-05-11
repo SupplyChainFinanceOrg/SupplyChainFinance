@@ -1,18 +1,18 @@
 /**
  * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
  */
-package com.jeesite.modules.button.dao;
+package com.jeesite.modules.add.dao;
 
 import com.jeesite.common.dao.CrudDao;
 import com.jeesite.common.mybatis.annotation.MyBatisDao;
-import com.jeesite.modules.button.entity.TbButton;
+import com.jeesite.modules.add.entity.UserRoleBase;
 
 /**
- * tb_buttonDAO接口
+ * 用户与角色关联表DAO接口
  * @author z
  * @version 2018-05-11
  */
 @MyBatisDao
-public interface TbButtonDao extends CrudDao<TbButton> {
+public interface UserRoleBaseDao extends CrudDao<UserRoleBase> {
 	
 }

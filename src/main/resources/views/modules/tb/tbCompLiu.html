@@ -1,20 +1,20 @@
 <% layout('/layouts/default.html', {title: '企业管理', libs: ['validate','fileupload']}){ %>
 <div class="main-content">
 	<div class="box box-main">
-		<!-- <div class="box-header with-border">
+		<div class="box-header with-border">
 			<div class="box-title">
-				 <span id='getlabel'></span>注册
+				<i class="fa fa-list-alt"></i> ${text(tbComp.isNewRecord ? '新增企业' : '编辑企业')}
 			</div>
 			<div class="box-tools pull-right">
 				<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
 			</div>
-		</div> -->
-		<form return=""></form>
-		<#form:form id="inputForm" model="${tbComp}" action="${ctxPath}/account/savereg" method="post" class="form-horizontal">
-			<input type="hidden" id="savenew">
-			<div class="box-body">
-				<div class="form-unit" style="font-style: normal;  text-align: center; font-size: 30px;"><span id='getlabel'></span>${text('注册')}</div>
+		</div>
+		<#form:form id="inputForm" model="${tbComp}" action="${ctx}/tb/tbComp/save" method="post" class="form-horizontal">
+					<div class="box-body">
+				<div class="form-unit" ><span id='getlabel'></span>${text('基础信息')}</div>
 				<#form:hidden path="id"/>
+				<input id="url" name="url" style="display: none">
+				<input id="nextstatus" name="nextstatus" style="display: none">				
 				<div class="row">
 					<div class="col-xs-6">
 						<div class="form-group">
@@ -41,8 +41,9 @@
 							<label class="control-label col-sm-4" title="">
 								<span class="required hide">*</span> 注册时间：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-<#form:input path="registerDate" readonly="true" maxlength="20" class="form-control Wdate"
-									dataFormat="date" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>							</div>
+							<#form:input path="registerDate" readonly="true" maxlength="20" class="form-control Wdate"
+									dataFormat="date" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
+							</div>
 						</div>
 					</div>
 					<div class="col-xs-6">
@@ -297,9 +298,11 @@
 			<div class="box-footer" align="center">
 				<div class="row" style="margin: 0 100px 0 0; ">
 					<div class="col-sm-offset-2 col-sm-10">
-					<input type="reset" style="display: none" id="reset">
-						<button type="submit" class="btn btn-sm btn-primary" id="btnSubmit" style="display: none"><i class="fa fa-check"></i> ${text('申请注册')}</button>&nbsp;	&nbsp;	&nbsp;	&nbsp;	&nbsp;	&nbsp;	&nbsp;	&nbsp;	&nbsp;	&nbsp;						
-						<a class="btn btn-sm btn-default" href="${ctxPath}" ><i class="fa fa-reply-all"></i> ${text('返回登录')}</a>
+						<button type="submit" class="btn btn-sm btn-primary" id="btnSubmit" style="display: none"></button>		
+						<%for(bstate in prolist){%> 	
+						<button type="button" class="btn btn-sm btn-primary"  onclick="change('${bstate.nextStateId}','${bstate.url}','${bstate.remark}')">${bstate.name}</button>	&nbsp;&nbsp;												
+						<%}%>				
+						<button type="button" class="btn btn-sm btn-default" id="btnCancel" onclick="js.closeCurrentTabPage()"><i class="fa fa-reply-all"></i> ${text('关 闭')}</button>
 					</div>
 				</div>
 			</div>
@@ -308,24 +311,14 @@
 </div>
 <% } %>
 <script>
-$(function(){
-	$("#reset").trigger("click");
-	$("#btnSubmit").show();
-})
-function goback(){
-	window.location.href='${ctxPath}';
-}
 $("#inputForm").validate({
 	submitHandler: function(form){
 		js.ajaxSubmitForm($(form), function(data){
 			js.showMessage(data.message);
-			//alert(data.message)
 			if(data.result == Global.TRUE){
-				$("#btnSubmit").remove();
-				setTimeout('goback()',5000)
-				/* js.closeCurrentTabPage(function(contentWindow){
+				js.closeCurrentTabPage(function(contentWindow){
 					contentWindow.page();
-				}); */
+				});
 			}
 		}, "json");
     }
@@ -340,5 +333,24 @@ $(function(){
 })
 function getlabel(compType){
 	$("#getlabel").text(js.getDictLabel(${@DictUtils.getDictListJson('company_type')}, compType, '${text('未知')}', true)); 
+}
+function change(status,url,remark){
+/* 	layer.alert('见到你真的很高兴', {icon: 1});*/
+	layer.alert(remark, {
+		     skin: 'layui-layer-molv' //样式类名  自定义样式
+		     ,closeBtn: 1    // 是否显示关闭按钮
+		     ,anim: 1 //动画类型
+		    ,btn: ['确定','取消'] //按钮
+		    ,icon: 8    // icon
+		    ,yes:function(){
+		         $('#nextstatus').val(status);
+		    	if(url.length>0){
+		    		$('#inputForm').attr("action",url)
+		    	}
+		    	$("#btnSubmit").trigger("click");
+		     }
+	     	,btn2:function(){
+		        layer.msg('已取消')
+		     }});
 }
 </script>

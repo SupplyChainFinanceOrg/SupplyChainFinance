@@ -122,6 +122,7 @@ public class EmpUserController extends BaseController {
 			// 获取当前用户所拥有的角色
 			Role role = new Role();
 			role.setUserCode(empUser.getUserCode());
+			roleService.findListByUserCode(role);
 			model.addAttribute("roleList", roleService.findListByUserCode(role));
 
 		}

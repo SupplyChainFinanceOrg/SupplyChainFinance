@@ -3,10 +3,19 @@
  */
 package com.jeesite.modules.tb.web;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.poi.util.StringUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,9 +25,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.druid.util.StringUtils;
 import com.jeesite.common.config.Global;
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.web.BaseController;
+import com.jeesite.common.web.http.UserAgentUtils;
+import com.jeesite.modules.button.entity.TbButton;
+import com.jeesite.modules.button.service.TbButtonService;
+import com.jeesite.modules.state.entity.TbProcess;
+import com.jeesite.modules.state.entity.TbState;
+import com.jeesite.modules.state.service.TbProcessService;
+import com.jeesite.modules.state.service.TbStateService;
+import com.jeesite.modules.sys.entity.Role;
+import com.jeesite.modules.sys.entity.TbUser;
+import com.jeesite.modules.sys.entity.User;
+import com.jeesite.modules.sys.service.RoleService;
+import com.jeesite.modules.sys.service.TbUserService;
+import com.jeesite.modules.sys.service.UserService;
+import com.jeesite.modules.sys.utils.UserUtils;
 import com.jeesite.modules.tb.entity.TbComp;
 import com.jeesite.modules.tb.service.TbCompService;
 
@@ -33,7 +57,14 @@ public class TbCompController extends BaseController {
 
 	@Autowired
 	private TbCompService tbCompService;
-	
+	@Autowired
+	private TbStateService tbStateService;
+	@Autowired
+	private TbUserService tbUserService;
+	@Autowired
+	private RoleService roleService;
+	@Autowired
+	private TbProcessService tbProcessService;
 	/**
 	 * 获取数据
 	 */
@@ -47,7 +78,18 @@ public class TbCompController extends BaseController {
 	 */
 	@RequiresPermissions("tb:tbComp:view")
 	@RequestMapping(value = {"list", ""})
-	public String list(TbComp tbComp, Model model) {
+	public String list(TbComp tbComp, Model model,HttpServletRequest request, HttpServletResponse response) {
+		User user =UserUtils.getUser();
+		Role r=new Role();
+		r.setUserCode(user.getUserCode());
+		List<Role> rolelist=roleService.findListByUserCode(r);
+		List<TbState> bottonlist=new ArrayList<>();
+		model.addAttribute("userrolecode", null);
+		if(rolelist!=null&&rolelist.size()>0){
+			bottonlist=tbStateService.findList(new TbState(TbState.COMPANYTYPE, "1", rolelist.get(0).getRoleCode()));
+			model.addAttribute("userrolecode", rolelist.get(0).getRoleCode());
+		}
+		model.addAttribute("bottonlist", bottonlist);
 		model.addAttribute("tbComp", tbComp);
 		return "modules/tb/tbCompList";
 	}
@@ -59,7 +101,14 @@ public class TbCompController extends BaseController {
 	@RequestMapping(value = "listData")
 	@ResponseBody
 	public Page<TbComp> listData(TbComp tbComp, HttpServletRequest request, HttpServletResponse response) {
-		Page<TbComp> page = tbCompService.findPage(new Page<TbComp>(request, response), tbComp); 
+		Page<TbComp> page = new Page<TbComp>(request, response);
+		String userrolecode= request.getParameter("userrolecode");
+		if(!StringUtils.isEmpty(userrolecode)){
+			if(userrolecode.equals(TbComp.JKQYROLECODE)||userrolecode.equals(TbComp.JRQYROLECODE)||userrolecode.equals(TbComp.HXQYROLECODE)){
+				tbComp.setUserId(UserUtils.getUser().getUserCode());
+			}
+		}
+		page = tbCompService.findPage(page, tbComp); 
 		return page;
 	}
 
@@ -68,8 +117,19 @@ public class TbCompController extends BaseController {
 	 */
 	@RequiresPermissions("tb:tbComp:view")
 	@RequestMapping(value = "form")
-	public String form(TbComp tbComp, Model model) {
-		model.addAttribute("tbComp", tbComp);
+	public String form(TbComp tbComp, Model model,HttpServletRequest request, HttpServletResponse response) {
+		model.addAttribute("tbComp", tbComp);		
+		if("1".equals(request.getParameter("looktype"))){
+			//流程
+			//获取角色，状态
+			List<TbProcess> prolist=tbProcessService.buttunList(tbComp.getApplyState()+"",TbProcess.COMPANYTYPE);							
+			System.out.println(prolist);
+			model.addAttribute("prolist", prolist);		
+			return "modules/tb/tbCompLiu";
+		}else if("2".equals(request.getParameter("looktype"))){
+			return "modules/tb/tbCompDetai";
+		}
+		
 		return "modules/tb/tbCompForm";
 	}
 
@@ -79,8 +139,23 @@ public class TbCompController extends BaseController {
 	@RequiresPermissions("tb:tbComp:edit")
 	@PostMapping(value = "save")
 	@ResponseBody
-	public String save(@Validated TbComp tbComp) {
-		tbCompService.save(tbComp);
+	public String save(@Validated TbComp tbComp,HttpServletRequest request, HttpServletResponse response) {
+		if(StringUtils.isEmpty(request.getParameter("nextstatus"))){
+			tbCompService.save(tbComp);
+		}else{
+			//查询老的数据
+			TbComp oldtbComp=tbCompService.get(tbComp.getId());
+			tbComp.setApplyState(Long.parseLong(request.getParameter("nextstatus")));
+			if(0==oldtbComp.getApplyState()){
+				tbCompService.saveAndCreate(tbComp,true);
+			}else{
+				if(1==tbComp.getApplyState()||2==tbComp.getApplyState()){
+					tbComp.setOperationData(new Date());
+					tbComp.setOperationUserId(UserUtils.getUser().getUserCode());
+				}
+				tbCompService.save(tbComp);
+			}
+		}	
 		return renderResult(Global.TRUE, "保存企业成功！");
 	}
 	
@@ -118,5 +193,4 @@ public class TbCompController extends BaseController {
 		tbCompService.delete(tbComp);
 		return renderResult(Global.TRUE, "删除企业成功！");
 	}
-	
 }

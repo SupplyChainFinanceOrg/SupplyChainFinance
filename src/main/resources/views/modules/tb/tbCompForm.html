@@ -10,8 +10,8 @@
 			</div>
 		</div>
 		<#form:form id="inputForm" model="${tbComp}" action="${ctx}/tb/tbComp/save" method="post" class="form-horizontal">
-			<div class="box-body">
-				<div class="form-unit">${text('基本信息')}</div>
+					<div class="box-body">
+				<div class="form-unit" ><span id='getlabel'></span>${text('基础信息')}</div>
 				<#form:hidden path="id"/>
 				<div class="row">
 					<div class="col-xs-6">
@@ -39,21 +39,11 @@
 							<label class="control-label col-sm-4" title="">
 								<span class="required hide">*</span> 注册时间：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="registerDate" class="form-control"/>
+							<#form:input path="registerDate" readonly="true" maxlength="20" class="form-control Wdate"
+									dataFormat="date" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
 							</div>
 						</div>
 					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> 注册地址：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="registerAddress" maxlength="500" class="form-control"/>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
@@ -63,6 +53,22 @@
 							</div>
 						</div>
 					</div>
+					
+				</div>
+
+									<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group">
+							<label class="control-label col-sm-2">注册地址：</label>
+							<div class="col-sm-10">
+								<#form:input path="registerAddress" maxlength="500" class="form-control"/>
+							</div>
+						</div>
+					</div>
+				</div>
+					
+				<div class="row">
+					
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
@@ -72,8 +78,6 @@
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="row">
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
@@ -83,6 +87,9 @@
 							</div>
 						</div>
 					</div>
+				</div>
+				<div class="row">
+					
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
@@ -92,8 +99,6 @@
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="row">
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
@@ -103,106 +108,9 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> 公司性质：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:radio path="natureId" dictType="nature_type" class="form-control digits" />						
-							</div>
-						</div>
-					</div>
 				</div>
 				<div class="row">
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> 所属行业：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="industry" maxlength="20" class="form-control"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> 主营业务：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="mainBusiness" class="form-control"/>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> 公司简介：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="compProfile" class="form-control"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> 是否特殊行业：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:radio path="speciaIndustry" dictType="specia_industry" class="form-control digits" />
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> 特殊行业许可证：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="specialTradeLicense" class="form-control"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> 营业执照：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="businessLicense" class="form-control"/>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> 法人身份证正面：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="idCardA" class="form-control"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> 法人身份证反面：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="idCardB" class="form-control"/>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> 用户id：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="userId" maxlength="64" class="form-control"/>
-							</div>
-						</div>
-					</div>
+					
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
@@ -211,15 +119,26 @@
 								<#form:input path="compPhone" maxlength="20" class="form-control"/>
 							</div>
 						</div>
+						
 					</div>
-				</div>
-				<div class="row">
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
 								<span class="required hide">*</span> 公司邮箱：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
 								<#form:input path="compEmail" maxlength="64" class="form-control"/>
+							</div>
+						</div>
+					</div>
+				</div>
+					<div class="row">
+					
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> 主营业务：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="mainBusiness" class="form-control"/>
 							</div>
 						</div>
 					</div>
@@ -234,6 +153,98 @@
 					</div>
 				</div>
 				<div class="row">
+					
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> 公司性质：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:radio path="natureId" dictType="nature_type" class="form-control digits" />						
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> 所属行业：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+							<#form:radio path="industry" dictType="industry_type" class="form-control digits" />
+							</div>
+						</div>
+					</div>
+				</div>
+			
+				
+				<div class="row">
+					
+					
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> 是否特殊行业：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">							
+								<#form:radio path="speciaIndustry" dictType="specia_industry" class="form-control digits" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group">
+							<label class="control-label col-sm-2">公司简介：</label>
+							<div class="col-sm-10">
+						       <#form:textarea path="compProfile" class="form-control" style="height:100px" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> 法人身份证正面：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:fileupload id="idCardA"    bizKey="${tbComp.id}" bizType="tbComp_idCardA" maxUploadNum="1"
+									uploadType="image" class="" readonly="false"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> 法人身份证反面：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+							<#form:fileupload id="idCardB" bizKey="${tbComp.id}" bizType="tbComp_idCardB" maxUploadNum="1"
+									uploadType="image" class="" readonly="false"/>
+							</div>
+						</div>
+					</div>
+				</div>
+			<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> 特殊行业许可证：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+							<#form:fileupload id="specialTradeLicense"  bizKey="${tbComp.id}" bizType="tbComp_specialTradeLicense" maxUploadNum="1"
+									uploadType="image" class="" readonly="false"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> 营业执照：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:fileupload id="businessLicense" bizKey="${tbComp.id}" bizType="tbComp_businessLicense" maxUploadNum="1"
+									uploadType="image" class="" readonly="false"/>
+							</div>
+						</div>
+					</div>
+				</div>	
+				<div class="row" hidden="true">
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
@@ -243,105 +254,49 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> 审核状态：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-<!-- 								<#form:select path="applyState" dictType="nature_type" blankOption="true" class="form-control digits" />
- -->							</div>
-						</div>
-					</div>
+
 				</div>
-				<div class="row">
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> 注册日期：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="applyDate" class="form-control"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> 操作人：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="operationUserId" maxlength="64" class="form-control"/>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> 操作时间：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="operationData" class="form-control"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> 企业简介附件：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="compProfileAttachment" maxlength="500" class="form-control"/>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> 企业章程附件  核心企业上传：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="articlesAssociation" maxlength="500" class="form-control"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> 验资报告附件  核心企业上传：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="capitalVerificationReport" maxlength="500" class="form-control"/>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
+<div class="row">
 					<div class="col-xs-12">
 						<div class="form-group">
-							<label class="control-label col-sm-2">图片上传：</label>
+							<label class="control-label col-sm-2">企业简介附件：</label>
 							<div class="col-sm-10">
-								<#form:fileupload id="uploadImage" bizKey="${tbComp.id}" bizType="tbComp_image"
-									uploadType="image" class="" readonly="false"/>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-12">
-						<div class="form-group">
-							<label class="control-label col-sm-2">附件上传：</label>
-							<div class="col-sm-10">
-								<#form:fileupload id="uploadFile" bizKey="${tbComp.id}" bizType="tbComp_file"
+							<#form:fileupload id="compProfileAttachment" bizKey="${tbComp.id}" bizType="tbComp_compProfileAttachment" maxUploadNum="1"
 									uploadType="all" class="" readonly="false"/>
 							</div>
 						</div>
 					</div>
 				</div>
+				
+				<div class="row" name="capital" hidden="true">
+					<div class="col-xs-12">
+						<div class="form-group">
+							<label class="control-label col-sm-2">企业章程附件：</label>
+							<div class="col-sm-10">
+							<#form:fileupload id="articlesAssociation" bizKey="${tbComp.id}" bizType="tbComp_articlesAssociation" maxUploadNum="1"
+									uploadType="all" class="" readonly="false"/>
+							</div>
+						</div>
+					</div>
+				</div>
+<div class="row"  name="capital" hidden="true" >
+					<div class="col-xs-12">
+						<div class="form-group">
+							<label class="control-label col-sm-2">验资报告附件：</label>
+							<div class="col-sm-10">
+							<#form:fileupload id="capitalVerificationReport" bizKey="${tbComp.id}" bizType="tbComp_capitalVerificationReport" maxUploadNum="1"
+									uploadType="all" class="" readonly="false"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				
 			</div>
-			<div class="box-footer">
-				<div class="row">
+			<div class="box-footer" align="center">
+				<div class="row" style="margin: 0 100px 0 0; ">
 					<div class="col-sm-offset-2 col-sm-10">
-						<% if (hasPermi('tb:tbComp:edit')){ %>
-							<button type="submit" class="btn btn-sm btn-primary" id="btnSubmit"><i class="fa fa-check"></i> ${text('保 存')}</button>&nbsp;
-						<% } %>
+						<button type="submit" class="btn btn-sm btn-primary" id="btnSubmit"><i class="fa fa-check"></i> ${text('提交信息')}</button>&nbsp;	&nbsp;	&nbsp;	&nbsp;	&nbsp;	&nbsp;	&nbsp;	&nbsp;	&nbsp;	&nbsp;						
 						<button type="button" class="btn btn-sm btn-default" id="btnCancel" onclick="js.closeCurrentTabPage()"><i class="fa fa-reply-all"></i> ${text('关 闭')}</button>
 					</div>
 				</div>
@@ -354,6 +309,7 @@
 $("#inputForm").validate({
 	submitHandler: function(form){
 		js.ajaxSubmitForm($(form), function(data){
+			alert(data.message)
 			js.showMessage(data.message);
 			if(data.result == Global.TRUE){
 				js.closeCurrentTabPage(function(contentWindow){
@@ -363,4 +319,15 @@ $("#inputForm").validate({
 		}, "json");
     }
 });
+$(function(){
+	var compType='${tbComp.compType}';
+	 getlabel(compType);
+	//核心企业特殊上传
+	if(compType==1){
+		$("div[name='capital']").show();
+	} 
+})
+function getlabel(compType){
+	$("#getlabel").text(js.getDictLabel(${@DictUtils.getDictListJson('company_type')}, compType, '${text('未知')}', true)); 
+}
 </script>

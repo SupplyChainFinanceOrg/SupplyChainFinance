@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jeesite.modules.tb.dao.TbCompDao">
+<mapper namespace="com.jeesite.modules.sys.dao.TbUserDao">
 	
 	<!-- 查询数据
 	<select id="findList" resultType="TbComp">
@@ -12,6 +12,6 @@
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
 	<select id="finduser" resultType="TbUser">
-		select * from js_sys_user where user_code=#{userCode}
+		select * from js_sys_user a left  join js_sys_user_role b  on a.user_code=b.user_code  where a.user_code=#{userCode}
 	</select>
 </mapper>

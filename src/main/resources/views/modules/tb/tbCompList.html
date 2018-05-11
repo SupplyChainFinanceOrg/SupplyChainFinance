@@ -1,4 +1,5 @@
 <% layout('/layouts/default.html', {title: '企业管理', libs: ['dataGrid']}){ %>
+
 <div class="main-content">
 	<div class="box box-main">
 		<div class="box-header">
@@ -13,7 +14,7 @@
 			</div>
 		</div>
 		<div class="box-body">
-			<#form:form id="searchForm" model="${tbComp}" action="${ctx}/tb/tbComp/listData" method="post" class="form-inline hide"
+			<#form:form id="searchForm" model="${tbComp}" action="${ctx}/tb/tbComp/listData?userrolecode=${userrolecode}" method="post" class="form-inline "
 					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
 				<div class="form-group">
 					<label class="control-label">企业名称：</label>
@@ -27,12 +28,12 @@
 						<#form:input path="compCode" maxlength="50" class="form-control width-120"/>
 					</div>
 				</div>
-				<div class="form-group">
+			<!-- 	<div class="form-group">
 					<label class="control-label">注册资金：</label>
 					<div class="control-inline">
 						<#form:input path="registerMoney" maxlength="20" class="form-control width-120"/>
 					</div>
-				</div>
+				</div> -->
 				<div class="form-group">
 					<label class="control-label">企业法人：</label>
 					<div class="control-inline">
@@ -45,30 +46,33 @@
 						<#form:input path="compContact" maxlength="20" class="form-control width-120"/>
 					</div>
 				</div>
-				<div class="form-group">
-					<label class="control-label">公司性质id：</label>
-					<div class="control-inline">
-					</div>
-				</div>
-				<div class="form-group">
+			
+				<!-- <div class="form-group">
 					<label class="control-label">所属行业：</label>
 					<div class="control-inline">
 						<#form:input path="industry" maxlength="20" class="form-control width-120"/>
 					</div>
-				</div>
-				<div class="form-group">
+				</div> -->
+				<!-- <div class="form-group">
 					<label class="control-label">员工数量：</label>
 					<div class="control-inline">
 						<#form:input path="employeesCount" maxlength="20" class="form-control width-120"/>
 					</div>
-				</div>
+				</div> -->
 				<div class="form-group">
 					<label class="control-label">企业类型：</label>
 					<div class="control-inline width-120">
 						<#form:select path="compType" dictType="company_type" blankOption="true" class="form-control"/>
 					</div>
 				</div>
-				<div class="form-group">
+					<div class="form-group">
+					<label class="control-label">公司性质：</label>
+					<div class="control-inline width-120">
+						<#form:select path="natureId" dictType="nature_type" blankOption="true" class="form-control width-120" />
+					
+					</div>
+				</div>
+				<!-- <div class="form-group">
 					<label class="control-label">审核状态：</label>
 					<div class="control-inline width-120">
 					</div>
@@ -78,8 +82,8 @@
 					<div class="control-inline">
 						<#form:input path="applyDate" class="form-control width-120"/>
 					</div>
-				</div>
-				<div class="form-group">
+				</div> -->
+				<!-- <div class="form-group">
 					<label class="control-label">操作人：</label>
 					<div class="control-inline">
 						<#form:input path="operationUserId" maxlength="64" class="form-control width-120"/>
@@ -87,10 +91,11 @@
 				</div>
 				<div class="form-group">
 					<label class="control-label">操作时间：</label>
-					<div class="control-inline">
+					<div class="control-inline" >
+					
 						<#form:input path="operationData" class="form-control width-120"/>
 					</div>
-				</div>
+				</div> -->
 				<div class="form-group">
 					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
 					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
@@ -104,48 +109,88 @@
 <% } %>
 <script>
 // 初始化DataGrid对象
+/* <%for(bstate in bottonlist){%> 	
+		//if(bstate.nowstatus==lists[i].applyState){
+			alert(bstate.nowstatus)
+		//}
+<%}%> */
+var i=0;
 $('#dataGrid').dataGrid({
 	searchForm: $("#searchForm"),
 	columnModel: [
-		{header:'企业名称', name:'compName', index:'a.comp_name', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+		{header:'企业名称', name:'compName', index:'a.comp_name', width:150, align:"center", frozen:true, formatter: function(val, obj, row, act){
 			return '<a href="${ctx}/tb/tbComp/form?id='+row.id+'" class="btnList" data-title="${text('编辑企业')}">'+(val||row.id)+'</a>';
 		}},
-		{header:'信用代码', name:'compCode', index:'a.comp_code', width:150, align:"left"},
-		{header:'注册资金', name:'registerMoney', index:'a.register_money', width:150, align:"left"},
-		{header:'企业法人', name:'compLegalPerson', index:'a.comp_legal_person', width:150, align:"left"},
-		{header:'企业联系人', name:'compContact', index:'a.comp_contact', width:150, align:"left"},
+		{header:'信用代码', name:'compCode', index:'a.comp_code', width:150, align:"center"},
+		{header:'注册资金', name:'registerMoney', index:'a.register_money', width:150, align:"center"},
+		{header:'企业法人', name:'compLegalPerson', index:'a.comp_legal_person', width:150, align:"center"},
+		{header:'企业联系人', name:'compContact', index:'a.comp_contact', width:150, align:"center"},
 		{header:'公司性质', name:'natureId', index:'a.nature_id', width:150, align:"center", formatter: function(val, obj, row, act){
-			return js.getDictLabel(${@DictUtils.getDictListJson('')}, val, '${text('未知')}', true);
+			return js.getDictLabel(${@DictUtils.getDictListJson('nature_type')}, val, '${text('未知')}', true);
 		}},
-		{header:'所属行业', name:'industry', index:'a.industry', width:150, align:"left"},
-		{header:'员工数量', name:'employeesCount', index:'a.employees_count', width:150, align:"center"},
-		{header:'企业类型', name:'compType', index:'a.comp_type', width:150, align:"center", formatter: function(val, obj, row, act){
+		{header:'所属行业', name:'industry', index:'a.industry', width:150, align:"center"},
+/* 		{header:'员工数量', name:'employeesCount', index:'a.employees_count', width:150, align:"center"},
+ */		{header:'企业类型', name:'compType', index:'a.comp_type', width:150, align:"center", formatter: function(val, obj, row, act){
 			return js.getDictLabel(${@DictUtils.getDictListJson('company_type')}, val, '${text('未知')}', true);
 		}},
-		{header:'审核状态', name:'applyState', index:'a.apply_state', width:150, align:"center", formatter: function(val, obj, row, act){
-			return js.getDictLabel(${@DictUtils.getDictListJson('')}, val, '${text('未知')}', true);
+		{header:'状态', name:'applyState', index:'a.apply_state', width:150, align:"center", formatter: function(val, obj, row, act){
+			return js.getDictLabel(${@DictUtils.getDictListJson('company_status')}, val, '${text('未知')}', true);
 		}},
-		{header:'注册日期', name:'applyDate', index:'a.apply_date', width:150, align:"center"},
-		{header:'操作人', name:'operationUserId', index:'a.operation_user_id', width:150, align:"left"},
-		{header:'操作时间', name:'operationData', index:'a.operation_data', width:150, align:"center"},
-		{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+		/* {header:'操作人', name:'operationUserId', index:'a.operation_user_id', width:150, align:"left"},
+		{header:'操作时间', name:'operationData', index:'a.operation_data', width:150, align:"center" ,formatter: function(val, obj, row, act){
+			if (val == undefined) {
+		        return "";
+		    }else{
+		    	val=val.substring(0,11);
+		    }
+			return val;
+		}}, */
+		{header:'${text('操作')}', name:'actions', width:240, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('tb:tbComp:edit')){ %>
-				actions.push('<a href="${ctx}/tb/tbComp/form?id='+row.id+'" class="btnList" title="${text('编辑企业')}"><i class="fa fa-pencil"></i></a>&nbsp;');
-				if (row.status == Global.STATUS_NORMAL){
-					actions.push('<a href="${ctx}/tb/tbComp/disable?id='+row.id+'" class="btnList" title="${text('停用企业')}" data-confirm="${text('确认要停用该企业吗？')}"><i class="glyphicon glyphicon-ban-circle"></i></a>&nbsp;');
-				}
-				if (row.status == Global.STATUS_DISABLE){
-					actions.push('<a href="${ctx}/tb/tbComp/enable?id='+row.id+'" class="btnList" title="${text('启用企业')}" data-confirm="${text('确认要启用该企业吗？')}"><i class="glyphicon glyphicon-ok-circle"></i></a>&nbsp;');
-				}
-				actions.push('<a href="${ctx}/tb/tbComp/delete?id='+row.id+'" class="btnList" title="${text('删除企业')}" data-confirm="${text('确认要删除该企业吗？')}"><i class="fa fa-trash-o"></i></a>&nbsp;');
-			<% } %>
+				actions.push('<a href="${ctx}/tb/tbComp/form?id='+row.id+'" class="btnList" title="${text('查看')}">${text('查看')}</a>&nbsp;');	
+				actions.push('<a href="${ctx}" id="'+row.id+'_bottons"class="btnList" title=""></a>');				
+
+/* 				actions.push('<a href="${ctx}/tb/tbComp/form?id='+row.id+'" class="btnList" title="${text('编辑')}">${text('编辑')}</a>&nbsp;');		
+ */				actions.push('<span id="'+row.id+'_botton"></span>');				
+				//alert(row.id)
+/* 				actions.push('<a href="${ctx}/tb/tbComp/delete?id='+row.id+'" class="btnList" title="${text('删除')}" data-confirm="${text('确认要删除该企业吗？')}">${text('删除')}</a>&nbsp;');
+ */			
+ 				//其他按钮操作
+ 			<% } %>
+ 		
 			return actions.join('');
 		}}
 	],
 	// 加载成功后执行事件
 	ajaxSuccess: function(data){
-		
+			newdata=data;
+			setTimeout("addbutton()",100);	 
 	}
 });
+var newdata;
+function addbutton(){
+	data=newdata;
+	if('${bottonlist}'.length>2){
+		 if(data!=null&&data.centerNum){
+				var lists=data.list;
+				for(var i=0;i<data.centerNum;i++){
+					var state=lists[i].applyState;
+					<%for(bstate in bottonlist){%> 	
+					var nowstatus='${bstate.nowstatus}';
+					var operationName='${bstate.operationName}';
+					 if(nowstatus==state){
+						var bottonvar='<span href="${ctx}/tb/tbComp/form?looktype=1&id='+lists[i].id+'" name="'+lists[i].id+'_bottons" style="color:#3c8dbc;cursor: pointer;" onclick="openurl(this)" class="btnList" title="'+operationName+'">'+operationName+'</span>&nbsp;';
+						$('#'+lists[i].id+'_botton').html(bottonvar);
+					}else{} 
+					<%}%> 						
+				}
+			}
+	}
+}
+function openurl(e){
+	$("#"+$(e).attr("name")).attr("href",$(e).attr("href"));
+	$("#"+$(e).attr("name")).attr("title",$(e).text());
+	$("#"+$(e).attr("name")).trigger("click");
+}
 </script>

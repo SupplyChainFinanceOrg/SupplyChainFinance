@@ -54,7 +54,12 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 	}, orderBy="a.id DESC"
 )
 public class TbComp extends DataEntity<TbComp> {
-	
+	public static long JKQYTYPE=0;
+	public static long HXQYTYPE=1;
+	public static long JRQYTYPE=2;
+	public static String JKQYROLECODE="jkqy";
+	public static String HXQYROLECODE="hxqy";
+	public static String JRQYROLECODE="jrjg";
 	private static final long serialVersionUID = 1L;
 	private String compName;		// 企业名称
 	private String compCode;		// 统一社会信用代码
