@@ -17,21 +17,30 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
  */
 @Table(name="tb_contract", alias="a", columns={
 		@Column(name="id", attrName="id", label="id", isPK=true),
-		@Column(name="contract_name", attrName="contractName", label="合同名称", queryType=QueryType.LIKE),
+		@Column(name="name", attrName="name", label="合同名称", queryType=QueryType.LIKE),
 		@Column(name="product_id", attrName="productId", label="产品id"),
 		@Column(name="sign_state", attrName="signState", label="签署状态id"),
-		@Column(name="temp_path", attrName="tempPath", label="合同模板路径"),
-		@Column(name="contract_name", attrName="contractName", label="合同名称", queryType=QueryType.LIKE),
-	}, orderBy="a.id DESC"
+		@Column(name="temp_content", attrName="tempContent", label="合同模板路径"),
+		@Column(name="short_name", attrName="shortName", label="简称"),
+	}, orderBy="a.id ASC"
 )
 public class TbContract extends DataEntity<TbContract> {
 	
 	private static final long serialVersionUID = 1L;
-	private String contractName;		// 合同名称
+	private String name;			// 合同名称
 	private String productId;		// 产品id
 	private String signState;		// 签署状态id
-	private String tempPath;		// 合同模板路径
+	private String tempContent;		// 合同模板路径
+	private String shortName;		// 简称
 	
+	public String getShortName() {
+		return shortName;
+	}
+
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
+	}
+
 	public TbContract() {
 		this(null);
 	}
@@ -58,21 +67,20 @@ public class TbContract extends DataEntity<TbContract> {
 	}
 	
 	@Length(min=0, max=200, message="合同模板路径长度不能超过 200 个字符")
-	public String getTempPath() {
-		return tempPath;
+	public String getName() {
+		return name;
 	}
 
-	public void setTempPath(String tempPath) {
-		this.tempPath = tempPath;
+	public void setName(String name) {
+		this.name = name;
 	}
 	
-	@Length(min=0, max=50, message="合同名称长度不能超过 50 个字符")
-	public String getContractName() {
-		return contractName;
+	public String getTempContent() {
+		return tempContent;
 	}
 
-	public void setContractName(String contractName) {
-		this.contractName = contractName;
+	public void setTempContent(String tempContent) {
+		this.tempContent = tempContent;
 	}
 	
 }

@@ -11,5 +11,26 @@
 		</where>
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
+	<insert id="saveByXml" parameterType="TbSginContract">
 	
+	INSERT INTO jeesite.tb_sgin_contract (
+  		loan_id,
+  		contract_field_id,
+  		contract_value,
+  		contract_id,
+  		field_name,
+  		field_code,
+  		state
+	) 
+	VALUES
+  	(
+   		 #{loanId},
+    	#{contractFieldId},
+    	#{contractValue},
+    	#{contractId},
+    	#{fieldName},
+    	#{fieldCode},
+    	#{state}
+  	) ;
+	</insert>
 </mapper>
