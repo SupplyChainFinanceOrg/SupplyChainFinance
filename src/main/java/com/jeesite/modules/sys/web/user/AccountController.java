@@ -5,6 +5,7 @@ package com.jeesite.modules.sys.web.user;
 
 import java.lang.reflect.Method;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -64,6 +65,16 @@ public class AccountController extends BaseController{
 	@ResponseBody
 	public String savereg(@Validated TbComp tbComp) {
 		try {
+			if(StringUtils.isBlank(tbComp.getContactPhone())){
+				return renderResult(Global.FALSE, "联系人电话不能为空！");
+			}else{
+				TbComp phonecheck=new TbComp();
+				phonecheck.setContactPhone(tbComp.getContactPhone());
+				List<TbComp> list=tbCompService.findList(phonecheck);
+				if(list!=null&&list.size()>0){
+					return renderResult(Global.FALSE, "联系人电话已存在，请更换电话！");
+				}
+			}
 			tbComp.setApplyState((long) 0);
 			tbCompService.save(tbComp);			
 		} catch (Exception e) {
