@@ -24,8 +24,8 @@ import com.jeesite.modules.apply.service.TbLoanApplyService;
 
 /**
  * tb_loan_applyController
- * @author zhengkj
- * @version 2018-05-08
+ * @author z
+ * @version 2018-05-12
  */
 @Controller
 @RequestMapping(value = "${adminPath}/apply/tbLoanApply")
@@ -74,49 +74,25 @@ public class TbLoanApplyController extends BaseController {
 	}
 
 	/**
-	 * 保存债务申请
+	 * 保存借款申请
 	 */
 	@RequiresPermissions("apply:tbLoanApply:edit")
 	@PostMapping(value = "save")
 	@ResponseBody
 	public String save(@Validated TbLoanApply tbLoanApply) {
 		tbLoanApplyService.save(tbLoanApply);
-		return renderResult(Global.TRUE, "保存债务申请成功！");
+		return renderResult(Global.TRUE, "保存借款申请成功！");
 	}
 	
 	/**
-	 * 停用债务申请
-	 */
-	@RequiresPermissions("apply:tbLoanApply:edit")
-	@RequestMapping(value = "disable")
-	@ResponseBody
-	public String disable(TbLoanApply tbLoanApply) {
-		tbLoanApply.setStatus(TbLoanApply.STATUS_DISABLE);
-		tbLoanApplyService.updateStatus(tbLoanApply);
-		return renderResult(Global.TRUE, "停用债务申请成功");
-	}
-	
-	/**
-	 * 启用债务申请
-	 */
-	@RequiresPermissions("apply:tbLoanApply:edit")
-	@RequestMapping(value = "enable")
-	@ResponseBody
-	public String enable(TbLoanApply tbLoanApply) {
-		tbLoanApply.setStatus(TbLoanApply.STATUS_NORMAL);
-		tbLoanApplyService.updateStatus(tbLoanApply);
-		return renderResult(Global.TRUE, "启用债务申请成功");
-	}
-	
-	/**
-	 * 删除债务申请
+	 * 删除借款申请
 	 */
 	@RequiresPermissions("apply:tbLoanApply:edit")
 	@RequestMapping(value = "delete")
 	@ResponseBody
 	public String delete(TbLoanApply tbLoanApply) {
 		tbLoanApplyService.delete(tbLoanApply);
-		return renderResult(Global.TRUE, "删除债务申请成功！");
+		return renderResult(Global.TRUE, "删除借款申请成功！");
 	}
 	
 }

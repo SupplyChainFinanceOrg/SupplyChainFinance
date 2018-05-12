@@ -16,8 +16,8 @@ import com.jeesite.modules.file.utils.FileUploadUtils;
 
 /**
  * tb_loan_applyService
- * @author zhengkj
- * @version 2018-05-08
+ * @author z
+ * @version 2018-05-12
  */
 @Service
 @Transactional(readOnly=true)

@@ -335,11 +335,24 @@ function clicksubmit(){
 				break;
 			}
 		}
-		if($('input[id^="'+files[i]+'WU_FILE"]').size()==0){
+		//alert($("ul[id='"+files[i]+"fileLists']").children("li").size())
+		//alert($('ul[id^="'+files[i]+fileLists+'"]').size());
+		/* if(){
+			
+		} */
+		//fileLists
+		 if($("ul[id='"+files[i]+"fileLists']").children("li").size()==0&&$("tbody[id='"+files[i]+"fileLists']").children("tr").size()==0){
 			isok=false;
 			js.showMessage(tipmsgarray[i]+"不能为空！");
 			break;
-		}
+		} 
+		/*  if($("ul[id='"+files[i]+"fileLists']").children("li").size()==0&&$("tbody[id='"+files[i]+"fileLists']").children("tr").size()){
+				isok=false;
+				js.showMessage(tipmsgarray[i]+"不能为空！");
+				break;
+		 }else{
+			 
+		 }  */
 	}
 	if(isok){
 		$("#btnSubmit").trigger('click');
