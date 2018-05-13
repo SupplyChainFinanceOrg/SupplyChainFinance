@@ -13,8 +13,6 @@
 			<div class="box-body">
 				<div class="form-unit">${text('企业信息')}</div>
 				<#form:hidden path="id"/>
-				<input id="url" name="url" style="display: none">
-				<input id="nextstatus" name="nextstatus" style="display: none">		
 			<input id="compId" name="compId" type="hidden" value="${tbLoanApply.compId}">				
 				
 				<div class="row">
@@ -747,13 +745,10 @@
 				<%}%>	
 			</div>
 			
-			<div class="box-footer" align="center">
-				<div class="row" style="margin: 0 100px 0 0; ">
+			<div class="box-footer">
+				<div class="row">
 					<div class="col-sm-offset-2 col-sm-10">
-						<button type="submit" class="btn btn-sm btn-primary" id="btnSubmit" style="display: none"></button>		
-						<%for(bstate in prolist){%> 	
-						<button type="button" class="btn btn-sm btn-primary"  onclick="change('${bstate.nextStateId}','${bstate.url}','${bstate.remark}')">${bstate.name}</button>	&nbsp;&nbsp;												
-						<%}%>				
+
 						<button type="button" class="btn btn-sm btn-default" id="btnCancel" onclick="js.closeCurrentTabPage()"><i class="fa fa-reply-all"></i> ${text('关 闭')}</button>
 					</div>
 				</div>
@@ -763,7 +758,6 @@
 </div>
 <% } %>
 <script>
-
 $("#inputForm").validate({
 	submitHandler: function(form){
 		js.ajaxSubmitForm($(form), function(data){
@@ -776,31 +770,4 @@ $("#inputForm").validate({
 		}, "json");
     }
 });
-function change(status,url,remark){
-	/* 	layer.alert('见到你真的很高兴', {icon: 1});*/
-		layer.alert(remark, {
-			     skin: 'layui-layer-molv' //样式类名  自定义样式
-			     ,closeBtn: 1    // 是否显示关闭按钮
-			     ,anim: 1 //动画类型
-			    ,btn: ['确定','取消'] //按钮
-			    ,icon: 8    // icon
-			    ,yes:function(){
-			         $('#nextstatus').val(status);
-			    	if(url.length>0){
-			    		$('#inputForm').attr("action",url)
-			    	}
-			    	 if(status==0){
-			    		 for(var i=0;i<$(".form-control").size();i++){
-			    				$(".form-control").eq(i).attr("class",$(".form-control").eq(i).attr("class").replace('required',' '))
-			    			} 
-			    		 for(var i=0;i<$(".wup_input").size();i++){
-			    				$(".wup_input").eq(i).attr("class",$(".wup_input").eq(i).attr("class").replace('required',' '))
-			    		 }
-			    	} 
-			    	$("#btnSubmit").trigger("click");
-			     }
-		     	,btn2:function(){
-			        layer.msg('已取消')
-			     }});
-	}
 </script>

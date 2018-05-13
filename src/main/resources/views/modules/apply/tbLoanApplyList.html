@@ -1,13 +1,13 @@
-<% layout('/layouts/default.html', {title: '借款申请管理', libs: ['dataGrid']}){ %>
+<% layout('/layouts/default.html', {title: '借款管理', libs: ['dataGrid']}){ %>
 <div class="main-content">
 	<div class="box box-main">
 		<div class="box-header">
 			<div class="box-title">
-				<i class="fa fa-list-alt"></i> ${text('借款申请管理')}
+				<i class="fa fa-list-alt"></i> ${text('借款管理')}
 			</div>
 			<div class="box-tools pull-right">
 				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
-				<% if(hasPermi('apply:tbLoanApply:edit')){ %>
+				<% if(hasPermi('apply:tbLoanApply:edit')&&userrolecode=='jkqy'){ %>
 					<a href="${ctx}/apply/tbLoanApply/form" class="btn btn-default btnTool" title="${text('新增借款申请')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
 				<% } %>
 			</div>

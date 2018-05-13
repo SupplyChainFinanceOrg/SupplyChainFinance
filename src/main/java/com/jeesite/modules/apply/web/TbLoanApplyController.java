@@ -176,14 +176,18 @@ public class TbLoanApplyController extends BaseController {
 		}
 		}
 		model.addAttribute("tbComp", tbComp);
+		//流程
+		//获取角色，状态
+		List<TbProcess> prolist=tbProcessService.buttunList(tbLoanApply.getApplyState()+"",TbProcess.APPALYTYPE);							
+		model.addAttribute("prolist", prolist);		
 		if("1".equals(request.getParameter("looktype"))){
-			//流程
-			//获取角色，状态
-			List<TbProcess> prolist=tbProcessService.buttunList(tbLoanApply.getApplyState()+"",TbProcess.APPALYTYPE);							
-			model.addAttribute("prolist", prolist);		
+	
 			return "modules/apply/tbLoanApplyLiu";
 		}
-		return "modules/apply/tbLoanApplyForm";
+		if(StringUtils.isEmpty(tbLoanApply.getId())){
+			return "modules/apply/tbLoanApplyForm";
+		}
+		return "modules/apply/tbLoanApplyDetail";
 	}
 
 	/**
@@ -200,7 +204,7 @@ public class TbLoanApplyController extends BaseController {
 				tbLoanApply.setApplyState(0l);
 			}
 		}
-		if(StringUtils.isEmpty(request.getParameter("nextstatus"))){
+		if(StringUtils.isEmpty(request.getParameter("nextstatus"))||StringUtils.isEmpty(tbLoanApply.getId())){
 			tbLoanApplyService.save(tbLoanApply);
 		}else{
 			TbLoanApply	oldtbLoanApply=tbLoanApplyService.get(tbLoanApply.getId());
