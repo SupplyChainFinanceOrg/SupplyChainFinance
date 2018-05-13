@@ -419,7 +419,7 @@ public class TbLoanApply extends DataEntity<TbLoanApply> {
 		this.productId = productId;
 	}
 	
-	@NotNull(message="借款期限 关联产品类型表不能为空")
+	@NotNull(message="借款期限不能为空")
 	public Long getLoanTime() {
 		return loanTime;
 	}
@@ -428,7 +428,7 @@ public class TbLoanApply extends DataEntity<TbLoanApply> {
 		this.loanTime = loanTime;
 	}
 	
-	@NotNull(message="核心企业合作年限 关联COO表不能为空")
+	@NotNull(message="核心企业合作年限不能为空")
 	public Long getCooperationId() {
 		return cooperationId;
 	}
@@ -501,7 +501,7 @@ public class TbLoanApply extends DataEntity<TbLoanApply> {
 		this.legalIdcard = legalIdcard;
 	}
 	
-	@Length(min=0, max=20, message="法人户口所在地Registered permanent residence长度不能超过 20 个字符")
+	@Length(min=0, max=20, message="法人户口所在地不能超过 20 个字符")
 	public String getLegalPrpPlace() {
 		return legalPrpPlace;
 	}

@@ -13,6 +13,8 @@
 			<div class="box-body">
 				<div class="form-unit">${text('企业信息')}</div>
 				<#form:hidden path="id"/>
+				<input id="url" name="url" style="display: none">
+				<input id="nextstatus" name="nextstatus" style="display: none">		
 			<input id="compId" name="compId" type="hidden" value="${tbLoanApply.compId}">				
 				
 				<div class="row">
@@ -737,7 +739,7 @@
 							<span class="required ">*</span>${tbatt.attachmentName}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-10">
 							<#form:fileupload id="${tbatt.id}_att" bizKey="${tbLoanApply.id}" bizType="tbLoanApply_${tbatt.id}" maxUploadNum="1"
-									uploadType="all" class="required" readonly="false"/><span style="color: red">${tbatt.attachmentRemar}</span>
+									uploadType="all" class="" readonly="false"/><span style="color: red">${tbatt.attachmentRemar}</span>
 							</div>
 						</div>
 					</div>
@@ -745,12 +747,13 @@
 				<%}%>	
 			</div>
 			
-			<div class="box-footer">
-				<div class="row">
+			<div class="box-footer" align="center">
+				<div class="row" style="margin: 0 100px 0 0; ">
 					<div class="col-sm-offset-2 col-sm-10">
-						<% if (hasPermi('apply:tbLoanApply:edit')){ %>
-							<button type="submit" class="btn btn-sm btn-primary" id="btnSubmit"><i class="fa fa-check"></i> ${text('保 存')}</button>&nbsp;
-						<% } %>
+						<button type="submit" class="btn btn-sm btn-primary" id="btnSubmit" style="display: none"></button>		
+						<%for(bstate in prolist){%> 	
+						<button type="button" class="btn btn-sm btn-primary"  onclick="change('${bstate.nextStateId}','${bstate.url}','${bstate.remark}')">${bstate.name}</button>	&nbsp;&nbsp;												
+						<%}%>				
 						<button type="button" class="btn btn-sm btn-default" id="btnCancel" onclick="js.closeCurrentTabPage()"><i class="fa fa-reply-all"></i> ${text('关 闭')}</button>
 					</div>
 				</div>
@@ -772,4 +775,23 @@ $("#inputForm").validate({
 		}, "json");
     }
 });
+function change(status,url,remark){
+	/* 	layer.alert('见到你真的很高兴', {icon: 1});*/
+		layer.alert(remark, {
+			     skin: 'layui-layer-molv' //样式类名  自定义样式
+			     ,closeBtn: 1    // 是否显示关闭按钮
+			     ,anim: 1 //动画类型
+			    ,btn: ['确定','取消'] //按钮
+			    ,icon: 8    // icon
+			    ,yes:function(){
+			         $('#nextstatus').val(status);
+			    	if(url.length>0){
+			    		$('#inputForm').attr("action",url)
+			    	}
+			    	$("#btnSubmit").trigger("click");
+			     }
+		     	,btn2:function(){
+			        layer.msg('已取消')
+			     }});
+	}
 </script>

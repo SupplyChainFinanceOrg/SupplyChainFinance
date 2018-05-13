@@ -78,6 +78,7 @@ public class AccountController extends BaseController{
 			tbComp.setApplyState((long) 0);
 			tbCompService.save(tbComp);			
 		} catch (Exception e) {
+			e.printStackTrace();
 			return renderResult(Global.FALSE, "注册信息提交失败，请稍后再试！");
 		}
 		return renderResult(Global.TRUE, "注册信息提交成功，请等待管理员审核！<br>5秒后，跳入登录界面！");

@@ -123,7 +123,6 @@ public class TbCompController extends BaseController {
 			//流程
 			//获取角色，状态
 			List<TbProcess> prolist=tbProcessService.buttunList(tbComp.getApplyState()+"",TbProcess.COMPANYTYPE);							
-			System.out.println(prolist);
 			model.addAttribute("prolist", prolist);		
 			return "modules/tb/tbCompLiu";
 		}else if("2".equals(request.getParameter("looktype"))){
@@ -139,7 +138,7 @@ public class TbCompController extends BaseController {
 	@RequiresPermissions("tb:tbComp:edit")
 	@PostMapping(value = "save")
 	@ResponseBody
-	public String save(@Validated TbComp tbComp,HttpServletRequest request, HttpServletResponse response) {
+	public String save(TbComp tbComp,HttpServletRequest request, HttpServletResponse response) {
 		if(StringUtils.isEmpty(request.getParameter("nextstatus"))){
 			tbCompService.save(tbComp);
 		}else{

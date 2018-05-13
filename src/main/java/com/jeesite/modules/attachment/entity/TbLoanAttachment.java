@@ -26,7 +26,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="attachment_name", attrName="attachmentName", label="附件名称", queryType=QueryType.LIKE),
 		@Column(name="attachment_remar", attrName="attachmentRemar", label="附件备注"),
 		@Column(name="attachment_type", attrName="attachmentType", label="附件类型 0企业 1个人"),
-	}, orderBy="a.id DESC"
+	}, orderBy="a.id asc"
 )
 public class TbLoanAttachment extends DataEntity<TbLoanAttachment> {
 	

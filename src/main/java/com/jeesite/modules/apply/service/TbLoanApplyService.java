@@ -5,6 +5,7 @@ package com.jeesite.modules.apply.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +13,8 @@ import com.jeesite.common.entity.Page;
 import com.jeesite.common.service.CrudService;
 import com.jeesite.modules.apply.entity.TbLoanApply;
 import com.jeesite.modules.apply.dao.TbLoanApplyDao;
+import com.jeesite.modules.attachment.entity.TbLoanAttachment;
+import com.jeesite.modules.attachment.service.TbLoanAttachmentService;
 import com.jeesite.modules.file.utils.FileUploadUtils;
 
 /**
@@ -22,7 +25,8 @@ import com.jeesite.modules.file.utils.FileUploadUtils;
 @Service
 @Transactional(readOnly=true)
 public class TbLoanApplyService extends CrudService<TbLoanApplyDao, TbLoanApply> {
-	
+	@Autowired
+	private TbLoanAttachmentService tbLoanAttachmentService;
 	/**
 	 * 获取单条数据
 	 * @param tbLoanApply
@@ -56,6 +60,12 @@ public class TbLoanApplyService extends CrudService<TbLoanApplyDao, TbLoanApply>
 		FileUploadUtils.saveFileUpload(tbLoanApply.getId(), "tbLoanApply_image");
 		// 保存上传附件
 		FileUploadUtils.saveFileUpload(tbLoanApply.getId(), "tbLoanApply_file");
+		List<TbLoanAttachment> list=tbLoanAttachmentService.findList(new TbLoanAttachment());
+		if(list!=null&&list.size()>0){
+			for(TbLoanAttachment att:list){
+				FileUploadUtils.saveFileUpload(tbLoanApply.getId(), "tbLoanApply_"+att.getId());
+			}
+		}
 	}
 	
 	/**

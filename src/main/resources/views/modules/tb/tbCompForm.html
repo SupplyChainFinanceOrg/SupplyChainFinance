@@ -146,7 +146,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class="required hide">*</span> 员工数量：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="employeesCount" maxlength="20" class="form-control digits"/>
+								<#form:input path="employeesCount" maxlength="5" class="form-control digits"/>
 							</div>
 						</div>
 					</div>
@@ -194,7 +194,7 @@
 						<div class="form-group">
 							<label class="control-label col-sm-2">公司简介：</label>
 							<div class="col-sm-10">
-						       <#form:textarea path="compProfile" class="form-control" style="height:100px" />
+						       <#form:textarea path="compProfile" class="form-control " style="height:100px" />
 							</div>
 						</div>
 					</div>
@@ -206,7 +206,7 @@
 								<span class="required ">*</span> 法人身份证正面：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
 								<#form:fileupload id="idCardA"    bizKey="${tbComp.id}" bizType="tbComp_idCardA" maxUploadNum="1"
-									uploadType="image" class="" readonly="false"/>
+									uploadType="image" class="required" readonly="false"/>
 							</div>
 						</div>
 					</div>
@@ -216,7 +216,7 @@
 								<span class="required ">*</span> 法人身份证反面：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
 							<#form:fileupload id="idCardB" bizKey="${tbComp.id}" bizType="tbComp_idCardB" maxUploadNum="1"
-									uploadType="image" class="" readonly="false"/>
+									uploadType="image" class="required" readonly="false"/>
 							</div>
 						</div>
 					</div>
@@ -228,7 +228,7 @@
 								<span class="required">*</span> 特殊行业许可证：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
 							<#form:fileupload id="specialTradeLicense"  bizKey="${tbComp.id}" bizType="tbComp_specialTradeLicense" maxUploadNum="1"
-									uploadType="image" class="" readonly="false"/>
+									uploadType="image" class="required" readonly="false"/>
 							</div>
 						</div>
 					</div>
@@ -238,7 +238,7 @@
 								<span class="required">*</span> 营业执照：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
 								<#form:fileupload id="businessLicense" bizKey="${tbComp.id}" bizType="tbComp_businessLicense" maxUploadNum="1"
-									uploadType="image" class="" readonly="false"/>
+									uploadType="image" class="required" readonly="false"/>
 							</div>
 						</div>
 					</div>
@@ -274,7 +274,7 @@
 							<label class="control-label col-sm-2"><span class="required ">*</span>企业章程附件：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-10">
 							<#form:fileupload id="articlesAssociation" bizKey="${tbComp.id}" bizType="tbComp_articlesAssociation" maxUploadNum="1"
-									uploadType="all" class="" readonly="false"/>
+									uploadType="all" class="required" readonly="false"/>
 							</div>
 						</div>
 					</div>
@@ -285,7 +285,7 @@
 							<label class="control-label col-sm-2"><span class="required ">*</span>验资报告附件：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-10">
 							<#form:fileupload id="capitalVerificationReport" bizKey="${tbComp.id}" bizType="tbComp_capitalVerificationReport" maxUploadNum="1"
-									uploadType="all" class="" readonly="false"/>
+									uploadType="all" class="required" readonly="false"/>
 							</div>
 						</div>
 					</div>
@@ -309,7 +309,6 @@
 $("#inputForm").validate({
 	submitHandler: function(form){
 		js.ajaxSubmitForm($(form), function(data){
-			alert(data.message)
 			js.showMessage(data.message);
 			if(data.result == Global.TRUE){
 				js.closeCurrentTabPage(function(contentWindow){
