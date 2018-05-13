@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.Length;
 
 import com.jeesite.common.entity.DataEntity;
 import com.jeesite.common.mybatis.annotation.Column;
+import com.jeesite.common.mybatis.annotation.JoinTable;
 import com.jeesite.common.mybatis.annotation.Table;
 import com.jeesite.common.mybatis.mapper.query.QueryType;
 
@@ -21,7 +22,11 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="contract_field_id", attrName="contractFieldId", label="合同字段id"),
 		@Column(name="contract_value", attrName="contractValue", label="签署字段的值"),
 		@Column(name="contract_id", attrName="contractId", label="合同id"),
-	}, orderBy="a.id DESC"
+		@Column(name="field_name", attrName="fieldName", label="字段名称"),
+		@Column(name="field_code", attrName="fieldCode", label="字段代码"),
+		@Column(name="state", attrName="state", label="借款状态"),
+	}, 
+orderBy="a.id asc"
 )
 public class TbSginContract extends DataEntity<TbSginContract> {
 	
@@ -30,9 +35,36 @@ public class TbSginContract extends DataEntity<TbSginContract> {
 	private Long contractFieldId;		// 合同字段id
 	private String contractValue;		// 签署字段的值
 	private Long contractId;		// 合同id
+	private String fieldName;
+	private String fieldCode;		// 签署字段的值
+	private String state;	
 	
+	public String getFieldCode() {
+		return fieldCode;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public void setFieldCode(String fieldCode) {
+		this.fieldCode = fieldCode;
+	}
+
 	public TbSginContract() {
 		this(null);
+	}
+
+	public String getFieldName() {
+		return fieldName;
+	}
+
+	public void setFieldName(String fieldName) {
+		this.fieldName = fieldName;
 	}
 
 	public TbSginContract(String id){

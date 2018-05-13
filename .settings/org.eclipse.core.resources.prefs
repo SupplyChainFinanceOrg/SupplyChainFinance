@@ -3,6 +3,7 @@ encoding//src/main/java=UTF-8
 encoding//src/main/resources=UTF-8
 encoding//src/main/resources/config/beetl.properties=UTF-8
 encoding//src/main/resources/config/ueditor.json=UTF-8
+encoding//src/main/resources/views/modules/contract/contractMain.html=UTF-8
 encoding//src/main/resources/views/modules/demo/dataGridEditGrid.html=UTF-8
 encoding//src/main/resources/views/modules/demo/dataGridGroupGrid.html=UTF-8
 encoding//src/main/resources/views/modules/demo/formEditForm.html=UTF-8

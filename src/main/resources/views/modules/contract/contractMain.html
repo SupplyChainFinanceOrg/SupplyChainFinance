@@ -1,0 +1,39 @@
+<% layout('/layouts/default.html'){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header with-border">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> 查看合同内容
+			</div>
+			<button class="btn">一键签约</button><button onclick="location.href='../contract/tbContract/parmSetting?loanId=1'"  class="btn">设置合同参数</button>
+			<ul class="nav nav-tabs pull-right">
+				<% for(var contract in contractList){ %> 
+				<li <% if(contractLP.index==1){ %>class="active" <% } %>><a
+					style="text-decoration: none; color: #969696; cursor: pointer;"
+					data-toggle="tab" aria-expanded="true"
+					onclick="chengeTab(${contractLP.index},${contractLP.size})">${contract.name}</a></li>
+				 <% } %>
+			</ul>
+		</div>
+		
+		<% for(var contractSign in contractSignList){ %> 
+		
+		<div id="tab-${contractSignLP.index}" style="padding: 50px;">${contractSignLP.index}${contractSign.contractContent}</div>
+		
+		<% } %>
+	</div>
+</div>
+<% } %>
+<script>
+	function chengeTab(index,count) {
+		for(var i=0;i<count;i++){
+			var id=i+1;
+			if (index == id) {
+				document.getElementById("tab-"+id).style.display = "";//显示
+			}else{
+				document.getElementById("tab-"+id).style.display = "none";//隐藏
+			}
+			
+		}
+	}
+</script>

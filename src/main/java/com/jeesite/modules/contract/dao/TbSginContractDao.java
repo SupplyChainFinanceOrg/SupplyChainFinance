@@ -14,5 +14,5 @@ import com.jeesite.modules.contract.entity.TbSginContract;
  */
 @MyBatisDao
 public interface TbSginContractDao extends CrudDao<TbSginContract> {
-	
+	public void saveByXml(TbSginContract tbSginContract);
 }
