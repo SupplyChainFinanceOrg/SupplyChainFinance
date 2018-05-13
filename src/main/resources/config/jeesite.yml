@@ -17,7 +17,6 @@ demoMode: false
 #============================#
 #===== Database sttings =====#
 #============================#
-
 # 数据库连接
 jdbc: 
   
@@ -26,11 +25,8 @@ jdbc:
   driver: com.mysql.jdbc.Driver
   url: jdbc:mysql://127.0.0.1:3306/jeesite?useUnicode=true&characterEncoding=utf-8 
   username: root
-  password: root
- # url: jdbc:mysql://159.65.108.22:3306/jeesite?useUnicode=true&characterEncoding=utf-8 
- # username: root
- # password: Gyl2018.b
-  testSql: SELECT 1
+  password: hanzl
+
 #
 #  # Oracle 数据库配置
 #  type: oracle
@@ -398,7 +394,7 @@ jdbc:
 #===== Message settings =====#
 #============================#
 
-#msg:
+msg:
 #
 #  # 是否开启实时发送消息（保存消息后立即检查未读消息并发送），分布式部署下请单独配置消息发送服务，不建议开启此选项。
 #  realtime:
@@ -406,7 +402,7 @@ jdbc:
 #    enabled: true
 #    # 消息发送任务Bean名称
 #    sendTaskBeanName: msgLocalSendTask
-#
+# 你
 #  # 邮件发送参数
 #  email:
 #    fromAddress: test@163.com
@@ -417,9 +413,9 @@ jdbc:
 #
 #  # 短信网关
 #  sms:
-#    url: http://host:port/msg/sendSms
-#    data: account=demo&pswd=demo&product=
-#    suffix: 【JeeSite】
+   url: http://host:port/msg/sendSms
+   data: account=demo&pswd=demo&product=
+   suffix: 【大雁金服】
 #
 #  # 微信相关
 #  weixin:
@@ -458,4 +454,14 @@ jdbc:
 #============================#
 #===== Project settings =====#
 #============================#
-
+contractApi :
+    #html 转换 pdf 字体路径
+    fontPath : d:/simsun.ttc
+    #合同PDF存储路径
+    savePath : d:/contract/uploadpdf
+    #开发者id
+    developerId : 1845372398275133986
+    #api私钥
+    praviteKey : MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAIb3IZhGRHWFMP0JPpmsjp5Ak8qK4/LNvuNjPN5vNAfltBZx+itAocNT4yHJThriXdJSrshzo4aQWNrrrx+4fr5AWkYutE87Ea4wvdLlMvWKe+FJ9N0OUmP7Kc666U+m+bVItT+3AIBTk2Qng8cXUSIfeZomSWzgKBmY5SQANaMHAgMBAAECgYAvswPih2MGjc4kf7HqKfw1nekdujyZwXFnd9k5W9/tspcVH68kvjDtkaZCeJzsD3jNLn+rRINUuYtNw+IeudvA6fduAEaT1YsHPO+PSyfTT19ZqlirVwJ6Vya7DUvC5V45g6kf7Zo5+T1it+PHX3O3d6u9wvEWEDG1Shv3MtsIsQJBAMPtHW9Bz4YMCS38Pjh0pap9dr124d9zfeFNJpyRU7Cqfs6Y/SwBp1aBPySO2Oz8jjeSrm10d77tsgF2Jnd2Z70CQQCwWP/mltECNCrV/ACP7ZFWVm1yq2ko7SnyJjLIswLeW21dix81+jAnuAWyT8TFV4eZnUAiVJqSpv2wC3sEIrATAkBf1gdU2ZMiFZcT6FOjF+PFPnOrf5BC1eJYJ33gjfGq8+rtMcZ9FR3+YWA6iKkxWuRR6Kzrm1HLkcdFkb6FJuTdAkEAqrwQTlV4WHTfgDuy46Zzzy5wWtQgRVKRCPP4uR2vyk6kbSvT9POcief+A+x9Kz8adxyrSlG1MgVhmn8TBCb9ZwJAVD5g3BL4WJQtLlgqNfY/ulUJt54XD35bWarI49ECR4lipNxZ/5Ahwmf7uK13Rfod7xDl3E5Jz/EEiyNp5uBo2w==
+    #api地址
+    host : https://openapi.bestsign.info/openapi/v3
