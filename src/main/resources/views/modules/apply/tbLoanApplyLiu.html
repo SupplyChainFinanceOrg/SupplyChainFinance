@@ -788,6 +788,14 @@ function change(status,url,remark){
 			    	if(url.length>0){
 			    		$('#inputForm').attr("action",url)
 			    	}
+			    	if(status==0){
+			    		 for(var i=0;i<$(".form-control").size();i++){
+			    				$(".form-control").eq(i).attr("class",$(".form-control").eq(i).attr("class").replace('required',' '))
+			    			} 
+			    		 for(var i=0;i<$(".wup_input").size();i++){
+			    				$(".wup_input").eq(i).attr("class",$(".wup_input").eq(i).attr("class").replace('required',' '))
+			    		 }
+			    	} 
 			    	$("#btnSubmit").trigger("click");
 			     }
 		     	,btn2:function(){
