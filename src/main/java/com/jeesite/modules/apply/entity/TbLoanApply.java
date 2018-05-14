@@ -89,6 +89,24 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="core_sys_url", attrName="coreSysUrl", label="核心企业系统登录地址"),
 		@Column(name="core_sys_username", attrName="coreSysUsername", label="核心企业系统登录用户名"),
 		@Column(name="core_sys_pwd", attrName="coreSysPwd", label="核心企业系统登录密码"),
+		@Column(name="actual_living_address", attrName="actualLivingAddress", label="实际居住地址"),
+		@Column(name="household_contacts1", attrName="householdContacts1", label="家庭联系人1"),
+		@Column(name="household_contacts2", attrName="householdContacts2", label="家庭联系人2"),
+		@Column(name="household_contacts1_relationship", attrName="householdContacts1Relationship", label="家庭联系人1关系 0父母 1配偶 2子女"),
+		@Column(name="household_contacts2_relationship", attrName="householdContacts2Relationship", label="家庭联系人2关系 0父母 1配偶 2子女"),
+		@Column(name="household_contacts1_phone", attrName="householdContacts1Phone", label="家庭联系人1 电话"),
+		@Column(name="household_contacts2_phone", attrName="householdContacts2Phone", label="家庭联系人2 电话"),
+		@Column(name="other_contacts1", attrName="otherContacts1", label="其他联系人1"),
+		@Column(name="other_contacts1_relationship", attrName="otherContacts1Relationship", label="其他联系人1关系 0亲属 1朋友 2同事"),
+		@Column(name="other_contacts1_phone", attrName="otherContacts1Phone", label="其他联系人1电话"),
+		@Column(name="other_contacts2_phone", attrName="otherContacts2Phone", label="其他联系人2电话"),
+		@Column(name="contarct_code", attrName="contarctCode", label="购销合同编号（应收账款）"),
+		@Column(name="contact_amount", attrName="contactAmount", label="账款金额"),
+		@Column(name="urge_date_start", attrName="urgeDateStart", label="催账日期起"),
+		@Column(name="urge_date_end", attrName="urgeDateEnd", label="催账日期止"),
+		@Column(name="money_collecting_account", attrName="moneyCollectingAccount", label="催账日期止"),
+		@Column(name="money_collecting_bank", attrName="moneyCollectingBank", label="催账日期止"),
+		@Column(name="money_collecting_name", attrName="moneyCollectingName", label="催账日期止"),
 	}, orderBy="a.id DESC"
 )
 public class TbLoanApply extends DataEntity<TbLoanApply> {
@@ -160,7 +178,57 @@ public class TbLoanApply extends DataEntity<TbLoanApply> {
 	private String coreSysUrl;		// 核心企业系统登录地址
 	private String coreSysUsername;		// 核心企业系统登录用户名
 	private String coreSysPwd;		// 核心企业系统登录密码
+
+	private String contarctCode;
+	private String contactAmount;
+	private String urgeDateStart;
+	private String urgeDateEnd;
+	private String moneyCollectingName;
+	private String moneyCollectingBank;
+	private String moneyCollectingAccount;
 	
+	
+
+	public String getMoneyCollectingName() {
+		return moneyCollectingName;
+	}
+
+	public void setMoneyCollectingName(String moneyCollectingName) {
+		this.moneyCollectingName = moneyCollectingName;
+	}
+
+	public String getMoneyCollectingBank() {
+		return moneyCollectingBank;
+	}
+
+	public void setMoneyCollectingBank(String moneyCollectingBank) {
+		this.moneyCollectingBank = moneyCollectingBank;
+	}
+
+	public String getMoneyCollectingAccount() {
+		return moneyCollectingAccount;
+	}
+
+	public void setMoneyCollectingAccount(String moneyCollectingAccount) {
+		this.moneyCollectingAccount = moneyCollectingAccount;
+	}
+
+	public String getUrgeDateStart() {
+		return urgeDateStart;
+	}
+
+	public void setUrgeDateStart(String urgeDateStart) {
+		this.urgeDateStart = urgeDateStart;
+	}
+
+	public String getUrgeDateEnd() {
+		return urgeDateEnd;
+	}
+
+	public void setUrgeDateEnd(String urgeDateEnd) {
+		this.urgeDateEnd = urgeDateEnd;
+	}
+
 	public TbLoanApply() {
 		this(null);
 	}
@@ -169,6 +237,22 @@ public class TbLoanApply extends DataEntity<TbLoanApply> {
 		super(id);
 	}
 	
+	public String getContarctCode() {
+		return contarctCode;
+	}
+
+	public void setContarctCode(String contarctCode) {
+		this.contarctCode = contarctCode;
+	}
+
+	public String getContactAmount() {
+		return contactAmount;
+	}
+
+	public void setContactAmount(String contactAmount) {
+		this.contactAmount = contactAmount;
+	}
+
 	@NotBlank(message="企业名称不能为空")
 	@Length(min=0, max=100, message="企业名称长度不能超过 100 个字符")
 	public String getCompName() {
