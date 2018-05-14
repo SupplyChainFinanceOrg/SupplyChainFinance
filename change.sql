@@ -97,3 +97,11 @@ ALTER TABLE `jeesite`.`tb_loan_apply` ADD COLUMN `money_collecting_account` VARC
 
 ALTER TABLE `jeesite`.`tb_sgin_contract` ADD COLUMN `field_code` VARCHAR(100) NULL COMMENT '字段代码' AFTER `field_name`; 
 
+-----------------------------------------------
+ALTER TABLE `tb_comp`
+ADD COLUMN `regCode`  varchar(30) NULL COMMENT '工商注册号' AFTER `capital_verification_report`,
+ADD COLUMN `orgCode`  varchar(30) NULL COMMENT '组织结构代码' AFTER `regCode`,
+ADD COLUMN `taxCode`  varchar(30) NULL COMMENT '税务登记号' AFTER `orgCode`;
+ALTER TABLE `tb_comp`
+ADD COLUMN `cardNo`  varchar(30) NULL COMMENT '法人号' AFTER `taxCode`;
+---------------------------------------------
