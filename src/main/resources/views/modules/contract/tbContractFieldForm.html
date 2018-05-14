@@ -3,10 +3,10 @@
 	<div class="box box-main">
 		<div class="box-header with-border">
 			<div class="box-title">
-				<i class="fa fa-list-alt"></i> 参数设置
+				<i class="fa fa-list-alt"></i> 设置合同参数
 			</div>
 		</div>
-		<<#form:form id="inputForm" model="" action="" method="post" class="form-horizontal">
+		<#form:form id="inputForm" model="" action="${ctx}/contract/tbContract/submitSettingParm" method="post" class="form-horizontal">
 			<div class="box-body">
 			<% for(var contract in csList){ %> 
 				<div class="form-unit">${contract.shortName}</div>
@@ -22,7 +22,8 @@
 							<label class="control-label col-sm-2" title="">
 								<span class="required hide">*</span> ${sc.fieldName}:<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-5">
-								<#form:input name="sc${sc.id}" value="${sc.id},${sc.contractValue}" maxlength="11" class="form-control digits"/>
+								<#form:input name="values" value="${sc.contractValue}" maxlength="100" class="form-control digits"/>
+								<#form:hidden name="ids" value="${sc.id}" />
 							</div>
 						</div>
 					</div>
@@ -34,9 +35,9 @@
 			<div class="box-footer">
 				<div class="row">
 					<div class="col-sm-offset-2 col-sm-10">
-							<button type="submit" class="btn btn-sm btn-primary" id="btnSubmit"><i class="fa fa-check"></i> ${text('保 存')}</button>&nbsp;
+							<button type="submit" class="btn btn-sm btn-primary" id="btnSubmit"><i class="fa fa-check"></i> ${text('提交')}</button>&nbsp;
 					
-						<button type="button" class="btn btn-sm btn-default" id="btnCancel" onclick="js.closeCurrentTabPage()"><i class="fa fa-reply-all"></i> ${text('关 闭')}</button>
+						<button type="button" class="btn btn-sm btn-default" id="btnCancel" onclick="js.closeCurrentTabPage()"><i class="fa fa-reply-all"></i> ${text('关闭')}</button>
 					</div>
 				</div>
 			</div>

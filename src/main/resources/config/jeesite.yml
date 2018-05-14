@@ -455,10 +455,12 @@ msg:
 #===== Project settings =====#
 #============================#
 contractApi :
-    #html 转换 pdf 字体路径
+    #html 转换 pdf 字体路径 
     fontPath : d:/simsun.ttc
     #合同PDF存储路径
     savePath : d:/contract/uploadpdf
+    #合同编号
+    code : 玖鼎(_)保理第_号
     #开发者id
     developerId : 1845372398275133986
     #api私钥

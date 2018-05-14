@@ -5,7 +5,8 @@
 			<div class="box-title">
 				<i class="fa fa-list-alt"></i> 查看合同内容
 			</div>
-			<button class="btn">一键签约</button><button onclick="location.href='../contract/tbContract/parmSetting?loanId=1'"  class="btn">设置合同参数</button>
+			<button class="btn btn-sm btn-primary" style="margin-left: 20px;">一键签约</button><button style="margin-left: 20px;" 
+			onclick="location.href='${ctx}/contract/tbContract/parmSetting?loanId=1'"  class="btn btn-sm btn-primary">设置合同参数</button>
 			<ul class="nav nav-tabs pull-right">
 				<% for(var contract in contractList){ %> 
 				<li <% if(contractLP.index==1){ %>class="active" <% } %>><a
@@ -18,7 +19,7 @@
 		
 		<% for(var contractSign in contractSignList){ %> 
 		
-		<div id="tab-${contractSignLP.index}" style="padding: 50px;">${contractSignLP.index}${contractSign.contractContent}</div>
+		<div id="tab-${contractSignLP.index}" style="padding: 50px;   <% if(contractSignLP.index!=1){ %> display: none; <% } %>"  >${contractSignLP.index}${contractSign.contractContent}</div>
 		
 		<% } %>
 	</div>
