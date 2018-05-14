@@ -15,8 +15,6 @@ ALTER TABLE `tb_comp`
 CHANGE COLUMN `employees
 _count` `employees_count`  int(20) NULL DEFAULT NULL COMMENT '员工数量' AFTER `comp_email`
 ---------------------------------------------------------------------
-
-<<<<<<< HEAD
 ------------------------------------
 1.录入企业类型、性质等
 2.录入企业的状态
@@ -88,7 +86,6 @@ ALTER TABLE `jeesite`.`tb_sgin_contract` ADD COLUMN `field_name` VARCHAR(200) NU
 ALTER TABLE `jeesite`.`tb_contract_sign` ADD COLUMN `short_name` VARCHAR(50) NULL COMMENT '简称' AFTER `state`; 
 ALTER TABLE `jeesite`.`tb_sgin_contract` ADD COLUMN `state` INT(11) NULL COMMENT '借款状态' AFTER `field_code`; 
 ALTER TABLE `jeesite`.`tb_contract_sign` ADD COLUMN `state` INT(11) NULL COMMENT '状态' AFTER `operation_time`; 
-<<<<<<< HEAD
 ALTER TABLE `jeesite`.`tb_sgin_contract` ADD COLUMN `field_code` VARCHAR(100) NULL COMMENT '字段代码' AFTER `field_name`; 
 CREATE TABLE `jeesite`.`tb_counter`( `id` INT(11) NOT NULL AUTO_INCREMENT, `name` VARCHAR(20) COMMENT '名称', `value` VARCHAR(20) COMMENT '值', PRIMARY KEY (`id`) ); 
 ALTER TABLE `jeesite`.`tb_counter` ADD COLUMN `code` VARCHAR(20) NULL COMMENT '编号' AFTER `value`; 
