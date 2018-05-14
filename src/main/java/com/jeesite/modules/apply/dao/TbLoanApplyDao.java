@@ -9,8 +9,8 @@ import com.jeesite.modules.apply.entity.TbLoanApply;
 
 /**
  * tb_loan_applyDAO接口
- * @author zhengkj
- * @version 2018-05-08
+ * @author z
+ * @version 2018-05-12
  */
 @MyBatisDao
 public interface TbLoanApplyDao extends CrudDao<TbLoanApply> {

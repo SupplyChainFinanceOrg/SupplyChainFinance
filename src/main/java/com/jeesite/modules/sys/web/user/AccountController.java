@@ -5,6 +5,7 @@ package com.jeesite.modules.sys.web.user;
 
 import java.lang.reflect.Method;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,6 +28,7 @@ import com.jeesite.modules.sys.service.UserService;
 import com.jeesite.modules.sys.utils.UserUtils;
 import com.jeesite.modules.sys.utils.ValidCodeUtils;
 import com.jeesite.modules.tb.entity.TbComp;
+import com.jeesite.modules.tb.service.TbCompService;
 
 /**
  * 账号自助服务Controller
@@ -39,6 +42,8 @@ public class AccountController extends BaseController{
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private TbCompService tbCompService;
 	/**
 	 * 忘记密码页面
 	 */
@@ -49,7 +54,34 @@ public class AccountController extends BaseController{
 	}
 	@RequestMapping(value = "reguser")
 	public String reguser(TbComp tbComp, Model model) {
-		return "modules/tb/tbCompForm";
+		model.addAttribute("tbComp", tbComp);
+		return "modules/tb/compReg";
+	}
+	@RequestMapping(value = "syRegPre")
+	public String syRegPre(Model model) {
+		return "modules/sys/sysRegPre";
+	}
+	@PostMapping(value = "savereg")
+	@ResponseBody
+	public String savereg(@Validated TbComp tbComp) {
+		try {
+			if(StringUtils.isBlank(tbComp.getContactPhone())){
+				return renderResult(Global.FALSE, "联系人电话不能为空！");
+			}else{
+				TbComp phonecheck=new TbComp();
+				phonecheck.setContactPhone(tbComp.getContactPhone());
+				List<TbComp> list=tbCompService.findList(phonecheck);
+				if(list!=null&&list.size()>0){
+					return renderResult(Global.FALSE, "联系人电话已存在，请更换电话！");
+				}
+			}
+			tbComp.setApplyState((long) 0);
+			tbCompService.save(tbComp);			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return renderResult(Global.FALSE, "注册信息提交失败，请稍后再试！");
+		}
+		return renderResult(Global.TRUE, "注册信息提交成功，请等待管理员审核！<br>5秒后，跳入登录界面！");
 	}
 	/**
 	 * 获取短信、邮件验证码

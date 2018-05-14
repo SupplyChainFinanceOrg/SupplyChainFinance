@@ -13,13 +13,14 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * tb_buttonEntity
  * @author z
- * @version 2018-05-08
+ * @version 2018-05-11
  */
 @Table(name="tb_button", alias="a", columns={
 		@Column(name="id", attrName="id", label="id", isPK=true),
 		@Column(name="name", attrName="name", label="名称", queryType=QueryType.LIKE),
 		@Column(name="url", attrName="url", label="挑战链接"),
-		@Column(name="role_id", attrName="roleId", label="可见角色"),
+		@Column(name="remark", attrName="remark", label="挑战链接"),
+		
 		@Column(name="button_type", attrName="buttonType", label="按钮类型 0列表 1表单"),
 	}, orderBy="a.id DESC"
 )
@@ -30,7 +31,16 @@ public class TbButton extends DataEntity<TbButton> {
 	private String url;		// 挑战链接
 	private String roleId;		// 可见角色
 	private Integer buttonType;		// 按钮类型 0列表 1表单
+	private String remark;
 	
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
 	public TbButton() {
 		this(null);
 	}
@@ -38,6 +48,7 @@ public class TbButton extends DataEntity<TbButton> {
 	public TbButton(String id){
 		super(id);
 	}
+	
 	
 	@Length(min=0, max=20, message="名称长度不能超过 20 个字符")
 	public String getName() {

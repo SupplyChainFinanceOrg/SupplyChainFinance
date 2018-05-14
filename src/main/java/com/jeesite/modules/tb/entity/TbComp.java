@@ -4,11 +4,13 @@
 package com.jeesite.modules.tb.entity;
 
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
+
 import java.util.Date;
+
 import com.jeesite.common.mybatis.annotation.JoinTable;
 import com.jeesite.common.mybatis.annotation.JoinTable.Type;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import com.jeesite.common.entity.DataEntity;
 import com.jeesite.common.mybatis.annotation.Column;
 import com.jeesite.common.mybatis.annotation.Table;
@@ -54,7 +56,12 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 	}, orderBy="a.id DESC"
 )
 public class TbComp extends DataEntity<TbComp> {
-	
+	public static long JKQYTYPE=0;
+	public static long HXQYTYPE=1;
+	public static long JRQYTYPE=2;
+	public static String JKQYROLECODE="jkqy";
+	public static String HXQYROLECODE="hxqy";
+	public static String JRQYROLECODE="jrjg";
 	private static final long serialVersionUID = 1L;
 	private String compName;		// 企业名称
 	private String compCode;		// 统一社会信用代码
@@ -94,7 +101,7 @@ public class TbComp extends DataEntity<TbComp> {
 	public TbComp(String id){
 		super(id);
 	}
-	
+	@NotBlank(message="录入信息有误")
 	@Length(min=0, max=100, message="企业名称长度不能超过 100 个字符")
 	public String getCompName() {
 		return compName;
@@ -103,7 +110,7 @@ public class TbComp extends DataEntity<TbComp> {
 	public void setCompName(String compName) {
 		this.compName = compName;
 	}
-	
+	@NotBlank(message="录入信息有误")
 	@Length(min=0, max=50, message="统一社会信用代码长度不能超过 50 个字符")
 	public String getCompCode() {
 		return compCode;
@@ -139,7 +146,7 @@ public class TbComp extends DataEntity<TbComp> {
 	public void setRegisterMoney(String registerMoney) {
 		this.registerMoney = registerMoney;
 	}
-	
+	@NotBlank(message="录入信息有误")
 	@Length(min=0, max=20, message="企业法人长度不能超过 20 个字符")
 	public String getCompLegalPerson() {
 		return compLegalPerson;
@@ -148,7 +155,7 @@ public class TbComp extends DataEntity<TbComp> {
 	public void setCompLegalPerson(String compLegalPerson) {
 		this.compLegalPerson = compLegalPerson;
 	}
-	
+	@NotBlank(message="录入信息有误")
 	@Length(min=0, max=20, message="法人电话长度不能超过 20 个字符")
 	public String getLegalPersonPhone() {
 		return legalPersonPhone;
@@ -157,7 +164,7 @@ public class TbComp extends DataEntity<TbComp> {
 	public void setLegalPersonPhone(String legalPersonPhone) {
 		this.legalPersonPhone = legalPersonPhone;
 	}
-	
+	@NotBlank(message="录入信息有误")
 	@Length(min=0, max=20, message="企业联系人长度不能超过 20 个字符")
 	public String getCompContact() {
 		return compContact;
@@ -166,7 +173,7 @@ public class TbComp extends DataEntity<TbComp> {
 	public void setCompContact(String compContact) {
 		this.compContact = compContact;
 	}
-	
+	@NotBlank(message="录入信息有误")
 	@Length(min=0, max=20, message="联系人电话长度不能超过 20 个字符")
 	public String getContactPhone() {
 		return contactPhone;
@@ -175,7 +182,6 @@ public class TbComp extends DataEntity<TbComp> {
 	public void setContactPhone(String contactPhone) {
 		this.contactPhone = contactPhone;
 	}
-	
 	public Integer getNatureId() {
 		return natureId;
 	}
@@ -257,7 +263,7 @@ public class TbComp extends DataEntity<TbComp> {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	
+	@NotBlank(message="录入信息有误")
 	@Length(min=0, max=20, message="公司电话长度不能超过 20 个字符")
 	public String getCompPhone() {
 		return compPhone;
@@ -266,7 +272,7 @@ public class TbComp extends DataEntity<TbComp> {
 	public void setCompPhone(String compPhone) {
 		this.compPhone = compPhone;
 	}
-	
+	@NotBlank(message="录入信息有误")
 	@Length(min=0, max=64, message="公司邮箱长度不能超过 64 个字符")
 	public String getCompEmail() {
 		return compEmail;

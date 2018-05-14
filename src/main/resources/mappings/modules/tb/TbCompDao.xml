@@ -11,5 +11,7 @@
 		</where>
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
-	
+	<select id="finduser" resultType="TbUser">
+		select * from js_sys_user where user_code=#{userCode}
+	</select>
 </mapper>

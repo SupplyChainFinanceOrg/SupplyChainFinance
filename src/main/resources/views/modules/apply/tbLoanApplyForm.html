@@ -1,9 +1,9 @@
-<% layout('/layouts/default.html', {title: '债务申请管理', libs: ['validate','fileupload']}){ %>
+<% layout('/layouts/default.html', {title: '借款申请管理', libs: ['validate','fileupload']}){ %>
 <div class="main-content">
 	<div class="box box-main">
 		<div class="box-header with-border">
 			<div class="box-title">
-				<i class="fa fa-list-alt"></i> ${text(tbLoanApply.isNewRecord ? '新增债务申请' : '编辑债务申请')}
+				<i class="fa fa-list-alt"></i> ${text(tbLoanApply.isNewRecord ? '新增借款申请' : '编辑借款申请')}
 			</div>
 			<div class="box-tools pull-right">
 				<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
@@ -11,8 +11,12 @@
 		</div>
 		<#form:form id="inputForm" model="${tbLoanApply}" action="${ctx}/apply/tbLoanApply/save" method="post" class="form-horizontal">
 			<div class="box-body">
-				<div class="form-unit">${text('基本信息')}</div>
+				<div class="form-unit">${text('企业信息')}</div>
 				<#form:hidden path="id"/>
+				<input id="url" name="url" style="display: none">
+				<input id="nextstatus" name="nextstatus" style="display: none">		
+			<input id="compId" name="compId" type="hidden" value="${tbLoanApply.compId}">				
+				
 				<div class="row">
 					<div class="col-xs-6">
 						<div class="form-group">
@@ -26,7 +30,7 @@
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 统一社会信用代码：<i class="fa icon-question hide"></i></label>
+								<span class="required">*</span> 统一社会信用代码：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
 								<#form:input path="compCode" maxlength="50" class="form-control required"/>
 							</div>
@@ -39,50 +43,56 @@
 							<label class="control-label col-sm-4" title="">
 								<span class="required ">*</span> 注册时间：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="registerDate" class="form-control required"/>
-							</div>
+<#form:input path="registerDate" readonly="true" maxlength="20" class="form-control Wdate required"
+									dataFormat="date" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>							</div>
 						</div>
 					</div>
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 注册地址：<i class="fa icon-question hide"></i></label>
+								<span class="required hide">*</span> 注册资金：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="registerAddress" maxlength="500" class="form-control required"/>
+								<#form:input path="registerMoney" maxlength="20" class="form-control digits"/>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+
+									<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group">
+							<label class="control-label col-sm-2">注册地址：</label>
+							<div class="col-sm-10">
+								<#form:input path="registerAddress" maxlength="500" class="form-control"/>
 							</div>
 						</div>
 					</div>
 				</div>
+					
 				<div class="row">
+					
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 注册资金：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="registerMoney" maxlength="20" class="form-control required"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 企业法人：<i class="fa icon-question hide"></i></label>
+								<span class="required">*</span> 企业法人：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
 								<#form:input path="compLegalPerson" maxlength="20" class="form-control required"/>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="row">
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 法人电话：<i class="fa icon-question hide"></i></label>
+								<span class="required">*</span> 法人电话：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="legalPersonPhone" maxlength="20" class="form-control required"/>
+								<#form:input path="legalPersonPhone" maxlength="20" class="form-control required phone"/>
 							</div>
 						</div>
 					</div>
+				</div>
+				<div class="row">
+					
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
@@ -92,83 +102,103 @@
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="row">
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
 								<span class="required ">*</span> 联系人电话：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="contactPhone" maxlength="20" class="form-control required"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 公司性质id：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="natureId" maxlength="2" class="form-control required digits"/>
+								<#form:input path="contactPhone" maxlength="20" class="form-control required phone"/>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="row">
+					
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 所属行业：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> 公司电话：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="industry" maxlength="20" class="form-control required"/>
+								<#form:input path="compPhone" maxlength="20" class="form-control required phone"/>
 							</div>
 						</div>
+						
 					</div>
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 主营业务：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> 公司邮箱：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="compEmail" maxlength="64" class="form-control required email"/>
+							</div>
+						</div>
+					</div>
+				</div>
+					<div class="row">
+					
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required">*</span> 主营业务：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
 								<#form:input path="mainBusiness" class="form-control required"/>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="row">
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 公司简介：<i class="fa icon-question hide"></i></label>
+								<span class="required hide">*</span> 员工数量：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="compProfile" class="form-control required"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 是否特殊行业 0否 1是：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="speciaIndustry" maxlength="1" class="form-control required digits"/>
+								<#form:input path="employeesCount" maxlength="20" class="form-control digits"/>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="row">
+					
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 特殊行业许可证：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> 公司性质：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="specialTradeLicense" class="form-control required"/>
+								<#form:radio path="natureId" dictType="nature_type" class="form-control digits required" />						
 							</div>
 						</div>
 					</div>
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 营业执照：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> 所属行业：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="businessLicense" class="form-control required"/>
+							<#form:radio path="industry" dictType="industry_type" class="form-control digits required" />
+							</div>
+						</div>
+					</div>
+				</div>
+			
+				
+				<div class="row">
+					
+					
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> 是否特殊行业：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">							
+								<#form:radio path="speciaIndustry" dictType="specia_industry" class="form-control digits required" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group">
+							<label class="control-label col-sm-2">公司简介：</label>
+							<div class="col-sm-10">
+						       <#form:textarea path="compProfile" class="form-control" style="height:100px" />
 							</div>
 						</div>
 					</div>
@@ -179,7 +209,8 @@
 							<label class="control-label col-sm-4" title="">
 								<span class="required ">*</span> 法人身份证正面：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="idCardA" class="form-control required"/>
+								<#form:fileupload id="idCardA"    bizKey="${tbLoanApply.compId}" bizType="tbComp_idCardA" maxUploadNum="1"
+									uploadType="image" class="" readonly="false"/>
 							</div>
 						</div>
 					</div>
@@ -188,67 +219,70 @@
 							<label class="control-label col-sm-4" title="">
 								<span class="required ">*</span> 法人身份证反面：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="idCardB" class="form-control required"/>
+							<#form:fileupload id="idCardB" bizKey="${tbLoanApply.compId}" bizType="tbComp_idCardB" maxUploadNum="1"
+									uploadType="image" class="" readonly="false"/>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="row">
+			<div class="row">
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 公司电话：<i class="fa icon-question hide"></i></label>
+								<span class="required">*</span> 特殊行业许可证：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="compPhone" maxlength="20" class="form-control required"/>
+							<#form:fileupload id="specialTradeLicense"  bizKey="${tbLoanApply.compId}" bizType="tbComp_specialTradeLicense" maxUploadNum="1"
+									uploadType="image" class="" readonly="false"/>
 							</div>
 						</div>
 					</div>
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 公司邮箱：<i class="fa icon-question hide"></i></label>
+								<span class="required">*</span> 营业执照：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="compEmail" maxlength="64" class="form-control required"/>
+								<#form:fileupload id="businessLicense" bizKey="${tbLoanApply.compId}" bizType="tbComp_businessLicense" maxUploadNum="1"
+									uploadType="image" class="" readonly="false"/>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-6">
+				</div>	
+			
+<div class="row">
+					<div class="col-xs-12">
 						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 员工数量：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="employeesCount" maxlength="20" class="form-control required digits"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 企业id：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="compId" maxlength="64" class="form-control required"/>
+							<label class="control-label col-sm-2">
+							<span class="required ">*</span>企业简介附件：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-10">
+							<#form:fileupload id="compProfileAttachment" bizKey="${tbLoanApply.compId}" bizType="tbComp_compProfileAttachment" maxUploadNum="1"
+									uploadType="all" class="" readonly="false"/>
 							</div>
 						</div>
 					</div>
 				</div>
+				
+			
+				
+				
+			</div>
+							<div class="form-unit">${text('基本信息')}</div>
+			
 				<div class="row">
-					<div class="col-xs-6">
+				 	<div class="col-xs-6" hidden="true">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 用户id：<i class="fa icon-question hide"></i></label>
+								<span class="required hide">*</span> 用户id：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="userId" maxlength="64" class="form-control required"/>
+								<#form:input path="userId" maxlength="64" class="form-control"/>
 							</div>
 						</div>
-					</div>
+					</div> 
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
 								<span class="required ">*</span> 借款金额：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="loanAmount" maxlength="20" class="form-control required"/>
+								<#form:input path="loanAmount" maxlength="20" class="form-control required number"/>
 							</div>
 						</div>
 					</div>
@@ -268,7 +302,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class="required ">*</span> 借款人电话：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="loanPhone" maxlength="20" class="form-control required"/>
+								<#form:input path="loanPhone" maxlength="20" class="form-control required phone"/>
 							</div>
 						</div>
 					</div>
@@ -277,38 +311,18 @@
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 借款产品id：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> 借款产品：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="productId" maxlength="11" class="form-control required digits"/>
+							<#form:radio  path="productId" items="${tbProductlist}" itemLabel="prodctName" itemValue="id" class="form-control required" />
 							</div>
 						</div>
 					</div>
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 借款期限 关联产品类型表：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> 借款期限：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="loanTime" maxlength="11" class="form-control required digits"/>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 核心企业合作年限 关联COO表：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="cooperationId" maxlength="11" class="form-control required digits"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 借款用途：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="loanUse" maxlength="2000" class="form-control required"/>
+							<#form:radio  path="loanTime" items="${tbProductBorrowTypelist}" itemLabel="borrowTime" itemValue="id" class="form-control required" />							
 							</div>
 						</div>
 					</div>
@@ -317,18 +331,65 @@
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 还款来源：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> 核心企业合作年限：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="reimbursementSouce" maxlength="1000" class="form-control required"/>
+							
+								<#form:radio  path="cooperationId" dictType="time_cooperation" class="form-control required digits" />
+							
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group">
+							<label class="control-label col-sm-2">借款用途：</label>
+							<div class="col-sm-10">
+								<#form:textarea path="loanUse" rows="4" maxlength="2000" class="form-control"/>
+							</div>
+						</div>
+					</div>
+				</div>
+					<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group">
+							<label class="control-label col-sm-2">还款来源：</label>
+							<div class="col-sm-10">
+								<#form:textarea path="reimbursementSouce" rows="4" maxlength="1000" class="form-control"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> 企业房产：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:radio path="compHouse" dictType="comp_house" class="form-control required digits" />
 							</div>
 						</div>
 					</div>
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 企业房产 0自有 1租赁 2其他：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> 企业土地：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="compHouse" maxlength="1" class="form-control required digits"/>
+								<#form:radio path="compLand" dictType="comp_land" class="form-control required digits" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> 年销售额：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="annualSales" maxlength="20" class="form-control"/>
 							</div>
 						</div>
 					</div>
@@ -337,29 +398,30 @@
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 企业土地 0划拨 1出让 2租赁：<i class="fa icon-question hide"></i></label>
+								<span class="required hide">*</span> 净利润：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="compLand" maxlength="1" class="form-control required digits"/>
+								<#form:input path="netProfit" maxlength="20" class="form-control"/>
 							</div>
 						</div>
 					</div>
-					<div class="col-xs-6">
+						<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 年销售额：<i class="fa icon-question hide"></i></label>
+								<span class="required hide">*</span> 银行负债：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="annualSales" maxlength="20" class="form-control required"/>
+								<#form:input path="bankResponsible" maxlength="20" class="form-control"/>
 							</div>
 						</div>
 					</div>
+					
 				</div>
 				<div class="row">
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 净利润：<i class="fa icon-question hide"></i></label>
+								<span class="required hide">*</span> 法人户口所在地：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="netProfit" maxlength="20" class="form-control required"/>
+								<#form:input path="legalPrpPlace" maxlength="20" class="form-control"/>
 							</div>
 						</div>
 					</div>
@@ -368,7 +430,61 @@
 							<label class="control-label col-sm-4" title="">
 								<span class="required ">*</span> 法人身份证号：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="legalIdcard" maxlength="20" class="form-control required"/>
+								<#form:input path="legalIdcard" maxlength="20" class="form-control required idcard"/>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> 法人房产情况：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:radio path="legalHouse" dictType="legal_house" class="form-control required digits" />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> 法人车产情况：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:radio path="legalCar" dictType="legal_car" class="form-control required digits" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+				<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> 法人婚姻状况：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:radio path="legalMarriage" dictType="marriage" class="form-control required digits" />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> 居住情况：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:radio path="livingSituation" dictType="living" class="form-control required digits" />
+							</div>
+						</div>
+					</div>
+				
+				</div>
+				<div class="row">
+				
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> 户籍地址与实际居住地址是否一致：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:radio path="isRprAddress" dictType="is_rpr_address" class="form-control required digits" />
 							</div>
 						</div>
 					</div>
@@ -377,92 +493,24 @@
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 法人户口所在地Registered permanent residence：<i class="fa icon-question hide"></i></label>
+								<span class="required hide">*</span> 实际居住地址：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="legalPrpPlace" maxlength="20" class="form-control required"/>
+								<#form:textarea path="actualLivingAddress" rows="4" maxlength="500" class="form-control"/>
 							</div>
 						</div>
 					</div>
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 法人婚姻状况 0未婚 1已婚 2离异：<i class="fa icon-question hide"></i></label>
+								<span class="required hide">*</span> 如与实际居住地址不符 填写户籍地址：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="legalMarriage" maxlength="1" class="form-control required digits"/>
+								<#form:textarea path="rprAddress" rows="4" maxlength="500" class="form-control"/>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="row">
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 法人房产情况 0有房无贷款 1有房有贷款 2无房：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="legalHouse" maxlength="1" class="form-control required digits"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 法人车产情况 0有车无贷款 1有车有贷款 2无车：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="legalCar" maxlength="1" class="form-control required digits"/>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 居住情况 0自有房产 1租赁 2其他：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="livingSituation" maxlength="1" class="form-control required digits"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 银行负债：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="bankResponsible" maxlength="20" class="form-control required"/>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 实际居住地址：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="actualLivingAddress" maxlength="500" class="form-control required"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 户籍地址与实际居住地址是否一致 0是 1否：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="isRprAddress" maxlength="1" class="form-control required digits"/>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 如与实际居住地址不符 填写户籍地址：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="rprAddress" maxlength="500" class="form-control required"/>
-							</div>
-						</div>
-					</div>
+								<div class="row">
+				
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
@@ -472,138 +520,145 @@
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="row">
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 家庭联系人2：<i class="fa icon-question hide"></i></label>
+								<span class="required hide">*</span> 家庭联系人2：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="householdContacts2" maxlength="20" class="form-control required"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 家庭联系人1关系 0父母 1配偶 2子女：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="householdContacts1Relationship" maxlength="1" class="form-control required digits"/>
+								<#form:input path="householdContacts2" maxlength="20" class="form-control"/>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="row">
+					
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 家庭联系人2关系 0父母 1配偶 2子女：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> 家庭联系人1关系：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="householdContacts2Relationship" maxlength="1" class="form-control required digits"/>
+								<#form:radio path="householdContacts1Relationship" dictType="relationship" class="form-control required digits" />
 							</div>
 						</div>
 					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> 家庭联系人2关系：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:radio path="householdContacts2Relationship" dictType="relationship" class="form-control digits" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
 								<span class="required ">*</span> 家庭联系人1 电话：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="householdContacts1Phone" maxlength="20" class="form-control required"/>
+								<#form:input path="householdContacts1Phone" maxlength="20" class="form-control required phone"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> 家庭联系人2 电话：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="householdContacts2Phone" maxlength="20" class="form-control phone"/>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="row">
+					
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 家庭联系人2 电话：<i class="fa icon-question hide"></i></label>
+								<span class="required hide">*</span> 其他联系人1：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="householdContacts2Phone" maxlength="20" class="form-control required"/>
+								<#form:input path="otherContacts1" maxlength="20" class="form-control "/>
 							</div>
 						</div>
 					</div>
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 其他联系人1：<i class="fa icon-question hide"></i></label>
+								<span class="required hide">*</span> 其他联系人2：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="otherContacts1" maxlength="20" class="form-control required"/>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 其他联系人2：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="otherContacts2" maxlength="20" class="form-control required"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 其他联系人1关系 0亲属 1朋友 2同事：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="otherContacts1Relationship" maxlength="1" class="form-control required digits"/>
+								<#form:input path="otherContacts2" maxlength="20" class="form-control"/>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="row">
+					
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 其他联系人2关系 0亲属 1朋友 2同事：<i class="fa icon-question hide"></i></label>
+								<span class="required hide">*</span> 其他联系人1关系：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="otherContacts2Relationship" maxlength="1" class="form-control required digits"/>
+								<#form:radio path="otherContacts1Relationship" dictType="other_relationship" class="form-control digits" />
 							</div>
 						</div>
 					</div>
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 其他联系人1电话：<i class="fa icon-question hide"></i></label>
+								<span class="required hide">*</span> 其他联系人2关系：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="otherContacts1Phone" maxlength="20" class="form-control required"/>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 其他联系人2电话：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="otherContacts2Phone" maxlength="20" class="form-control required"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 申请时间：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="applyTime" class="form-control required"/>
+								<#form:radio path="otherContacts2Relationship" dictType="other_relationship" class="form-control digits" />
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="row">
+					
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 申请状态：<i class="fa icon-question hide"></i></label>
+								<span class="required hide">*</span> 其他联系人1电话：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="applyState" maxlength="11" class="form-control required digits"/>
+								<#form:input path="otherContacts1Phone" maxlength="20" class="form-control phone"/>
 							</div>
 						</div>
 					</div>
+						<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> 其他联系人2电话：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="otherContacts2Phone" maxlength="20" class="form-control phone"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row" hidden="true">
+				
 					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> 申请时间：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="applyTime" readonly="true" maxlength="20" class="form-control Wdate date"
+									dataFormat="date" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row" hidden="true">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> 申请状态：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:select path="applyState" dictType="apply_status" blankOption="true" class="form-control digits" />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6" hidden="true">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
 								<span class="required hide">*</span> 操作人：<i class="fa icon-question hide"></i></label>
@@ -613,13 +668,14 @@
 						</div>
 					</div>
 				</div>
-				<div class="row">
+				<div class="row" hidden="true">
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
 								<span class="required hide">*</span> 操作时间：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="operationTime" class="form-control"/>
+								<#form:input path="operationTime" readonly="true" maxlength="20" class="form-control Wdate"
+									dataFormat="date" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
 							</div>
 						</div>
 					</div>
@@ -628,13 +684,13 @@
 							<label class="control-label col-sm-4" title="">
 								<span class="required hide">*</span> 授信额度：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="lineCredit" maxlength="20" class="form-control"/>
+								<#form:input path="lineCredit" maxlength="20" class="form-control number"/>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="row">
-					<div class="col-xs-6">
+				<div class="row" >
+					<div class="col-xs-6" hidden="true">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
 								<span class="required hide">*</span> 授权核心企业id：<i class="fa icon-question hide"></i></label>
@@ -646,9 +702,9 @@
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> 核心企业系统登录地址：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> 核心企业系统登录地址：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="coreSysUrl" maxlength="200" class="form-control"/>
+								<#form:input path="coreSysUrl" maxlength="200" class="form-control required url"/>
 							</div>
 						</div>
 					</div>
@@ -657,162 +713,47 @@
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> 核心企业系统登录用户名：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> 核心企业系统登录用户名：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="coreSysUsername" maxlength="100" class="form-control"/>
+								<#form:input path="coreSysUsername" maxlength="100" class="form-control required"/>
 							</div>
 						</div>
 					</div>
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> 核心企业系统登录密码：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> 核心企业系统登录密码：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="coreSysPwd" maxlength="50" class="form-control"/>
+								<#form:input path="coreSysPwd" maxlength="50" class="form-control required"/>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="row">
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> 实际居住地址：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="actualLivingAddress" maxlength="500" class="form-control"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> 家庭联系人1：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="householdContacts1" maxlength="20" class="form-control"/>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> 家庭联系人2：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="householdContacts2" maxlength="20" class="form-control"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> 家庭联系人1关系 0父母 1配偶 2子女：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="householdContacts1Relationship" maxlength="1" class="form-control digits"/>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> 家庭联系人2关系 0父母 1配偶 2子女：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="householdContacts2Relationship" maxlength="1" class="form-control digits"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> 家庭联系人1 电话：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="householdContacts1Phone" maxlength="20" class="form-control"/>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> 家庭联系人2 电话：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="householdContacts2Phone" maxlength="20" class="form-control"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> 其他联系人1：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="otherContacts1" maxlength="20" class="form-control"/>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> 其他联系人1关系 0亲属 1朋友 2同事：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="otherContacts1Relationship" maxlength="1" class="form-control digits"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> 其他联系人1电话：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="otherContacts1Phone" maxlength="20" class="form-control"/>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> 其他联系人2电话：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="otherContacts2Phone" maxlength="20" class="form-control"/>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
+							<div class="form-unit">${text('所需材料')}</div>
+					
+					<%for(tbatt in tbLoanAttachmentlist){%>						
+			<div class="row">
 					<div class="col-xs-12">
 						<div class="form-group">
-							<label class="control-label col-sm-2">图片上传：</label>
+							<label class="control-label col-sm-2">
+							<span class="required ">*</span>${tbatt.attachmentName}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-10">
-								<#form:fileupload id="uploadImage" bizKey="${tbLoanApply.id}" bizType="tbLoanApply_image"
-									uploadType="image" class="" readonly="false"/>
+							<#form:fileupload id="${tbatt.id}_att" bizKey="${tbLoanApply.id}" bizType="tbLoanApply_${tbatt.id}" maxUploadNum="1"
+									uploadType="all" class="required" readonly="false"/><span style="color: red">${tbatt.attachmentRemar}</span>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="row">
-					<div class="col-xs-12">
-						<div class="form-group">
-							<label class="control-label col-sm-2">附件上传：</label>
-							<div class="col-sm-10">
-								<#form:fileupload id="uploadFile" bizKey="${tbLoanApply.id}" bizType="tbLoanApply_file"
-									uploadType="all" class="" readonly="false"/>
-							</div>
-						</div>
-					</div>
-				</div>
+				<%}%>	
 			</div>
-			<div class="box-footer">
-				<div class="row">
+			
+			<div class="box-footer" align="center">
+				<div class="row" style="margin: 0 100px 0 0; ">
 					<div class="col-sm-offset-2 col-sm-10">
-						<% if (hasPermi('apply:tbLoanApply:edit')){ %>
-							<button type="submit" class="btn btn-sm btn-primary" id="btnSubmit"><i class="fa fa-check"></i> ${text('保 存')}</button>&nbsp;
-						<% } %>
+						<button type="submit" class="btn btn-sm btn-primary" id="btnSubmit" style="display: none"></button>		
+						<%for(bstate in prolist){%> 	
+						<button type="button" class="btn btn-sm btn-primary"  onclick="change('${bstate.nextStateId}','${bstate.url}','${bstate.remark}')">${bstate.name}</button>	&nbsp;&nbsp;												
+						<%}%>				
 						<button type="button" class="btn btn-sm btn-default" id="btnCancel" onclick="js.closeCurrentTabPage()"><i class="fa fa-reply-all"></i> ${text('关 闭')}</button>
 					</div>
 				</div>
@@ -822,6 +763,7 @@
 </div>
 <% } %>
 <script>
+
 $("#inputForm").validate({
 	submitHandler: function(form){
 		js.ajaxSubmitForm($(form), function(data){
@@ -834,4 +776,31 @@ $("#inputForm").validate({
 		}, "json");
     }
 });
+function change(status,url,remark){
+	/* 	layer.alert('见到你真的很高兴', {icon: 1});*/
+		layer.alert(remark, {
+			     skin: 'layui-layer-molv' //样式类名  自定义样式
+			     ,closeBtn: 1    // 是否显示关闭按钮
+			     ,anim: 1 //动画类型
+			    ,btn: ['确定','取消'] //按钮
+			    ,icon: 8    // icon
+			    ,yes:function(){
+			         $('#nextstatus').val(status);
+			    	if(url.length>0){
+			    		$('#inputForm').attr("action",url)
+			    	}
+			    	 if(status==0){
+			    		 for(var i=0;i<$(".form-control").size();i++){
+			    				$(".form-control").eq(i).attr("class",$(".form-control").eq(i).attr("class").replace('required',' '))
+			    			} 
+			    		 for(var i=0;i<$(".wup_input").size();i++){
+			    				$(".wup_input").eq(i).attr("class",$(".wup_input").eq(i).attr("class").replace('required',' '))
+			    		 }
+			    	} 
+			    	$("#btnSubmit").trigger("click");
+			     }
+		     	,btn2:function(){
+			        layer.msg('已取消')
+			     }});
+	}
 </script>

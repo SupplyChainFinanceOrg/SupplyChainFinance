@@ -10,7 +10,7 @@ import com.jeesite.modules.button.entity.TbButton;
 /**
  * tb_buttonDAO接口
  * @author z
- * @version 2018-05-08
+ * @version 2018-05-11
  */
 @MyBatisDao
 public interface TbButtonDao extends CrudDao<TbButton> {

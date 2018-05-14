@@ -10,7 +10,7 @@ import com.jeesite.modules.state.entity.TbProcess;
 /**
  * tb_processDAO接口
  * @author z
- * @version 2018-05-08
+ * @version 2018-05-11
  */
 @MyBatisDao
 public interface TbProcessDao extends CrudDao<TbProcess> {

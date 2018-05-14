@@ -3,8 +3,11 @@
  */
 package com.jeesite.modules.tb.dao;
 
+import java.util.List;
+
 import com.jeesite.common.dao.CrudDao;
 import com.jeesite.common.mybatis.annotation.MyBatisDao;
+import com.jeesite.modules.sys.entity.TbUser;
 import com.jeesite.modules.tb.entity.TbComp;
 
 /**
@@ -14,5 +17,5 @@ import com.jeesite.modules.tb.entity.TbComp;
  */
 @MyBatisDao
 public interface TbCompDao extends CrudDao<TbComp> {
-	
+	public List<TbUser> finduser(TbUser user);
 }

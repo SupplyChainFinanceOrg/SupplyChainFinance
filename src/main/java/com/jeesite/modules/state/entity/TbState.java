@@ -13,7 +13,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * tb_stateEntity
  * @author z
- * @version 2018-05-08
+ * @version 2018-05-10
  */
 @Table(name="tb_state", alias="a", columns={
 		@Column(name="id", attrName="id", label="id", isPK=true),
@@ -21,24 +21,42 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="product_id", attrName="productId", label="产品id  注册不写"),
 		@Column(name="state_name", attrName="stateName", label="对应状态", queryType=QueryType.LIKE),
 		@Column(name="operation_name", attrName="operationName", label="操作名称", queryType=QueryType.LIKE),
+		@Column(name="nowstatus", attrName="nowstatus", label="状态"),
+		@Column(name="rolecode", attrName="rolecode", label="角色"),
+		@Column(name="isstop", attrName="isstop", label="0启用  1停用"),
 	}, orderBy="a.id DESC"
 )
 public class TbState extends DataEntity<TbState> {
 	
 	private static final long serialVersionUID = 1L;
+	public static Integer COMPANYTYPE=0;
+	public static Integer APPLYTYPE=1;
 	private Integer type;		// 0注册 1流程
 	private String productId;		// 产品id  注册不写
 	private String stateName;		// 对应状态
 	private String operationName;		// 操作名称
-	
+	private String rolecode;		// 角色
+	private String isstop;		// 0启用  1停用
+	private String nowstatus;
 	public TbState() {
 		this(null);
 	}
-
+	public TbState(Integer type,String productId,String rolecode) {
+		this.type=type;
+		this.productId=productId;
+		this.rolecode=rolecode;
+		this.isstop="0";
+	}
 	public TbState(String id){
 		super(id);
 	}
 	
+	public String getNowstatus() {
+		return nowstatus;
+	}
+	public void setNowstatus(String nowstatus) {
+		this.nowstatus = nowstatus;
+	}
 	public Integer getType() {
 		return type;
 	}
@@ -72,6 +90,24 @@ public class TbState extends DataEntity<TbState> {
 
 	public void setOperationName(String operationName) {
 		this.operationName = operationName;
+	}
+	
+	@Length(min=0, max=20, message="角色长度不能超过 20 个字符")
+	public String getRolecode() {
+		return rolecode;
+	}
+
+	public void setRolecode(String rolecode) {
+		this.rolecode = rolecode;
+	}
+	
+	@Length(min=0, max=20, message="0启用  1停用长度不能超过 20 个字符")
+	public String getIsstop() {
+		return isstop;
+	}
+
+	public void setIsstop(String isstop) {
+		this.isstop = isstop;
 	}
 	
 }

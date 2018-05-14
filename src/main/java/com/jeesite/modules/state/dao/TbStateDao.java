@@ -10,7 +10,7 @@ import com.jeesite.modules.state.entity.TbState;
 /**
  * tb_stateDAO接口
  * @author z
- * @version 2018-05-08
+ * @version 2018-05-10
  */
 @MyBatisDao
 public interface TbStateDao extends CrudDao<TbState> {

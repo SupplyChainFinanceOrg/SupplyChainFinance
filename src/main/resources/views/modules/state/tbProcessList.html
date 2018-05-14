@@ -1,0 +1,91 @@
+<% layout('/layouts/default.html', {title: '流程管理', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> ${text('流程管理')}
+			</div>
+			<div class="box-tools pull-right">
+				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
+				<% if(hasPermi('state:tbProcess:edit')){ %>
+					<a href="${ctx}/state/tbProcess/form" class="btn btn-default btnTool" title="${text('新增流程')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+				<% } %>
+			</div>
+		</div>
+		<div class="box-body">
+			<#form:form id="searchForm" model="${tbProcess}" action="${ctx}/state/tbProcess/listData" method="post" class="form-inline hide"
+					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
+				<div class="form-group">
+					<label class="control-label">按钮id：</label>
+					<div class="control-inline">
+						<#form:input path="buttonId" maxlength="11" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">当前状态id：</label>
+					<div class="control-inline">
+						<#form:input path="thisStateId" maxlength="11" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">下一个状态id：</label>
+					<div class="control-inline">
+						<#form:input path="nextStateId" maxlength="11" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">角色：</label>
+					<div class="control-inline">
+						<#form:input path="roleId" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">0注册  1申请：</label>
+					<div class="control-inline">
+						<#form:input path="type" maxlength="1" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
+					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
+				</div>
+			</#form:form>
+			<table id="dataGrid"></table>
+			<div id="dataGridPage"></div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+// 初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [
+		{header:'按钮id', name:'buttonId', index:'a.button_id', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+			return '<a href="${ctx}/state/tbProcess/form?id='+row.id+'" class="btnList" data-title="${text('编辑流程')}">'+(val||row.id)+'</a>';
+		}},
+		{header:'当前状态id', name:'thisStateId', index:'a.this_state_id', width:150, align:"left"},
+		{header:'下一个状态id', name:'nextStateId', index:'a.next_state_id', width:150, align:"left"},
+		{header:'角色', name:'roleId', index:'a.role_id', width:150, align:"left"},
+		{header:'0注册  1申请', name:'type', index:'a.type', width:150, align:"left"},
+		{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+			var actions = [];
+			<% if(hasPermi('state:tbProcess:edit')){ %>
+				actions.push('<a href="${ctx}/state/tbProcess/form?id='+row.id+'" class="btnList" title="${text('编辑流程')}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				if (row.status == Global.STATUS_NORMAL){
+					actions.push('<a href="${ctx}/state/tbProcess/disable?id='+row.id+'" class="btnList" title="${text('停用流程')}" data-confirm="${text('确认要停用该流程吗？')}"><i class="glyphicon glyphicon-ban-circle"></i></a>&nbsp;');
+				}
+				if (row.status == Global.STATUS_DISABLE){
+					actions.push('<a href="${ctx}/state/tbProcess/enable?id='+row.id+'" class="btnList" title="${text('启用流程')}" data-confirm="${text('确认要启用该流程吗？')}"><i class="glyphicon glyphicon-ok-circle"></i></a>&nbsp;');
+				}
+				actions.push('<a href="${ctx}/state/tbProcess/delete?id='+row.id+'" class="btnList" title="${text('删除流程')}" data-confirm="${text('确认要删除该流程吗？')}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+			<% } %>
+			return actions.join('');
+		}}
+	],
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+		
+	}
+});
+</script>
