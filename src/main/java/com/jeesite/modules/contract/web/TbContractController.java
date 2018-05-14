@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,14 +26,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jeesite.common.config.Global;
 import com.jeesite.common.entity.Page;
+import com.jeesite.common.lang.StringUtils;
 import com.jeesite.common.web.BaseController;
-import com.jeesite.modules.contract.dao.TbContractDao;
 import com.jeesite.modules.contract.dao.TbContractSignDao;
 import com.jeesite.modules.contract.entity.TbContract;
-import com.jeesite.modules.contract.entity.TbContractField;
 import com.jeesite.modules.contract.entity.TbContractSign;
 import com.jeesite.modules.contract.entity.TbSginContract;
-import com.jeesite.modules.contract.service.TbContractFieldService;
 import com.jeesite.modules.contract.service.TbContractService;
 
 /**
@@ -48,8 +47,8 @@ public class TbContractController extends BaseController {
 	private TbContractService tbContractService;
 	@Autowired
 	private TbContractSignDao tbContractSignDao;
-	@Autowired 
-	private TbContractFieldService tbContractFieldService;
+//	@Autowired 
+//	private TbContractFieldService tbContractFieldService;
 
 
 
@@ -146,7 +145,7 @@ public class TbContractController extends BaseController {
 	 */
 
 	@RequestMapping(value = {"contractMain"})
-	public String contractMain(HttpServletResponse response,Model model) {
+	public String contractMain(HttpServletResponse response,HttpServletRequest request,Model model) {
 		TbContractSign contractSign=new TbContractSign();
 		contractSign.setLoanId("1");
 		TbContract contract=new TbContract();
@@ -177,9 +176,18 @@ public class TbContractController extends BaseController {
 		return "modules/contract/tbContractFieldForm";
 
 	}
-
+	@RequestMapping(value = {"submitSettingParm"})
+	public String submitSettingParm(HttpServletResponse response,HttpServletRequest request,Model model){
+		String[] ids =request.getParameterValues("ids");
+		String[] values =request.getParameterValues("values");
+		tbContractService.settingParm(ids,values);
+		
+		return "redirect:contractMain"; 
+	}
+	
 	public static void main(String[] args) {
-
+		String s="";
+		System.err.println(StringUtils.isNotBlank(s));
 	}
 	public static boolean WriteStringToFile(String filePath,String str) {
 		try {
