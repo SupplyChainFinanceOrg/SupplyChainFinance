@@ -97,3 +97,4 @@ ALTER TABLE `jeesite`.`tb_loan_apply` ADD COLUMN `money_collecting_account` VARC
 
 ALTER TABLE `jeesite`.`tb_sgin_contract` ADD COLUMN `field_code` VARCHAR(100) NULL COMMENT '字段代码' AFTER `field_name`; 
 
+CREATE TABLE `jeesite`.`tb_contract_api`( `id` VARCHAR(64) NOT NULL, `comp_id` VARCHAR(64) COMMENT '企业id', `cert` VARCHAR(200) COMMENT '数字证书', `contract_id` VARCHAR(500) COMMENT '合同id', `attachment_url` LONGTEXT COMMENT '附件地址', `contract_url` LONGTEXT COMMENT '合同地址', PRIMARY KEY (`id`) ); 

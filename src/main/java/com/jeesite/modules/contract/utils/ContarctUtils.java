@@ -12,9 +12,7 @@ public class ContarctUtils {
 	 * 创建合同编号
 	 * @return
 	 */
-	@Value("contractApi.code")
-	private static  String contarctCode;
-	public static String createContarctsCode(String number){
+	public static String createContarctsCode(String contarctCode,String number){
 		String[] codes=contarctCode.split("_");
 		SimpleDateFormat sdf=new SimpleDateFormat("YYYYMMdd");
 		contarctCode=codes[0]+sdf.format(new Date())+codes[1]+number+codes[2];

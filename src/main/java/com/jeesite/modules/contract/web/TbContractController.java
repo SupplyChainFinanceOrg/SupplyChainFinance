@@ -32,7 +32,10 @@ import com.jeesite.modules.contract.dao.TbContractSignDao;
 import com.jeesite.modules.contract.entity.TbContract;
 import com.jeesite.modules.contract.entity.TbContractSign;
 import com.jeesite.modules.contract.entity.TbSginContract;
+import com.jeesite.modules.contract.service.TbContractApiService;
 import com.jeesite.modules.contract.service.TbContractService;
+import com.jeesite.modules.counter.dao.TbCounterDao;
+import com.jeesite.modules.counter.entity.TbCounter;
 
 /**
  * tb_contractController
@@ -49,6 +52,8 @@ public class TbContractController extends BaseController {
 	private TbContractSignDao tbContractSignDao;
 //	@Autowired 
 //	private TbContractFieldService tbContractFieldService;
+	@Autowired
+	private TbContractApiService tbContractApiService;
 
 
 
@@ -146,28 +151,37 @@ public class TbContractController extends BaseController {
 
 	@RequestMapping(value = {"contractMain"})
 	public String contractMain(HttpServletResponse response,HttpServletRequest request,Model model) {
+		String loanId=request.getParameter("loanId");
+		String state=request.getParameter("state");
 		TbContractSign contractSign=new TbContractSign();
-		contractSign.setLoanId("1");
+		contractSign.setLoanId(loanId);
 		TbContract contract=new TbContract();
 		contract.setProductId(1+"");
-		contract.setSignState(19+"");
+		contract.setSignState(state);
 		List<TbContract> contractList=tbContractService.findList(contract);
 		List<TbContractSign> contractSignList=tbContractSignDao.findList(contractSign);
 		if(contractSignList==null||contractSignList.size()==0){
-			contractSignList=tbContractService.contractSetting("19","1",contractList);
+			contractSignList=tbContractService.contractSetting(state,loanId,contractList);
 		}
 		model.addAttribute("contractSignList", contractSignList);
 		model.addAttribute("contractList", contractList);
 		return "modules/contract/contractMain";
 	}
+	/**
+	 * 参数设定页面
+	 * @param response
+	 * @param request
+	 * @param model
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = {"parmSetting"})
 	public String parmSetting(HttpServletResponse response,HttpServletRequest request,Model model){
 		String loanId=request.getParameter("loanId");
 		String state=request.getParameter("state");
 		TbContract contract=new TbContract();
-		contract.setProductId(1+"");
-		contract.setSignState(19+"");
+		contract.setProductId(loanId);
+		contract.setSignState(state);
 		List<TbContract> contractList=tbContractService.findList(contract);
 		Map<String,Object> map=tbContractService.getSettingData(state, loanId);
 		model.addAttribute("contractList", contractList);
@@ -176,15 +190,52 @@ public class TbContractController extends BaseController {
 		return "modules/contract/tbContractFieldForm";
 
 	}
+	/**
+	 * 参数设定提交
+	 * @param response
+	 * @param request
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = {"submitSettingParm"})
 	public String submitSettingParm(HttpServletResponse response,HttpServletRequest request,Model model){
 		String[] ids =request.getParameterValues("ids");
 		String[] values =request.getParameterValues("values");
 		tbContractService.settingParm(ids,values);
-		
 		return "redirect:contractMain"; 
 	}
-	
+	/**
+	 * 一键签约
+	 * @param response
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = {"signCountarct"})
+	public String signCountarct(HttpServletResponse response,HttpServletRequest request,Model model){
+		String loanId=request.getParameter("loanId");
+		String state=request.getParameter("state");
+		String compId=request.getParameter("compId");
+		try {
+			tbContractService.signCountarct(state, loanId);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		tbContractApiService.regSSQ(compId);
+		return "";
+	}
+	@Autowired
+	TbCounterDao tbCounterDao;
+	@RequestMapping(value = {"counterTest"})
+	public String counterTest(HttpServletResponse response,HttpServletRequest request,Model model){
+		System.err.println("1111111111111111111111111111");
+		TbCounter counter=new TbCounter();
+		counter.setCode("contact_code");
+		counter=tbCounterDao.getByEntity(counter);
+		System.err.println(counter.getValue());
+		return "counter";
+	}
 	public static void main(String[] args) {
 		String s="";
 		System.err.println(StringUtils.isNotBlank(s));
