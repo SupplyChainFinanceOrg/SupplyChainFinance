@@ -108,9 +108,6 @@ ADD COLUMN `orgCode`  varchar(30) NULL COMMENT '组织结构代码' AFTER `regCo
 ADD COLUMN `taxCode`  varchar(30) NULL COMMENT '税务登记号' AFTER `orgCode`;
 ALTER TABLE `tb_comp`
 ADD COLUMN `cardNo`  varchar(30) NULL COMMENT '法人号' AFTER `taxCode`;
-<<<<<<< HEAD
----------------------------------------------
-=======
 ---------------------------------------------
 ------------------------------------------------
 ALTER TABLE `tb_loan_apply`
@@ -120,4 +117,3 @@ ADD COLUMN `taxCode`  varchar(30) NULL COMMENT '税务登记号' AFTER `orgCode`
 ALTER TABLE `tb_loan_apply`
 ADD COLUMN `cardNo`  varchar(30) NULL COMMENT '法人身份证' AFTER `taxCode`;
 -------------------------------------------------------------------------------------
->>>>>>> branch 'master' of https://github.com/SupplyChainFinanceOrg/SupplyChainFinance.git
