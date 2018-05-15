@@ -5,10 +5,13 @@ package com.jeesite.modules.apply.entity;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
+
 import java.util.Date;
+
 import com.jeesite.common.mybatis.annotation.JoinTable;
 import com.jeesite.common.mybatis.annotation.JoinTable.Type;
 import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.validation.constraints.NotNull;
 
 import com.jeesite.common.entity.DataEntity;
@@ -107,6 +110,10 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="money_collecting_account", attrName="moneyCollectingAccount", label="催账日期止"),
 		@Column(name="money_collecting_bank", attrName="moneyCollectingBank", label="催账日期止"),
 		@Column(name="money_collecting_name", attrName="moneyCollectingName", label="催账日期止"),
+		@Column(name="regCode", attrName="regCode", label="工商注册号"),
+		@Column(name="orgCode", attrName="orgCode", label="组织结构代码"),
+		@Column(name="taxCode", attrName="taxCode", label="税务登记号"),
+		@Column(name="cardNo", attrName="cardNo", label="法人身份证号"),
 	}, orderBy="a.id DESC"
 )
 public class TbLoanApply extends DataEntity<TbLoanApply> {
@@ -187,7 +194,43 @@ public class TbLoanApply extends DataEntity<TbLoanApply> {
 	private String moneyCollectingBank;
 	private String moneyCollectingAccount;
 	
+	private String regCode;		// 工商注册号
+	private String orgCode;		// 组织结构代码
+	private String taxCode;		// 税务登记号
+	private String cardNo;	  //法人身份证号
 	
+
+	public String getRegCode() {
+		return regCode;
+	}
+
+	public void setRegCode(String regCode) {
+		this.regCode = regCode;
+	}
+
+	public String getOrgCode() {
+		return orgCode;
+	}
+
+	public void setOrgCode(String orgCode) {
+		this.orgCode = orgCode;
+	}
+
+	public String getTaxCode() {
+		return taxCode;
+	}
+
+	public void setTaxCode(String taxCode) {
+		this.taxCode = taxCode;
+	}
+
+	public String getCardNo() {
+		return cardNo;
+	}
+
+	public void setCardNo(String cardNo) {
+		this.cardNo = cardNo;
+	}
 
 	public String getMoneyCollectingName() {
 		return moneyCollectingName;
