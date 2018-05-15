@@ -22,6 +22,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="contract_id", attrName="contractId", label="合同id"),
 		@Column(name="attachment_url", attrName="attachmentUrl", label="附件地址"),
 		@Column(name="contract_url", attrName="contractUrl", label="合同地址"),
+		@Column(name="cert_type", attrName="certType", label="证书类型"),
 	}, orderBy="a.id DESC"
 )
 public class TbContractApi extends DataEntity<TbContractApi> {
@@ -32,9 +33,18 @@ public class TbContractApi extends DataEntity<TbContractApi> {
 	private String contractId;		// 合同id
 	private String attachmentUrl;		// 附件地址
 	private String contractUrl;		// 合同地址
+	private String certType;		// 合同地址
 	
 	public TbContractApi() {
 		this(null);
+	}
+
+	public String getCertType() {
+		return certType;
+	}
+
+	public void setCertType(String certType) {
+		this.certType = certType;
 	}
 
 	public TbContractApi(String id){

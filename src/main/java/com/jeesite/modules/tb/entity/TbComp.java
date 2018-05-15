@@ -52,10 +52,19 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="operation_data", attrName="operationData", label="操作时间"),
 		@Column(name="comp_profile_attachment", attrName="compProfileAttachment", label="企业简介附件"),
 		@Column(name="articles_association", attrName="articlesAssociation", label="企业章程附件  核心企业上传"),
+		@Column(name="regCode", attrName="capitalVerificationReport", label="工商注册号"),
+		@Column(name="orgCode", attrName="capitalVerificationReport", label="组织结构代码"),
+		@Column(name="taxCode", attrName="capitalVerificationReport", label="税务登记号"),
+		@Column(name="cardNo", attrName="capitalVerificationReport", label="法人身份证号"),
 		@Column(name="capital_verification_report", attrName="capitalVerificationReport", label="验资报告附件  核心企业上传"),
+
 	}, orderBy="a.id DESC"
 )
-public class TbComp extends DataEntity<TbComp> {
+/*private String regCode;		// 工商注册号
+private String orgCode;		// 组织结构代码
+private String taxCode;		// 税务登记号
+private String cardNo;	  //法人身份证号
+*/public class TbComp extends DataEntity<TbComp> {
 	public static long JKQYTYPE=0;
 	public static long HXQYTYPE=1;
 	public static long JRQYTYPE=2;
@@ -93,9 +102,44 @@ public class TbComp extends DataEntity<TbComp> {
 	private String compProfileAttachment;		// 企业简介附件
 	private String articlesAssociation;		// 企业章程附件  核心企业上传
 	private String capitalVerificationReport;		// 验资报告附件  核心企业上传
-	
+	private String regCode;		// 工商注册号
+	private String orgCode;		// 组织结构代码
+	private String taxCode;		// 税务登记号
+	private String cardNo;	  //法人身份证号
 	public TbComp() {
 		this(null);
+	}
+
+	public String getRegCode() {
+		return regCode;
+	}
+
+	public void setRegCode(String regCode) {
+		this.regCode = regCode;
+	}
+
+	public String getOrgCode() {
+		return orgCode;
+	}
+
+	public void setOrgCode(String orgCode) {
+		this.orgCode = orgCode;
+	}
+
+	public String getTaxCode() {
+		return taxCode;
+	}
+
+	public void setTaxCode(String taxCode) {
+		this.taxCode = taxCode;
+	}
+
+	public String getCardNo() {
+		return cardNo;
+	}
+
+	public void setCardNo(String cardNo) {
+		this.cardNo = cardNo;
 	}
 
 	public TbComp(String id){
