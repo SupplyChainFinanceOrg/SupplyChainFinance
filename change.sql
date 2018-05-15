@@ -138,4 +138,8 @@ CHANGE COLUMN `orgCode` `org_code`  varchar(30) CHARACTER SET utf8 COLLATE utf8_
 CHANGE COLUMN `taxCode` `tax_code`  varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '税务登记号' AFTER `org_code`,
 CHANGE COLUMN `cardNo` `card_no`  varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '法人身份证号' AFTER `tax_code`;
 ------------------------------------------------
+--------------------------------------------------------
 
+ALTER TABLE `tb_process_log`
+ADD COLUMN `comp_id`  varchar(64) NULL COMMENT '企业id' AFTER `logState`
+-----------------------------------------------------------------------------

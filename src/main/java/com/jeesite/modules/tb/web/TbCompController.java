@@ -28,12 +28,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.druid.util.StringUtils;
 import com.jeesite.common.config.Global;
 import com.jeesite.common.entity.Page;
+import com.jeesite.common.mybatis.mapper.query.QueryType;
 import com.jeesite.common.web.BaseController;
 import com.jeesite.common.web.http.UserAgentUtils;
 import com.jeesite.modules.button.entity.TbButton;
 import com.jeesite.modules.button.service.TbButtonService;
 import com.jeesite.modules.state.entity.TbProcess;
+import com.jeesite.modules.state.entity.TbProcessLog;
 import com.jeesite.modules.state.entity.TbState;
+import com.jeesite.modules.state.service.TbProcessLogService;
 import com.jeesite.modules.state.service.TbProcessService;
 import com.jeesite.modules.state.service.TbStateService;
 import com.jeesite.modules.sys.entity.Role;
@@ -65,6 +68,8 @@ public class TbCompController extends BaseController {
 	private RoleService roleService;
 	@Autowired
 	private TbProcessService tbProcessService;
+	@Autowired
+	private TbProcessLogService tbProcessLogService;
 	/**
 	 * 获取数据
 	 */
@@ -118,7 +123,16 @@ public class TbCompController extends BaseController {
 	@RequiresPermissions("tb:tbComp:view")
 	@RequestMapping(value = "form")
 	public String form(TbComp tbComp, Model model,HttpServletRequest request, HttpServletResponse response) {
-		model.addAttribute("tbComp", tbComp);		
+		model.addAttribute("tbComp", tbComp);
+		//查询审核情况
+		TbProcessLog tbpl=new TbProcessLog();
+		tbpl.setCompId(tbComp.getId());
+		tbpl.getSqlMap().getWhere().and("loan_id", QueryType.IS_NULL, "");
+		List<TbProcessLog> loglist=tbProcessLogService.findList(tbpl);	
+		if(loglist!=null&&loglist.size()>0){
+			tbpl=loglist.get(0);		
+		}
+		model.addAttribute("tbpl", tbpl);		
 		if("1".equals(request.getParameter("looktype"))){
 			//流程
 			//获取角色，状态
@@ -141,20 +155,25 @@ public class TbCompController extends BaseController {
 	public String save(TbComp tbComp,HttpServletRequest request, HttpServletResponse response) {
 		if(StringUtils.isEmpty(request.getParameter("nextstatus"))){
 			tbCompService.save(tbComp);
+			tbProcessLogService.saveLog(Integer.parseInt(tbComp.getApplyState()+""), TbProcessLog.APPLY_TYPE,tbComp.getId(),null, null, request.getParameter("operationRemark"), 1, 1, 1,tbComp.getApplyState()+"");
 		}else{
 			//查询老的数据
 			TbComp oldtbComp=tbCompService.get(tbComp.getId());
-			tbComp.setApplyState(Long.parseLong(request.getParameter("nextstatus")));
+			String oldstatus=oldtbComp.getApplyState()+"";
+			oldtbComp.setApplyState(Long.parseLong(request.getParameter("nextstatus")));
 			if(0==oldtbComp.getApplyState()){
-				tbCompService.saveAndCreate(tbComp,true);
+				tbCompService.saveAndCreate(oldtbComp,true);
 			}else{
-				if(1==tbComp.getApplyState()||2==tbComp.getApplyState()){
-					tbComp.setOperationData(new Date());
-					tbComp.setOperationUserId(UserUtils.getUser().getUserCode());
+				if(1==oldtbComp.getApplyState()||2==oldtbComp.getApplyState()){
+					oldtbComp.setOperationData(new Date());
+					oldtbComp.setOperationUserId(UserUtils.getUser().getUserCode());
 				}
 				tbCompService.save(tbComp);
 			}
+			tbProcessLogService.saveLog(Integer.parseInt(tbComp.getApplyState()+""), TbProcessLog.APPLY_TYPE,tbComp.getId(),null, null, request.getParameter("operationRemark"), 1, 1, 1,oldstatus+"-"+oldtbComp.getApplyState()+"");
+
 		}	
+
 		return renderResult(Global.TRUE, "保存企业成功！");
 	}
 	

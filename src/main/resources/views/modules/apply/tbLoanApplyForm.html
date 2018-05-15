@@ -32,11 +32,52 @@
 							<label class="control-label col-sm-4" title="">
 								<span class="required">*</span> 统一社会信用代码：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="compCode" maxlength="50" class="form-control required"/>
+								<#form:input path="compCode" maxlength="50" class="form-control "/>
 							</div>
 						</div>
 					</div>
 				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> 工商注册号：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="regCode" maxlength="100" class="form-control"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required">*</span> 组织结构代码：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="orgCode" maxlength="50" class="form-control "/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> 税务登记号：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="taxCode" maxlength="100" class="form-control "/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required">*</span>法人身份证号：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="cardNo" maxlength="50" class="form-control idcard"/>
+							</div>
+						</div>
+					</div>
+				</div>
+
 				<div class="row">
 					<div class="col-xs-6">
 						<div class="form-group">
@@ -729,16 +770,32 @@
 						</div>
 					</div>
 				</div>
-							<div class="form-unit">${text('所需材料')}</div>
+							<div class="form-unit">${text('企业材料')}</div>
 					
-					<%for(tbatt in tbLoanAttachmentlist){%>						
-			<div class="row">
+					<%for(tbatt in corptbLoanAttachmentlist){%>						
+				<div class="row">
 					<div class="col-xs-12">
 						<div class="form-group">
 							<label class="control-label col-sm-2">
 							<span class="required ">*</span>${tbatt.attachmentName}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-10">
-							<#form:fileupload id="${tbatt.id}_att" bizKey="${tbLoanApply.id}" bizType="tbLoanApply_${tbatt.id}" maxUploadNum="1"
+							<#form:fileupload id="${tbatt.id}_att" bizKey="${tbLoanApply.id}" bizType="tbLoanApply_corp_${tbatt.id}" maxUploadNum="10"
+									uploadType="all" class="required" readonly="false"/><span style="color: red">${tbatt.attachmentRemar}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<%}%>	
+											<div class="form-unit">${text('个人材料')}</div>
+				
+						<%for(tbatt in peopletbLoanAttachmentlist){%>						
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group">
+							<label class="control-label col-sm-2">
+							<span class="required ">*</span>${tbatt.attachmentName}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-10">
+							<#form:fileupload id="${tbatt.id}_att" bizKey="${tbLoanApply.id}" bizType="tbLoanApply_people_${tbatt.id}" maxUploadNum="10"
 									uploadType="all" class="required" readonly="false"/><span style="color: red">${tbatt.attachmentRemar}</span>
 							</div>
 						</div>

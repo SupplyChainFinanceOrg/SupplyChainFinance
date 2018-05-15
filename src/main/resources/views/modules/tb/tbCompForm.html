@@ -37,6 +37,46 @@
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> 工商注册号：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="regCode" maxlength="100" class="form-control"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required">*</span> 组织结构代码：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="orgCode" maxlength="50" class="form-control "/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> 税务登记号：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="taxCode" maxlength="100" class="form-control "/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required">*</span>法人身份证号：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="cardNo" maxlength="50" class="form-control "/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
 								<span class="required ">*</span> 注册时间：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
 <#form:input path="registerDate" readonly="true" maxlength="20" class="form-control Wdate required"
