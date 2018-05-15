@@ -19,10 +19,9 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="id", attrName="id", label="id", isPK=true),
 		@Column(name="comp_id", attrName="compId", label="企业id"),
 		@Column(name="cert", attrName="cert", label="数字证书"),
-		@Column(name="contract_id", attrName="contractId", label="合同id"),
-		@Column(name="attachment_url", attrName="attachmentUrl", label="附件地址"),
-		@Column(name="contract_url", attrName="contractUrl", label="合同地址"),
 		@Column(name="cert_type", attrName="certType", label="证书类型"),
+		@Column(name="has_seal", attrName="hasSeal", label="是否有印章0无 1 有"),
+		@Column(name="has_add_signer", attrName="hasAddSigner", label="是否添加签名者0无 1 有"),
 	}, orderBy="a.id DESC"
 )
 public class TbContractApi extends DataEntity<TbContractApi> {
@@ -30,11 +29,16 @@ public class TbContractApi extends DataEntity<TbContractApi> {
 	private static final long serialVersionUID = 1L;
 	private String compId;		// 企业id
 	private String cert;		// 数字证书
-	private String contractId;		// 合同id
-	private String attachmentUrl;		// 附件地址
-	private String contractUrl;		// 合同地址
-	private String certType;		// 合同地址
-	
+	private String certType;		// 证书类型
+	private Integer hasSeal;		// 文件id
+	public Integer getHasSeal() {
+		return hasSeal;
+	}
+
+	public void setHasSeal(Integer hasSeal) {
+		this.hasSeal = hasSeal;
+	}
+
 	public TbContractApi() {
 		this(null);
 	}
@@ -67,31 +71,6 @@ public class TbContractApi extends DataEntity<TbContractApi> {
 
 	public void setCert(String cert) {
 		this.cert = cert;
-	}
-	
-	@Length(min=0, max=500, message="合同id长度不能超过 500 个字符")
-	public String getContractId() {
-		return contractId;
-	}
-
-	public void setContractId(String contractId) {
-		this.contractId = contractId;
-	}
-	
-	public String getAttachmentUrl() {
-		return attachmentUrl;
-	}
-
-	public void setAttachmentUrl(String attachmentUrl) {
-		this.attachmentUrl = attachmentUrl;
-	}
-	
-	public String getContractUrl() {
-		return contractUrl;
-	}
-
-	public void setContractUrl(String contractUrl) {
-		this.contractUrl = contractUrl;
 	}
 	
 }

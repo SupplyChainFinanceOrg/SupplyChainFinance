@@ -24,6 +24,7 @@ import com.jeesite.common.entity.Page;
 import com.jeesite.common.lang.StringUtils;
 import com.jeesite.common.service.CrudService;
 import com.jeesite.modules.contract.entity.TbContract;
+import com.jeesite.modules.contract.entity.TbContractApiChild;
 import com.jeesite.modules.contract.entity.TbContractField;
 import com.jeesite.modules.contract.entity.TbContractSign;
 import com.jeesite.modules.contract.entity.TbSginContract;
@@ -36,6 +37,7 @@ import com.jeesite.modules.tb.entity.TbComp;
 import com.jeesite.modules.tb.service.TbCompService;
 import com.jeesite.modules.apply.entity.TbLoanApply;
 import com.jeesite.modules.apply.service.TbLoanApplyService;
+import com.jeesite.modules.contract.dao.TbContractApiChildDao;
 import com.jeesite.modules.contract.dao.TbContractDao;
 import com.jeesite.modules.contract.dao.TbContractSignDao;
 import com.jeesite.modules.contract.dao.TbSginContractDao;
@@ -77,8 +79,12 @@ public class TbContractService extends CrudService<TbContractDao, TbContract> {
 	private TbProductBorrowTypeService tbProductBorrowTypeService;
 	@Autowired
 	private TbCompService tbCompService;
-	
-	
+	@Autowired
+	private TbContractApiService tbContractApiService;
+	@Autowired
+	private TbContractApiChildDao tbContractApiChildDao;
+
+
 
 	/**
 	 * 获取单条数据
@@ -163,6 +169,7 @@ public class TbContractService extends CrudService<TbContractDao, TbContract> {
 				contractSign.setContractContent(tmp);
 				contractSign.setUploadPdfpath(fileName);
 				contractSign.setShortName(c.getShortName());
+				contractSign.setType(c.getType());
 				if(contractSign1==null){
 					tbContractSignDao.saveSign(contractSign);//插入签约表
 				}else{
@@ -273,7 +280,7 @@ public class TbContractService extends CrudService<TbContractDao, TbContract> {
 		for(int i=0;i<values.length;i++) {
 			String value=values[i];
 			if(StringUtils.isNotBlank(value)) {
-				sc=new  TbSginContract();
+				sc=new TbSginContract();
 				sc.setId(ids[i]);
 				sc=tbSginContractDao.get(sc);
 				sc.setContractValue(value);
@@ -352,7 +359,7 @@ public class TbContractService extends CrudService<TbContractDao, TbContract> {
 		map.put("jd_bl_zmflxr_", loanApply.getCompLegalPerson()!=null?loanApply.getCompLegalPerson():"");
 		map.put("jd_bl_zmfyx_", loanApply.getCompEmail()!=null?loanApply.getCompEmail():"");
 
-   
+
 		return map; 
 
 	}
@@ -363,32 +370,56 @@ public class TbContractService extends CrudService<TbContractDao, TbContract> {
 	 * @return
 	 * @throws Exception
 	 */
-	public synchronized void signCountarct(String state,String loanId) throws Exception{
-		TbContractSign cs=new TbContractSign();
-		cs.setLoanId(loanId);
-		cs.setState(state);
-		List<TbContractSign> list=tbContractSignDao.findList(cs);
-		for(TbContractSign tbCs:list){
-			String tmp=tbCs.getContractContent();
-			TbSginContract sc=new TbSginContract();
-			sc.setContractId(Long.parseLong(tbCs.getId()));
-			List<TbSginContract> scList=tbSginContractService.findList(sc);
-			for(TbSginContract scObj:scList){
-				if(StringUtils.isNoneBlank(scObj.getFieldCode())&&StringUtils.isBlank(scObj.getContractValue())){
-					tmp=tmp.replaceAll(scObj.getFieldCode(), "");
+	@Transactional(readOnly=false)
+	public synchronized boolean signCountarct(String state,String loanId,String compId){
+		boolean flag=false;
+		try {
+			TbContractSign cs=new TbContractSign();
+			cs.setLoanId(loanId);
+			cs.setState(state);
+			TbComp comp=tbCompService.get(compId);
+			List<TbContractSign> list=tbContractSignDao.findList(cs);//获取待签约合同列表
+			for(TbContractSign tbCs:list){
+				String tmp=tbCs.getContractContent();
+				TbSginContract sc=new TbSginContract();
+				sc.setContractId(Long.parseLong(tbCs.getId()));
+				List<TbSginContract> scList=tbSginContractService.findList(sc);//获取签约字段
+				for(TbSginContract scObj:scList){
+					if(StringUtils.isNoneBlank(scObj.getFieldCode())&&StringUtils.isBlank(scObj.getContractValue())){
+						tmp=tmp.replaceAll(scObj.getFieldCode(), "");//替换签约代码为 ""
+					}
 				}
+				File file=new File(tbCs.getUploadPdfpath().substring(0, tbCs.getUploadPdfpath().lastIndexOf("/")+1));
+				if(!file.exists()){//创建签约路径
+					file.mkdirs();
+				}
+				if(Html2PdfUtils.htmlToPdfString(tmp,tbCs.getUploadPdfpath(),fontPath)){//生成签约PDF模板
+					if(tbContractApiService.regSSQ(compId)){//返回注册信息
+						String apiContarctId="";
+						TbContractApiChild contractApiChild=new TbContractApiChild();
+						contractApiChild.setContractId(tbCs.getId());
+						contractApiChild=tbContractApiChildDao.getByEntity(contractApiChild);
+						if(contractApiChild==null){
+							apiContarctId=tbContractApiService.uploadPDF(tbCs.getUploadPdfpath(), compId,tbCs.getId());
+						}else{
+							apiContarctId=contractApiChild.getApiContractId();
+						}
+						if(StringUtils.isNoneBlank(apiContarctId)){
+							tbContractApiService.addSigners(apiContarctId, comp.getLegalPersonPhone(), compId, tbCs.getType());
+
+						}
+					}
+				} 
 			}
-			File file=new File(tbCs.getUploadPdfpath().substring(0, tbCs.getUploadPdfpath().lastIndexOf("/")+1));
-			if(!file.exists()){
-				file.mkdirs();
-			}
-			if(Html2PdfUtils.htmlToPdfString(tmp,tbCs.getUploadPdfpath(),fontPath)){
-				//上传 savePath 到上上签
-			} 
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		return flag;
+
 	}
-	
-	
+
+
 	class CreatePDFThead implements Callable<Boolean>{
 		private String tmp;
 		private String fileName;

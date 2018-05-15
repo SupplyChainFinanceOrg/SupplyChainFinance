@@ -19,7 +19,8 @@
   		upload_pdfpath,
   		operation_time,
   		state,
-  		short_name
+  		short_name,
+  		type
   		) 
 		VALUES
   		(#{loanId},
@@ -28,7 +29,8 @@
     	#{uploadPdfpath},
     	now(),
     	#{state},
-    	#{shortName});
+    	#{shortName},
+    	#{type});
 		
 	</insert>
 </mapper>

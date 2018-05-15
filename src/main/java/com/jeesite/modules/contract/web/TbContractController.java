@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,12 +29,12 @@ import com.jeesite.common.lang.StringUtils;
 import com.jeesite.common.web.BaseController;
 import com.jeesite.modules.contract.dao.TbContractSignDao;
 import com.jeesite.modules.contract.entity.TbContract;
+import com.jeesite.modules.contract.entity.TbContractApi;
 import com.jeesite.modules.contract.entity.TbContractSign;
 import com.jeesite.modules.contract.entity.TbSginContract;
 import com.jeesite.modules.contract.service.TbContractApiService;
 import com.jeesite.modules.contract.service.TbContractService;
 import com.jeesite.modules.counter.dao.TbCounterDao;
-import com.jeesite.modules.counter.entity.TbCounter;
 
 /**
  * tb_contractController
@@ -217,23 +216,23 @@ public class TbContractController extends BaseController {
 		String state=request.getParameter("state");
 		String compId=request.getParameter("compId");
 		try {
-			tbContractService.signCountarct(state, loanId);
+			tbContractService.signCountarct(state, loanId,compId);
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		tbContractApiService.regSSQ(compId);
+		
 		return "";
 	}
 	@Autowired
 	TbCounterDao tbCounterDao;
 	@RequestMapping(value = {"counterTest"})
 	public String counterTest(HttpServletResponse response,HttpServletRequest request,Model model){
-		System.err.println("1111111111111111111111111111");
-		TbCounter counter=new TbCounter();
-		counter.setCode("contact_code");
-		counter=tbCounterDao.getByEntity(counter);
-		System.err.println(counter.getValue());
+		TbContractApi api=new TbContractApi();
+		api.setCompId("995160567265361920");
+		api=tbContractApiService.get(api);
+		System.err.println(api.getCert());
 		return "counter";
 	}
 	public static void main(String[] args) {

@@ -7,9 +7,6 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 
 import java.util.Date;
-
-import com.jeesite.common.mybatis.annotation.JoinTable;
-import com.jeesite.common.mybatis.annotation.JoinTable.Type;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.validation.constraints.NotNull;
@@ -110,10 +107,10 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="money_collecting_account", attrName="moneyCollectingAccount", label="催账日期止"),
 		@Column(name="money_collecting_bank", attrName="moneyCollectingBank", label="催账日期止"),
 		@Column(name="money_collecting_name", attrName="moneyCollectingName", label="催账日期止"),
-		@Column(name="regCode", attrName="regCode", label="工商注册号"),
-		@Column(name="orgCode", attrName="orgCode", label="组织结构代码"),
-		@Column(name="taxCode", attrName="taxCode", label="税务登记号"),
-		@Column(name="cardNo", attrName="cardNo", label="法人身份证号"),
+		@Column(name="reg_code", attrName="regCode", label="工商注册号"),
+		@Column(name="org_code", attrName="orgCode", label="组织结构代码"),
+		@Column(name="tax_code", attrName="taxCode", label="税务登记号"),
+		@Column(name="card_no", attrName="cardNo", label="法人身份证号"),
 	}, orderBy="a.id DESC"
 )
 public class TbLoanApply extends DataEntity<TbLoanApply> {

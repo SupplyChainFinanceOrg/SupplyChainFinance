@@ -3,15 +3,20 @@
  */
 package com.jeesite.modules.state.service;
 
+import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.service.CrudService;
+import com.jeesite.modules.button.service.TbButtonService;
 import com.jeesite.modules.state.entity.TbProcessLog;
 import com.jeesite.modules.state.dao.TbProcessLogDao;
+import com.jeesite.modules.sys.service.RoleService;
+import com.jeesite.modules.sys.utils.UserUtils;
 
 /**
  * tb_process_logService
@@ -21,7 +26,10 @@ import com.jeesite.modules.state.dao.TbProcessLogDao;
 @Service
 @Transactional(readOnly=true)
 public class TbProcessLogService extends CrudService<TbProcessLogDao, TbProcessLog> {
-	
+	@Autowired
+	private TbButtonService tbButtonService;
+	@Autowired
+	private RoleService roleService;
 	/**
 	 * 获取单条数据
 	 * @param tbProcessLog
@@ -72,5 +80,32 @@ public class TbProcessLogService extends CrudService<TbProcessLogDao, TbProcessL
 	public void delete(TbProcessLog tbProcessLog) {
 		super.delete(tbProcessLog);
 	}
-	
+	/**
+	 * 状态		
+	 * // 类型 0注册 1借款
+				// 产品id
+			// 借款id
+			// 用户id
+				// 操作时间
+				// 操作内容
+			// 操作意见
+				// 借款企业可见
+			// 核心企业可见
+				// 金融机构可见
+	 * */
+	@Transactional(readOnly=false)
+	public void saveLog(Integer  state,Integer type,String productId,String loanId,String operationRemark,Integer loanCompVisible,Integer coreCompVisible,Integer bankCompVisible) {
+		TbProcessLog tbProcessLog=new TbProcessLog ();
+		tbProcessLog.setLogState(state);
+		tbProcessLog.setType(type);
+		tbProcessLog.setProductId(productId);
+		tbProcessLog.setLoanId(loanId);
+		tbProcessLog.setUserId(UserUtils.getUser().getId());
+		tbProcessLog.setOperationTime(new Date());
+		tbProcessLog.setOperationRemark(operationRemark);
+		tbProcessLog.setCoreCompVisible(coreCompVisible);
+		tbProcessLog.setLoanCompVisible(loanCompVisible);
+		tbProcessLog.setBankCompVisible(bankCompVisible);
+		super.save(tbProcessLog);
+	}
 }

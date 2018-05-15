@@ -14,12 +14,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.activation.MimetypesFileTypeMap;
 
 public class BestSignDemo {
 
@@ -404,7 +400,7 @@ public class BestSignDemo {
         
         
         FileInputStream file = new FileInputStream(fdata);
-        
+        System.err.println(fdata);
         byte[] bdata = IOUtils.toByteArray(file); 
         //获取文件Base64编码
         final String fdataNew =Base64.encodeBase64String(bdata);
@@ -453,7 +449,8 @@ public class BestSignDemo {
         String dataString  = JSONObject.toJSONString(data);
         Map<String, Object> res  = HttpSender.getResponseString("POST", url, dataString, headers);
         String resString = (String) res.get("responseData");
-
+        reader.close();
+        file.close();
         return parseExecutorResult(resString);
     }
     

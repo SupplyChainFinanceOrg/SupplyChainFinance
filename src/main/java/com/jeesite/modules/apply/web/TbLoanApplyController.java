@@ -33,7 +33,9 @@ import com.jeesite.modules.product.entity.TbProductBorrowType;
 import com.jeesite.modules.product.service.TbProductBorrowTypeService;
 import com.jeesite.modules.product.service.TbProductService;
 import com.jeesite.modules.state.entity.TbProcess;
+import com.jeesite.modules.state.entity.TbProcessLog;
 import com.jeesite.modules.state.entity.TbState;
+import com.jeesite.modules.state.service.TbProcessLogService;
 import com.jeesite.modules.state.service.TbProcessService;
 import com.jeesite.modules.state.service.TbStateService;
 import com.jeesite.modules.sys.entity.Role;
@@ -71,6 +73,8 @@ public class TbLoanApplyController extends BaseController {
 	private RoleService roleService;
 	@Autowired
 	private TbProcessService tbProcessService;
+	@Autowired
+	private TbProcessLogService tbProcessLogService;
 	/**
 	 * 获取数据
 	 */
@@ -183,6 +187,13 @@ public class TbLoanApplyController extends BaseController {
 		if("1".equals(request.getParameter("looktype"))){
 	
 			return "modules/apply/tbLoanApplyLiu";
+		}else if("3".equals(request.getParameter("looktype"))){
+			//查看审核情况
+			TbProcessLog tbpl=new TbProcessLog();
+			tbpl.setLoanId(tbLoanApply.getId());
+			List<TbProcessLog> loglist=tbProcessLogService.findList(tbpl);
+			model.addAttribute("loglist", loglist);
+			return "modules/apply/tbLoanApplying";
 		}
 		if(StringUtils.isEmpty(tbLoanApply.getId())){
 			return "modules/apply/tbLoanApplyForm";
@@ -210,7 +221,11 @@ public class TbLoanApplyController extends BaseController {
 			TbLoanApply	oldtbLoanApply=tbLoanApplyService.get(tbLoanApply.getId());
 			oldtbLoanApply.setApplyState(Long.parseLong(request.getParameter("nextstatus")));
 			tbLoanApplyService.save(oldtbLoanApply);
+			if(!StringUtils.isEmpty(request.getParameter("operationRemark"))){			
+				tbProcessLogService.saveLog(Integer.parseInt(oldtbLoanApply.getApplyState()+""), TbProcessLog.APPLY_TYPE, oldtbLoanApply.getProductId()+"", oldtbLoanApply.getCompId(), request.getParameter("operationRemark"), 1, 1, 1);
+			}
 		}
+		
 		return renderResult(Global.TRUE, "操作成功！");
 	}
 	

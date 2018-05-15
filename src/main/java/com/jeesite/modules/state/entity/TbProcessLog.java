@@ -31,11 +31,15 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="loan_comp_visible", attrName="loanCompVisible", label="借款企业可见"),
 		@Column(name="core_comp_visible", attrName="coreCompVisible", label="核心企业可见"),
 		@Column(name="bank_comp_visible", attrName="bankCompVisible", label="金融机构可见"),
-	}, orderBy="a.id DESC"
+		@Column(name="logState", attrName="logState", label="状态"),
+
+	}, orderBy="a.operation_time asc"
 )
 public class TbProcessLog extends DataEntity<TbProcessLog> {
 	
 	private static final long serialVersionUID = 1L;
+	public static Integer REG_TYPE=0;
+	public static Integer APPLY_TYPE=1;
 	private Integer type;		// 类型 0注册 1借款
 	private String productId;		// 产品id
 	private String loanId;		// 借款id
@@ -46,7 +50,16 @@ public class TbProcessLog extends DataEntity<TbProcessLog> {
 	private Integer loanCompVisible;		// 借款企业可见
 	private Integer coreCompVisible;		// 核心企业可见
 	private Integer bankCompVisible;		// 金融机构可见
+	private Integer logState;		// 日志的状态
 	
+	public Integer getLogState() {
+		return logState;
+	}
+
+	public void setLogState(Integer logState) {
+		this.logState = logState;
+	}
+
 	public TbProcessLog() {
 		this(null);
 	}

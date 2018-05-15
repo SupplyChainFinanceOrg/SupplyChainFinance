@@ -22,6 +22,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="sign_state", attrName="signState", label="签署状态id"),
 		@Column(name="temp_content", attrName="tempContent", label="合同模板路径"),
 		@Column(name="short_name", attrName="shortName", label="简称"),
+		@Column(name="type", attrName="type", label="类型"),
 	}, orderBy="a.id ASC"
 )
 public class TbContract extends DataEntity<TbContract> {
@@ -32,7 +33,16 @@ public class TbContract extends DataEntity<TbContract> {
 	private String signState;		// 签署状态id
 	private String tempContent;		// 合同模板路径
 	private String shortName;		// 简称
+	private int type;		// 简称
 	
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
 	public String getShortName() {
 		return shortName;
 	}

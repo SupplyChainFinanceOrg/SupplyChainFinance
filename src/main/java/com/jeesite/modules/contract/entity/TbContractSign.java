@@ -25,10 +25,11 @@ import com.jeesite.common.mybatis.annotation.Table;
 		@Column(name="operation_time", attrName="operationTime", label="操作时间"),
 		@Column(name="state", attrName="state", label="操作时间"),
 		@Column(name="short_name", attrName="shortName", label="简称"),
-	}, orderBy="a.id asc"
-)
+		@Column(name="type", attrName="type", label="类型"),
+}, orderBy="a.id asc"
+		)
 public class TbContractSign extends DataEntity<TbContractSign> {
-	
+
 	private static final long serialVersionUID = 1L;
 	private String loanId;		// 借款id
 	private Long contractId;		// 合同id
@@ -37,7 +38,15 @@ public class TbContractSign extends DataEntity<TbContractSign> {
 	private Date operationTime;// 操作时间
 	private String state;// 操作时间
 	private String shortName;
-	
+	private int type;		// 简称
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
 	public String getShortName() {
 		return shortName;
 	}
@@ -77,7 +86,7 @@ public class TbContractSign extends DataEntity<TbContractSign> {
 	public TbContractSign(String id){
 		super(id);
 	}
-	
+
 	@Length(min=0, max=64, message="借款id长度不能超过 64 个字符")
 	public String getLoanId() {
 		return loanId;
@@ -86,7 +95,7 @@ public class TbContractSign extends DataEntity<TbContractSign> {
 	public void setLoanId(String loanId) {
 		this.loanId = loanId;
 	}
-	
+
 	public Long getContractId() {
 		return contractId;
 	}
@@ -94,7 +103,7 @@ public class TbContractSign extends DataEntity<TbContractSign> {
 	public void setContractId(Long contractId) {
 		this.contractId = contractId;
 	}
-	
+
 	public String getContractContent() {
 		return contractContent;
 	}
@@ -102,5 +111,5 @@ public class TbContractSign extends DataEntity<TbContractSign> {
 	public void setContractContent(String contractContent) {
 		this.contractContent = contractContent;
 	}
-	
+
 }

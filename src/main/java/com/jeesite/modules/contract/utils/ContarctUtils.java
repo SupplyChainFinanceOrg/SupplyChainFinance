@@ -32,4 +32,14 @@ public class ContarctUtils {
 		time+=day; // 相加得到新的毫秒数
 		return new Date(time); // 将毫秒数转换成日期
 	}
+	/**
+     * 取得当前时间戳（精确到秒）
+     *
+     * @return nowTimeStamp
+     */
+    public static long getNowTimeStamp() {
+        long time = System.currentTimeMillis();
+        time = time / 1000;
+        return time;
+    }
 }
