@@ -52,10 +52,10 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="operation_data", attrName="operationData", label="操作时间"),
 		@Column(name="comp_profile_attachment", attrName="compProfileAttachment", label="企业简介附件"),
 		@Column(name="articles_association", attrName="articlesAssociation", label="企业章程附件  核心企业上传"),
-		@Column(name="regCode", attrName="capitalVerificationReport", label="工商注册号"),
-		@Column(name="orgCode", attrName="capitalVerificationReport", label="组织结构代码"),
-		@Column(name="taxCode", attrName="capitalVerificationReport", label="税务登记号"),
-		@Column(name="cardNo", attrName="capitalVerificationReport", label="法人身份证号"),
+		@Column(name="reg_code", attrName="regCode", label="工商注册号"),
+		@Column(name="org_code", attrName="orgCode", label="组织结构代码"),
+		@Column(name="tax_code", attrName="taxCode", label="税务登记号"),
+		@Column(name="card_no", attrName="cardNo", label="法人身份证号"),
 		@Column(name="capital_verification_report", attrName="capitalVerificationReport", label="验资报告附件  核心企业上传"),
 
 	}, orderBy="a.id DESC"

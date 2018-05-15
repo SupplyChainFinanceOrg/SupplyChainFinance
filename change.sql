@@ -113,3 +113,23 @@ ADD COLUMN `taxCode`  varchar(30) NULL COMMENT '税务登记号' AFTER `orgCode`
 ALTER TABLE `tb_loan_apply`
 ADD COLUMN `cardNo`  varchar(30) NULL COMMENT '法人身份证' AFTER `taxCode`;
 -------------------------------------------------------------------------------------
+
+--------------------------------
+ALTER TABLE `tb_process_log`
+ADD COLUMN `logState`  int(3) NULL NULL COMMENT '状态'  AFTER `bank_comp_visible`
+---------------------------------------------------------------------------
+
+--------------------------------------------------
+ALTER TABLE `tb_comp`
+CHANGE COLUMN `regCode` `reg_code`  varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '工商注册号' AFTER `capital_verification_report`,
+CHANGE COLUMN `orgCode` `org_code`  varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '组织结构代码' AFTER `reg_code`,
+CHANGE COLUMN `taxCode` `tax_code`  varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '税务登记号' AFTER `org_code`,
+CHANGE COLUMN `cardNo` `card_no`  varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '法人身份证号' AFTER `tax_code`;
+
+
+ALTER TABLE `tb_loan_apply`
+CHANGE COLUMN `regCode` `reg_code`  varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '工商注册号' AFTER `money_collecting_name`,
+CHANGE COLUMN `orgCode` `org_code`  varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '组织结构代码' AFTER `reg_code`,
+CHANGE COLUMN `taxCode` `tax_code`  varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '税务登记号' AFTER `org_code`,
+CHANGE COLUMN `cardNo` `card_no`  varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '法人身份证号' AFTER `tax_code`;
+------------------------------------------------
