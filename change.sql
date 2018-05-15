@@ -97,6 +97,10 @@ ALTER TABLE `jeesite`.`tb_loan_apply` ADD COLUMN `money_collecting_account` VARC
 
 ALTER TABLE `jeesite`.`tb_sgin_contract` ADD COLUMN `field_code` VARCHAR(100) NULL COMMENT '字段代码' AFTER `field_name`; 
 
+CREATE TABLE `jeesite`.`tb_contract_api_log`( `id` VARCHAR(64) NOT NULL, `create_date` VARCHAR(50) COMMENT '发生时间', `compid` VARCHAR(64) COMMENT '企业id', `api_name` VARCHAR(200) COMMENT '接口名称', `err_code` VARCHAR(20) COMMENT '错误代码', `err_msg` VARCHAR(500) COMMENT '错误消息', PRIMARY KEY (`id`) ); 
+
+CREATE TABLE `jeesite`.`tb_contract_api`( `id` VARCHAR(64) NOT NULL, `comp_id` VARCHAR(64) COMMENT '企业id', `cert` VARCHAR(200) COMMENT '数字证书', `contract_id` VARCHAR(500) COMMENT '合同id', `attachment_url` LONGTEXT COMMENT '附件地址', `contract_url` LONGTEXT COMMENT '合同地址', PRIMARY KEY (`id`) ); 
+
 -----------------------------------------------
 ALTER TABLE `tb_comp`
 ADD COLUMN `regCode`  varchar(30) NULL COMMENT '工商注册号' AFTER `capital_verification_report`,
@@ -104,6 +108,7 @@ ADD COLUMN `orgCode`  varchar(30) NULL COMMENT '组织结构代码' AFTER `regCo
 ADD COLUMN `taxCode`  varchar(30) NULL COMMENT '税务登记号' AFTER `orgCode`;
 ALTER TABLE `tb_comp`
 ADD COLUMN `cardNo`  varchar(30) NULL COMMENT '法人号' AFTER `taxCode`;
+
 ---------------------------------------------
 ------------------------------------------------
 ALTER TABLE `tb_loan_apply`
@@ -133,3 +138,4 @@ CHANGE COLUMN `orgCode` `org_code`  varchar(30) CHARACTER SET utf8 COLLATE utf8_
 CHANGE COLUMN `taxCode` `tax_code`  varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '税务登记号' AFTER `org_code`,
 CHANGE COLUMN `cardNo` `card_no`  varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '法人身份证号' AFTER `tax_code`;
 ------------------------------------------------
+

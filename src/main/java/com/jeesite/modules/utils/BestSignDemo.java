@@ -47,7 +47,8 @@ public class BestSignDemo {
      * @return
      * @throws Exception
      */
-    public JSONObject userReg(final String account, final String name, final String userType) throws Exception {
+    public JSONObject userReg(final String account, final String name, final String userType
+    		, final String mail, final String mobile) throws Exception {
         final String path = "/user/reg";
 
         @SuppressWarnings("serial")
@@ -59,6 +60,10 @@ public class BestSignDemo {
                 put("name", name);
                 //注册用户类型（1表示个人用户、2表示企业用户）
                 put("userType", userType);
+                //注册（Email）
+                put("mail", mail);
+                //注册（phone）
+                put("mobile", mobile);
                 
             }
         };

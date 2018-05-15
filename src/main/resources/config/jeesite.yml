@@ -4,8 +4,8 @@
 #============================#
 
 # 产品或项目名称、版本、版权年份
-productName: 大雁金服供应链金融平台
-productVersion: V1.0
+productName : 大雁金服供应链金融平台
+productVersion : V1.0
 copyrightYear: 2018
 
 # 软件提供商公司或个人名称
@@ -26,7 +26,11 @@ jdbc:
   driver: com.mysql.jdbc.Driver
   url: jdbc:mysql://127.0.0.1:3306/jeesite?useUnicode=true&characterEncoding=utf-8 
   username: root
+<<<<<<< HEAD
+  password: hanzl
+=======
   password: root
+>>>>>>> branch 'master' of https://github.com/SupplyChainFinanceOrg/SupplyChainFinance.git
   #url: jdbc:mysql://159.65.108.22:3306/jeesite?useUnicode=true&characterEncoding=utf-8 
   #username: root
   #password: Gyl2018.b
