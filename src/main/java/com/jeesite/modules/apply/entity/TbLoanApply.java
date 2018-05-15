@@ -110,10 +110,10 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="money_collecting_account", attrName="moneyCollectingAccount", label="催账日期止"),
 		@Column(name="money_collecting_bank", attrName="moneyCollectingBank", label="催账日期止"),
 		@Column(name="money_collecting_name", attrName="moneyCollectingName", label="催账日期止"),
-		@Column(name="regCode", attrName="capitalVerificationReport", label="工商注册号"),
-		@Column(name="orgCode", attrName="capitalVerificationReport", label="组织结构代码"),
-		@Column(name="taxCode", attrName="capitalVerificationReport", label="税务登记号"),
-		@Column(name="cardNo", attrName="capitalVerificationReport", label="法人身份证号"),
+		@Column(name="regCode", attrName="regCode", label="工商注册号"),
+		@Column(name="orgCode", attrName="orgCode", label="组织结构代码"),
+		@Column(name="taxCode", attrName="taxCode", label="税务登记号"),
+		@Column(name="cardNo", attrName="cardNo", label="法人身份证号"),
 	}, orderBy="a.id DESC"
 )
 public class TbLoanApply extends DataEntity<TbLoanApply> {
