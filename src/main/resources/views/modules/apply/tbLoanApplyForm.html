@@ -296,7 +296,7 @@
 							<span class="required ">*</span>企业简介附件：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-10">
 							<#form:fileupload id="compProfileAttachment" bizKey="${tbLoanApply.compId}" bizType="tbComp_compProfileAttachment" maxUploadNum="1"
-									uploadType="all" class="" readonly="false"/>
+									uploadType="image" class="" readonly="false"/>
 							</div>
 						</div>
 					</div>
@@ -780,7 +780,7 @@
 							<span class="required ">*</span>${tbatt.attachmentName}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-10">
 							<#form:fileupload id="${tbatt.id}_att" bizKey="${tbLoanApply.id}" bizType="tbLoanApply_corp_${tbatt.id}" maxUploadNum="10"
-									uploadType="all" class="required" readonly="false"/><span style="color: red">${tbatt.attachmentRemar}</span>
+									uploadType="image" class="required" readonly="false"/><span style="color: red">${tbatt.attachmentRemar}</span>
 							</div>
 						</div>
 					</div>
@@ -796,7 +796,7 @@
 							<span class="required ">*</span>${tbatt.attachmentName}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-10">
 							<#form:fileupload id="${tbatt.id}_att" bizKey="${tbLoanApply.id}" bizType="tbLoanApply_people_${tbatt.id}" maxUploadNum="10"
-									uploadType="all" class="required" readonly="false"/><span style="color: red">${tbatt.attachmentRemar}</span>
+									uploadType="image" class="required" readonly="false"/><span style="color: red">${tbatt.attachmentRemar}</span>
 							</div>
 						</div>
 					</div>

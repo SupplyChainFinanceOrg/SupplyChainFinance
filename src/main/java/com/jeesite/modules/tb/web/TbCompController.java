@@ -140,7 +140,7 @@ public class TbCompController extends BaseController {
 			model.addAttribute("prolist", prolist);		
 			return "modules/tb/tbCompLiu";
 		}else if("2".equals(request.getParameter("looktype"))){
-			return "modules/tb/tbCompDetai";
+			return "modules/tb/tbCompDetail";
 		}
 		
 		return "modules/tb/tbCompForm";
@@ -155,7 +155,7 @@ public class TbCompController extends BaseController {
 	public String save(TbComp tbComp,HttpServletRequest request, HttpServletResponse response) {
 		if(StringUtils.isEmpty(request.getParameter("nextstatus"))){
 			tbCompService.save(tbComp);
-			tbProcessLogService.saveLog(Integer.parseInt(tbComp.getApplyState()+""), TbProcessLog.APPLY_TYPE,tbComp.getId(),null, null, request.getParameter("operationRemark"), 1, 1, 1,tbComp.getApplyState()+"");
+			tbProcessLogService.saveLog(Integer.parseInt(tbComp.getApplyState()+""), TbProcessLog.APPLY_TYPE,tbComp.getId(),null, null, request.getParameter("operationRemark"), 1, 1, 1,tbComp.getApplyState()+"",tbComp.getCompName());
 		}else{
 			//查询老的数据
 			TbComp oldtbComp=tbCompService.get(tbComp.getId());
@@ -170,7 +170,7 @@ public class TbCompController extends BaseController {
 				}
 				tbCompService.save(tbComp);
 			}
-			tbProcessLogService.saveLog(Integer.parseInt(tbComp.getApplyState()+""), TbProcessLog.APPLY_TYPE,tbComp.getId(),null, null, request.getParameter("operationRemark"), 1, 1, 1,oldstatus+"-"+oldtbComp.getApplyState()+"");
+			tbProcessLogService.saveLog(Integer.parseInt(tbComp.getApplyState()+""), TbProcessLog.APPLY_TYPE,tbComp.getId(),null, null, request.getParameter("operationRemark"), 1, 1, 1,oldstatus+"-"+oldtbComp.getApplyState()+"",tbComp.getCompName());
 
 		}	
 

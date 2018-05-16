@@ -101,6 +101,7 @@ public class TbProcessLogService extends CrudService<TbProcessLogDao, TbProcessL
 		tbProcessLog.setProductId(productId);
 		tbProcessLog.setLoanId(loanId);
 		tbProcessLog.setUserId(UserUtils.getUser().getId());
+		tbProcessLog.setUserName(UserUtils.getUser().getUserName());
 		tbProcessLog.setOperationTime(new Date());
 		tbProcessLog.setCompId(compId);
 		tbProcessLog.setOperationRemark(operationRemark);
@@ -111,6 +112,28 @@ public class TbProcessLogService extends CrudService<TbProcessLogDao, TbProcessL
 		tbProcessLog.setCoreCompVisible(coreCompVisible);
 		tbProcessLog.setLoanCompVisible(loanCompVisible);
 		tbProcessLog.setBankCompVisible(bankCompVisible);
+		super.save(tbProcessLog);
+	}
+	@Transactional(readOnly=false)
+	public void saveLog(Integer  state,Integer type,String compId,String productId,String loanId,String operationRemark,Integer loanCompVisible,Integer coreCompVisible,Integer bankCompVisible,String operationLog,String compName) {
+		TbProcessLog tbProcessLog=new TbProcessLog ();
+		tbProcessLog.setLogState(state);
+		tbProcessLog.setType(type);
+		tbProcessLog.setProductId(productId);
+		tbProcessLog.setLoanId(loanId);
+		tbProcessLog.setUserId(UserUtils.getUser().getId());
+		tbProcessLog.setUserName(UserUtils.getUser().getUserName());
+		tbProcessLog.setOperationTime(new Date());
+		tbProcessLog.setCompId(compId);
+		tbProcessLog.setOperationRemark(operationRemark);
+		tbProcessLog.setOperationLog(operationLog);
+		if((operationRemark!=null&&operationRemark.length()==0)||"".equals(operationRemark)){
+			tbProcessLog.setOperationRemark(null);
+		}
+		tbProcessLog.setCoreCompVisible(coreCompVisible);
+		tbProcessLog.setLoanCompVisible(loanCompVisible);
+		tbProcessLog.setBankCompVisible(bankCompVisible);
+		tbProcessLog.setCompName(compName);
 		super.save(tbProcessLog);
 	}
 }

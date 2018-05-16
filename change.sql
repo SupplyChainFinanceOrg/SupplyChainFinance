@@ -143,3 +143,8 @@ CHANGE COLUMN `cardNo` `card_no`  varchar(30) CHARACTER SET utf8 COLLATE utf8_ge
 ALTER TABLE `tb_process_log`
 ADD COLUMN `comp_id`  varchar(64) NULL COMMENT '企业id' AFTER `logState`
 -----------------------------------------------------------------------------
+---------------------------------------------------------------------
+ALTER TABLE `tb_process_log`
+ADD COLUMN `user_name`  varchar(200) NULL COMMENT '操作人' AFTER `comp_id`,
+ADD COLUMN `comp_name`  varchar(200) NULL COMMENT '企业名' AFTER `user_name`
+---------------------------------------------------------------------------

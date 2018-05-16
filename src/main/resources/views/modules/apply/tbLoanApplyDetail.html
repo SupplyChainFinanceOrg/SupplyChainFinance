@@ -198,9 +198,9 @@
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class=" "></span> 公司性质：<i class="fa icon-question hide" ></i></label>
-							<div class="col-sm-8">
-								<#form:radio path="natureId" dictType="nature_type" class="form-control digits " readonly="readonly" />						
+								<span class=" " ></span> 公司性质：<i class="fa icon-question hide" ></i></label>
+							<div class="col-sm-8" >							
+								<#form:radio  path="natureId" dictType="nature_type" class="form-control digits "  />						
 							</div>
 						</div>
 					</div>
@@ -209,7 +209,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" "></span> 所属行业：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-							${tbLoanApply.compName}<#form:radio path="industry" dictType="industry_type" class="form-control digits " />
+							<#form:radio path="industry" dictType="industry_type" class="form-control digits " />
 							</div>
 						</div>
 					</div>
@@ -226,7 +226,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" "></span> 是否特殊行业：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">							
-								${tbLoanApply.compName}<#form:radio path="speciaIndustry" dictType="specia_industry" class="form-control digits " />
+								<#form:radio path="speciaIndustry" dictType="specia_industry" class="form-control digits " />
 							</div>
 						</div>
 					</div>
@@ -236,7 +236,7 @@
 						<div class="form-group">
 							<label class="control-label col-sm-2">公司简介：</label>
 							<div class="col-sm-10">
-						       ${tbLoanApply.compName}<#form:textarea path="compProfile" class="form-control" style="height:100px" />
+						       ${tbLoanApply.compProfile}
 							</div>
 						</div>
 					</div>
@@ -247,8 +247,8 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" "></span> 法人身份证正面：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:fileupload id="idCardA"    bizKey="${tbLoanApply.compId}" bizType="tbComp_idCardA" maxUploadNum="1"
-									uploadType="image" class="" readonly="false"/>
+								<#form:fileupload id="idCardA"    bizKey="${tbLoanApply.compId}" bizType="tbComp_idCardA" maxUploadNum="1"
+									uploadType="image" class="" readonly="true"/>
 							</div>
 						</div>
 					</div>
@@ -257,8 +257,8 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" "></span> 法人身份证反面：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-							${tbLoanApply.compName}<#form:fileupload id="idCardB" bizKey="${tbLoanApply.compId}" bizType="tbComp_idCardB" maxUploadNum="1"
-									uploadType="image" class="" readonly="false"/>
+							<#form:fileupload id="idCardB" bizKey="${tbLoanApply.compId}" bizType="tbComp_idCardB" maxUploadNum="1"
+									uploadType="image" class="" readonly="true"/>
 							</div>
 						</div>
 					</div>
@@ -269,8 +269,8 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=""></span> 特殊行业许可证：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-							${tbLoanApply.compName}<#form:fileupload id="specialTradeLicense"  bizKey="${tbLoanApply.compId}" bizType="tbComp_specialTradeLicense" maxUploadNum="1"
-									uploadType="image" class="" readonly="false"/>
+							<#form:fileupload id="specialTradeLicense"  bizKey="${tbLoanApply.compId}" bizType="tbComp_specialTradeLicense" maxUploadNum="1"
+									uploadType="image" class="" readonly="true"/>
 							</div>
 						</div>
 					</div>
@@ -279,8 +279,8 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=""></span> 营业执照：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:fileupload id="businessLicense" bizKey="${tbLoanApply.compId}" bizType="tbComp_businessLicense" maxUploadNum="1"
-									uploadType="image" class="" readonly="false"/>
+								<#form:fileupload id="businessLicense" bizKey="${tbLoanApply.compId}" bizType="tbComp_businessLicense" maxUploadNum="1"
+									uploadType="image" class="" readonly="true"/>
 							</div>
 						</div>
 					</div>
@@ -292,8 +292,8 @@
 							<label class="control-label col-sm-2">
 							<span class=" "></span>企业简介附件：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-10">
-							${tbLoanApply.compName}<#form:fileupload id="compProfileAttachment" bizKey="${tbLoanApply.compId}" bizType="tbComp_compProfileAttachment" maxUploadNum="1"
-									uploadType="all" class="" readonly="false"/>
+							<#form:fileupload id="compProfileAttachment" bizKey="${tbLoanApply.compId}" bizType="tbComp_compProfileAttachment" maxUploadNum="1"
+									uploadType="image" class="" readonly="true"/>
 							</div>
 						</div>
 					</div>
@@ -311,7 +311,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" hide"></span> 用户id：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:input path="userId" maxlength="64" class="form-control"/>
+								<#form:input path="userId" maxlength="64" class="form-control"/>
 							</div>
 						</div>
 					</div> 
@@ -320,7 +320,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" "></span> 借款金额：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:input path="loanAmount" maxlength="20" class="form-control  number"/>
+								${tbLoanApply.loanAmount}
 							</div>
 						</div>
 					</div>
@@ -331,7 +331,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" "></span> 借款人姓名：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:input path="loanName" maxlength="20" class="form-control "/>
+								${tbLoanApply.loanName}
 							</div>
 						</div>
 					</div>
@@ -340,7 +340,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" "></span> 借款人电话：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:input path="loanPhone" maxlength="20" class="form-control  phone"/>
+								${tbLoanApply.loanPhone}
 							</div>
 						</div>
 					</div>
@@ -351,7 +351,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" "></span> 借款产品：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-							${tbLoanApply.compName}<#form:radio  path="productId" items="${tbProductlist}" itemLabel="prodctName" itemValue="id" class="form-control " />
+							<#form:radio  path="productId" items="${tbProductlist}" itemLabel="prodctName" itemValue="id" class="form-control " />
 							</div>
 						</div>
 					</div>
@@ -360,7 +360,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" "></span> 借款期限：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-							${tbLoanApply.compName}<#form:radio  path="loanTime" items="${tbProductBorrowTypelist}" itemLabel="borrowTime" itemValue="id" class="form-control " />							
+							<#form:radio  path="loanTime" items="${tbProductBorrowTypelist}" itemLabel="borrowTime" itemValue="id" class="form-control " />							
 							</div>
 						</div>
 					</div>
@@ -372,7 +372,7 @@
 								<span class=" "></span> 核心企业合作年限：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
 							
-								${tbLoanApply.compName}<#form:radio  path="cooperationId" dictType="time_cooperation" class="form-control  digits" />
+								 <#form:radio  path="cooperationId" dictType="time_cooperation" class="form-control  digits" />
 							
 							</div>
 						</div>
@@ -384,7 +384,7 @@
 						<div class="form-group">
 							<label class="control-label col-sm-2">借款用途：</label>
 							<div class="col-sm-10">
-								${tbLoanApply.compName}<#form:textarea path="loanUse" rows="4" maxlength="2000" class="form-control"/>
+								${tbLoanApply.loanUse}
 							</div>
 						</div>
 					</div>
@@ -394,7 +394,7 @@
 						<div class="form-group">
 							<label class="control-label col-sm-2">还款来源：</label>
 							<div class="col-sm-10">
-								${tbLoanApply.compName}<#form:textarea path="reimbursementSouce" rows="4" maxlength="1000" class="form-control"/>
+								${tbLoanApply.reimbursementSouce}
 							</div>
 						</div>
 					</div>
@@ -406,7 +406,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" "></span> 企业房产：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:radio path="compHouse" dictType="comp_house" class="form-control  digits" />
+								<#form:radio path="compHouse" dictType="comp_house" class="form-control  digits" />
 							</div>
 						</div>
 					</div>
@@ -415,7 +415,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" "></span> 企业土地：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:radio path="compLand" dictType="comp_land" class="form-control  digits" />
+								${tbLoanApply.compLand}
 							</div>
 						</div>
 					</div>
@@ -427,7 +427,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" hide"></span> 年销售额：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:input path="annualSales" maxlength="20" class="form-control"/>
+								${tbLoanApply.annualSales}
 							</div>
 						</div>
 					</div>
@@ -438,7 +438,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" hide"></span> 净利润：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:input path="netProfit" maxlength="20" class="form-control"/>
+								${tbLoanApply.netProfit}
 							</div>
 						</div>
 					</div>
@@ -447,7 +447,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" hide"></span> 银行负债：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:input path="bankResponsible" maxlength="20" class="form-control"/>
+								${tbLoanApply.bankResponsible}
 							</div>
 						</div>
 					</div>
@@ -459,7 +459,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" hide"></span> 法人户口所在地：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:input path="legalPrpPlace" maxlength="20" class="form-control"/>
+								${tbLoanApply.legalPrpPlace}
 							</div>
 						</div>
 					</div>
@@ -468,7 +468,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" "></span> 法人身份证号：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:input path="legalIdcard" maxlength="20" class="form-control  idcard"/>
+								${tbLoanApply.legalIdcard}
 							</div>
 						</div>
 					</div>
@@ -480,7 +480,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" "></span> 法人房产情况：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:radio path="legalHouse" dictType="legal_house" class="form-control  digits" />
+								${tbLoanApply.legalHouse}
 							</div>
 						</div>
 					</div>
@@ -489,7 +489,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" "></span> 法人车产情况：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:radio path="legalCar" dictType="legal_car" class="form-control  digits" />
+								${tbLoanApply.legalCar}
 							</div>
 						</div>
 					</div>
@@ -500,7 +500,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" "></span> 法人婚姻状况：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:radio path="legalMarriage" dictType="marriage" class="form-control  digits" />
+								<#form:radio path="legalMarriage" dictType="marriage" class="form-control  digits" />
 							</div>
 						</div>
 					</div>
@@ -509,7 +509,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" "></span> 居住情况：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:radio path="livingSituation" dictType="living" class="form-control  digits" />
+								<#form:radio path="livingSituation" dictType="living" class="form-control  digits" />
 							</div>
 						</div>
 					</div>
@@ -522,7 +522,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" "></span> 户籍地址与实际居住地址是否一致：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:radio path="isRprAddress" dictType="is_rpr_address" class="form-control  digits" />
+								<#form:radio path="isRprAddress" dictType="is_rpr_address" class="form-control  digits" />
 							</div>
 						</div>
 					</div>
@@ -533,7 +533,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" hide"></span> 实际居住地址：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:textarea path="actualLivingAddress" rows="4" maxlength="500" class="form-control"/>
+								${tbLoanApply.actualLivingAddress}
 							</div>
 						</div>
 					</div>
@@ -542,7 +542,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" hide"></span> 如与实际居住地址不符 填写户籍地址：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:textarea path="rprAddress" rows="4" maxlength="500" class="form-control"/>
+								${tbLoanApply.rprAddress}
 							</div>
 						</div>
 					</div>
@@ -554,7 +554,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" "></span> 家庭联系人1：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:input path="householdContacts1" maxlength="20" class="form-control "/>
+								${tbLoanApply.householdContacts1}
 							</div>
 						</div>
 					</div>
@@ -563,7 +563,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" hide"></span> 家庭联系人2：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:input path="householdContacts2" maxlength="20" class="form-control"/>
+								${tbLoanApply.householdContacts2}
 							</div>
 						</div>
 					</div>
@@ -575,7 +575,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" "></span> 家庭联系人1关系：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:radio path="householdContacts1Relationship" dictType="relationship" class="form-control  digits" />
+								<#form:radio path="householdContacts1Relationship" dictType="relationship" class="form-control  digits" />
 							</div>
 						</div>
 					</div>
@@ -584,7 +584,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" hide"></span> 家庭联系人2关系：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:radio path="householdContacts2Relationship" dictType="relationship" class="form-control digits" />
+								<#form:radio path="householdContacts2Relationship" dictType="relationship" class="form-control digits" />
 							</div>
 						</div>
 					</div>
@@ -596,7 +596,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" "></span> 家庭联系人1 电话：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:input path="householdContacts1Phone" maxlength="20" class="form-control  phone"/>
+								${tbLoanApply.householdContacts1Phone}
 							</div>
 						</div>
 					</div>
@@ -605,7 +605,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" hide"></span> 家庭联系人2 电话：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:input path="householdContacts2Phone" maxlength="20" class="form-control phone"/>
+								${tbLoanApply.householdContacts2Phone}
 							</div>
 						</div>
 					</div>
@@ -617,7 +617,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" hide"></span> 其他联系人1：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:input path="otherContacts1" maxlength="20" class="form-control "/>
+								${tbLoanApply.otherContacts1}
 							</div>
 						</div>
 					</div>
@@ -626,7 +626,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" hide"></span> 其他联系人2：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:input path="otherContacts2" maxlength="20" class="form-control"/>
+								${tbLoanApply.otherContacts2}
 							</div>
 						</div>
 					</div>
@@ -638,7 +638,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" hide"></span> 其他联系人1关系：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:radio path="otherContacts1Relationship" dictType="other_relationship" class="form-control digits" />
+								<#form:radio path="otherContacts1Relationship" dictType="other_relationship" class="form-control digits" />
 							</div>
 						</div>
 					</div>
@@ -647,7 +647,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" hide"></span> 其他联系人2关系：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:radio path="otherContacts2Relationship" dictType="other_relationship" class="form-control digits" />
+								<#form:radio path="otherContacts2Relationship" dictType="other_relationship" class="form-control digits" />
 							</div>
 						</div>
 					</div>
@@ -659,7 +659,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" hide"></span> 其他联系人1电话：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:input path="otherContacts1Phone" maxlength="20" class="form-control phone"/>
+								${tbLoanApply.otherContacts1Phone}
 							</div>
 						</div>
 					</div>
@@ -668,7 +668,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" hide"></span> 其他联系人2电话：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:input path="otherContacts2Phone" maxlength="20" class="form-control phone"/>
+								${tbLoanApply.otherContacts2Phone}
 							</div>
 						</div>
 					</div>
@@ -680,7 +680,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" hide"></span> 申请时间：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:input path="applyTime" readonly="true" maxlength="20" class="form-control Wdate date"
+								<#form:input path="applyTime" readonly="true" maxlength="20" class="form-control Wdate date"
 									dataFormat="date" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
 							</div>
 						</div>
@@ -692,7 +692,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" hide"></span> 申请状态：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:select path="applyState" dictType="apply_status" blankOption="true" class="form-control digits" />
+								<#form:select path="applyState" dictType="apply_status" blankOption="true" class="form-control digits" />
 							</div>
 						</div>
 					</div>
@@ -701,7 +701,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" hide"></span> 操作人：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:input path="operationUserId" maxlength="64" class="form-control"/>
+								<#form:input path="operationUserId" maxlength="64" class="form-control"/>
 							</div>
 						</div>
 					</div>
@@ -712,7 +712,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" hide"></span> 操作时间：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:input path="operationTime" readonly="true" maxlength="20" class="form-control Wdate"
+								<#form:input path="operationTime" readonly="true" maxlength="20" class="form-control Wdate"
 									dataFormat="date" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
 							</div>
 						</div>
@@ -722,7 +722,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" hide"></span> 授信额度：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:input path="lineCredit" maxlength="20" class="form-control number"/>
+								<#form:input path="lineCredit" maxlength="20" class="form-control number"/>
 							</div>
 						</div>
 					</div>
@@ -733,40 +733,13 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" hide"></span> 授权核心企业id：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:input path="coreCompId" maxlength="64" class="form-control"/>
+								<#form:input path="coreCompId" maxlength="64" class="form-control"/>
 							</div>
 						</div>
 					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class=" "></span> 核心企业系统登录地址：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:input path="coreSysUrl" maxlength="200" class="form-control  url"/>
-							</div>
-						</div>
-					</div>
+				
 				</div>
-				<div class="row">
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class=" "></span> 核心企业系统登录用户名：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:input path="coreSysUsername" maxlength="100" class="form-control "/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class=" "></span> 核心企业系统登录密码：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								${tbLoanApply.compName}<#form:input path="coreSysPwd" maxlength="50" class="form-control "/>
-							</div>
-						</div>
-					</div>
-				</div>
+				
 						<div class="form-unit">${text('企业材料')}</div>
 					
 					<%for(tbatt in corptbLoanAttachmentlist){%>						
@@ -776,8 +749,8 @@
 							<label class="control-label col-sm-2">
 							<span class=" "></span>${tbatt.attachmentName}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-10">
-							${tbLoanApply.compName}<#form:fileupload id="${tbatt.id}_att" bizKey="${tbLoanApply.id}" bizType="tbLoanApply_corp_${tbatt.id}" maxUploadNum="1"
-									uploadType="all" class="" readonly="false"/><span style="color: red">${tbatt.attachmentRemar}</span>
+							<#form:fileupload id="${tbatt.id}_att" bizKey="${tbLoanApply.id}" bizType="tbLoanApply_corp_${tbatt.id}" maxUploadNum="1"
+									uploadType="image" class="" readonly="true"/><span style="color: red">${tbatt.attachmentRemar}</span>
 							</div>
 						</div>
 					</div>
@@ -792,8 +765,8 @@
 							<label class="control-label col-sm-2">
 							<span class=" "></span>${tbatt.attachmentName}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-10">
-							${tbLoanApply.compName}<#form:fileupload id="${tbatt.id}_att" bizKey="${tbLoanApply.id}" bizType="tbLoanApply_people_${tbatt.id}" maxUploadNum="1"
-									uploadType="all" class="" readonly="false"/><span style="color: red">${tbatt.attachmentRemar}</span>
+							<#form:fileupload id="${tbatt.id}_att" bizKey="${tbLoanApply.id}" bizType="tbLoanApply_people_${tbatt.id}" maxUploadNum="1"
+									uploadType="image" class="" readonly="true"/><span style="color: red">${tbatt.attachmentRemar}</span>
 							</div>
 						</div>
 					</div>
