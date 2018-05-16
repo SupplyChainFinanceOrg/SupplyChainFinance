@@ -137,7 +137,10 @@ public class TbCompController extends BaseController {
 			//流程
 			//获取角色，状态
 			List<TbProcess> prolist=tbProcessService.buttunList(tbComp.getApplyState()+"",TbProcess.COMPANYTYPE);							
-			model.addAttribute("prolist", prolist);		
+			model.addAttribute("prolist", prolist);	
+			if(tbComp.getApplyState()==1||tbComp.getApplyState()==3||tbComp.getApplyState()==2){
+				return "modules/tb/tbCompForm";
+			}
 			return "modules/tb/tbCompLiu";
 		}else if("2".equals(request.getParameter("looktype"))){
 			return "modules/tb/tbCompDetail";
@@ -168,7 +171,7 @@ public class TbCompController extends BaseController {
 					oldtbComp.setOperationData(new Date());
 					oldtbComp.setOperationUserId(UserUtils.getUser().getUserCode());
 				}
-				tbCompService.save(tbComp);
+				tbCompService.save(oldtbComp);
 			}
 			tbProcessLogService.saveLog(Integer.parseInt(tbComp.getApplyState()+""), TbProcessLog.APPLY_TYPE,tbComp.getId(),null, null, request.getParameter("operationRemark"), 1, 1, 1,oldstatus+"-"+oldtbComp.getApplyState()+"",tbComp.getCompName());
 

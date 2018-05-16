@@ -13,6 +13,8 @@
 					<div class="box-body">
 				<div class="form-unit" ><span id='getlabel'></span>${text('基础信息')}</div>
 				<#form:hidden path="id"/>
+								<#form:hidden path="applyState"/>
+				
 				<div class="row">
 					<div class="col-xs-6">
 						<div class="form-group">
@@ -28,7 +30,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class="required">*</span> 统一社会信用代码：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="compCode" maxlength="50" class="form-control required"/>
+								<#form:input path="compCode" maxlength="50" class="form-control"/>
 							</div>
 						</div>
 					</div>
@@ -268,7 +270,7 @@
 								<span class="required">*</span> 特殊行业许可证：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
 							<#form:fileupload id="specialTradeLicense"  bizKey="${tbComp.id}" bizType="tbComp_specialTradeLicense" maxUploadNum="1"
-									uploadType="image" class="required" readonly="false"/>
+									uploadType="image" class="" readonly="false"/>
 							</div>
 						</div>
 					</div>
@@ -336,7 +338,10 @@
 			<div class="box-footer" align="center">
 				<div class="row" style="margin: 0 100px 0 0; ">
 					<div class="col-sm-offset-2 col-sm-10">
-						<button type="submit" class="btn btn-sm btn-primary" id="btnSubmit"><i class="fa fa-check"></i> ${text('提交信息')}</button>&nbsp;	&nbsp;	&nbsp;	&nbsp;	&nbsp;	&nbsp;	&nbsp;	&nbsp;	&nbsp;	&nbsp;						
+						<button type="submit" class="btn btn-sm btn-primary" id="btnSubmit" style="display: none"></button>		
+						<%for(bstate in prolist){%> 	
+						<button type="button" class="btn btn-sm btn-primary"  onclick="change('${bstate.nextStateId}','${bstate.url}','${bstate.remark}')">${bstate.name}</button>	&nbsp;&nbsp;												
+						<%}%>				
 						<button type="button" class="btn btn-sm btn-default" id="btnCancel" onclick="js.closeCurrentTabPage()"><i class="fa fa-reply-all"></i> ${text('关 闭')}</button>
 					</div>
 				</div>
@@ -346,6 +351,76 @@
 </div>
 <% } %>
 <script>
+function change(status,url,remark){
+		layer.alert(remark, {
+			     skin: 'layui-layer-molv' //样式类名  自定义样式
+			     ,closeBtn: 1    // 是否显示关闭按钮
+			     ,anim: 1 //动画类型
+			    ,btn: ['确定','取消'] //按钮
+			    ,icon: 8    // icon
+			    ,yes:function(){
+			         $('#applyState').val(status);
+			    	if(url.length>0){
+			    		$('#inputForm').attr("action",url)
+			    	}
+			    	var isok=true;
+			    	if(status==4){
+			    		var compCode=$("#compCode").val();
+			    		var regCode=$("#regCode").val();
+			    		var orgCode=$("#orgCode").val();
+			    		var taxCode=$("#taxCode").val();
+			    		if(regCode.length==0||orgCode.length==0||taxCode.length==0){
+			    				if(compCode.length==0){
+			    					isok=false;
+			    					js.showMessage("请录入统一社会信用代码或者录入工商注册号、组织结构代码和税务登记号");
+			    				}	
+			    		}
+			    		var chage=$("#speciaIndustry2").attr("aria-invalid");	
+			    		if(chage!=undefined){
+			    			if(chage=='false'){
+			    				if($("#specialTradeLicensefileLists li").size()==0){	
+			    					isok=false;
+			    					js.showMessage("请上传特殊行业许可证");
+			    				}
+			    			}
+			    			
+			    		}	
+			    	}
+			    	if(isok){
+			    		$("#btnSubmit").trigger('click');
+			    	}			   
+			    	}
+		     	,btn2:function(){
+			        layer.msg('已取消')
+			     }});
+	}
+function clicksubmit(){
+	//判断信用号和三证
+	var compCode=$("#compCode").val();
+	var regCode=$("#regCode").val();
+	var orgCode=$("#orgCode").val();
+	var taxCode=$("#taxCode").val();
+	if(regCode.length==0||orgCode.length==0||taxCode.length==0){
+			if(compCode.length==0){
+				isok=false;
+				js.showMessage("请录入统一社会信用代码或者录入工商注册号、组织结构代码和税务登记号");
+			}	
+	}
+	var chage=$("#speciaIndustry2").attr("aria-invalid");	
+	if(chage!=undefined){
+		if(chage=='false'){
+			if($("#specialTradeLicensefileLists li").size()==0){	
+				isok=false;
+				js.showMessage("请上传特殊行业许可证");
+			}
+		}
+		
+	}	
+	if(isok){
+		$("#btnSubmit").trigger('click');
+	}
+
+}
 $("#inputForm").validate({
 	submitHandler: function(form){
 		js.ajaxSubmitForm($(form), function(data){

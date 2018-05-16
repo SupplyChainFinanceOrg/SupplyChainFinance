@@ -171,6 +171,12 @@ public class TbLoanApplyController extends BaseController {
 	@RequiresPermissions("apply:tbLoanApply:view")
 	@RequestMapping(value = "form")
 	public String form(TbLoanApply tbLoanApply, Model model,HttpServletRequest request) {
+		//金融机构列表
+		TbComp corp=new TbComp();
+		corp.setApplyState((long)1);
+		corp.setCompType((int)TbComp.JRQYTYPE);
+		List<TbComp> jrcorplist=tbCompService.findList(corp);
+		model.addAttribute("jrcorplist", jrcorplist);
 		//查询产品表
 		model.addAttribute("tbLoanApply", tbLoanApply);
 		model.addAttribute("tbProductlist", tbProductService.findList(new TbProduct()));
