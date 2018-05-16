@@ -148,3 +148,17 @@ ALTER TABLE `tb_process_log`
 ADD COLUMN `user_name`  varchar(200) NULL COMMENT '操作人' AFTER `comp_id`,
 ADD COLUMN `comp_name`  varchar(200) NULL COMMENT '企业名' AFTER `user_name`
 ---------------------------------------------------------------------------
+
+-----------------------------------------------
+ALTER TABLE `tb_risk_control`
+ADD COLUMN `init_score`  int(2) NULL DEFAULT 10 COMMENT '分数' AFTER `type`
+----------------------
+------------------------------------
+ALTER TABLE `tb_loan_risk`
+ADD COLUMN `complete`  varchar(2) NULL COMMENT '是否齐全 0是 1否' AFTER `remark`
+-------------------------------------------------------------------
+
+ALTER TABLE `tb_loan_apply`
+ADD COLUMN `risk_score`  varchar(10) NULL DEFAULT '0' COMMENT '风控分' AFTER `card_no`
+
+------------------------------------------------------------------------------------

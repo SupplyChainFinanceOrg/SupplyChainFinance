@@ -29,10 +29,14 @@ import com.jeesite.modules.apply.entity.TbLoanApply;
 import com.jeesite.modules.apply.service.TbLoanApplyService;
 import com.jeesite.modules.attachment.entity.TbLoanAttachment;
 import com.jeesite.modules.attachment.service.TbLoanAttachmentService;
+import com.jeesite.modules.control.entity.TbRiskControl;
+import com.jeesite.modules.control.service.TbRiskControlService;
 import com.jeesite.modules.product.entity.TbProduct;
 import com.jeesite.modules.product.entity.TbProductBorrowType;
 import com.jeesite.modules.product.service.TbProductBorrowTypeService;
 import com.jeesite.modules.product.service.TbProductService;
+import com.jeesite.modules.risk.entity.TbLoanRisk;
+import com.jeesite.modules.risk.service.TbLoanRiskService;
 import com.jeesite.modules.state.entity.TbProcess;
 import com.jeesite.modules.state.entity.TbProcessLog;
 import com.jeesite.modules.state.entity.TbState;
@@ -80,6 +84,10 @@ public class TbLoanApplyController extends BaseController {
 
 	@Autowired
 	private EmpUserService empUserService;
+	@Autowired
+	private TbRiskControlService tbRiskControlService;
+	@Autowired
+	private TbLoanRiskService tbLoanRiskService;
 	/**
 	 * 获取数据
 	 */
@@ -250,6 +258,30 @@ public class TbLoanApplyController extends BaseController {
 			if(0==tbLoanApply.getApplyState()||2==tbLoanApply.getApplyState()){
 				return "modules/apply/tbLoanApplyForm";
 			}
+			if(3==tbLoanApply.getApplyState()){
+				//风控评分
+				for(int i=0;i<4;i++){
+					TbRiskControl tbrc=new TbRiskControl();
+					tbrc.setType(i);
+					List<TbRiskControl> tbrclist=tbRiskControlService.findList(tbrc);
+					model.addAttribute("tbrclist_"+i, tbrclist);
+
+				}
+				return "modules/apply/tbLoanApplyLiuaddScore";
+			}
+			if(4==tbLoanApply.getApplyState()||5==tbLoanApply.getApplyState()||6==tbLoanApply.getApplyState()||8==tbLoanApply.getApplyState()){
+				//风控评分
+				for(int i=0;i<4;i++){
+					TbLoanRisk tblr=new TbLoanRisk();
+					tblr.setLoanId(tbLoanApply.getId());
+					TbRiskControl tbrc=new TbRiskControl();
+					tbrc.setType(i);
+					tblr.setTbRiskControl(tbrc);
+					List<TbLoanRisk> tblrlist=tbLoanRiskService.findList(tblr);
+					model.addAttribute("tblrlist_"+i, tblrlist);
+				}
+				return "modules/apply/tbLoanApplyLiuaddScoreed";
+			}
 			return "modules/apply/tbLoanApplyLiu";
 		}else if("3".equals(request.getParameter("looktype"))){
 			//查看审核情况
@@ -302,10 +334,40 @@ public class TbLoanApplyController extends BaseController {
 		}else{
 			TbLoanApply	oldtbLoanApply=tbLoanApplyService.get(tbLoanApply.getId());
 			//日志
+			long nextstatus=Long.parseLong(request.getParameter("nextstatus"));
 			String oldstatus=oldtbLoanApply.getApplyState()+"";
-			oldtbLoanApply.setApplyState(Long.parseLong(request.getParameter("nextstatus")));
-			tbLoanApplyService.save(oldtbLoanApply);
+			oldtbLoanApply.setApplyState(nextstatus);
 			String statusstring= oldstatus+"-"+oldtbLoanApply.getApplyState();
+			if(nextstatus==4){
+				//保存风控分 //保存总分
+				int total=0;
+				TbRiskControl tbrc=new TbRiskControl();
+				List<TbRiskControl> tbrclist=tbRiskControlService.findList(tbrc);
+				for(int i=0;i<tbrclist.size();i++){
+					long raskid=Integer.parseInt(tbrclist.get(i).getId());
+					String complete=request.getParameter("complete_"+raskid);
+					String remark=request.getParameter("remark_"+raskid);
+					int score=Integer.parseInt(request.getParameter("score_"+raskid));
+					total=total+score;
+					TbLoanRisk tbLoanRisk=new TbLoanRisk();
+					tbLoanRisk.setId(tbLoanApply.getId()+"_"+raskid);
+					tbLoanRisk.setComplete(complete);
+					tbLoanRisk.setRiskId(raskid);
+					tbLoanRisk.setTotalScore(Long.parseLong(tbrclist.get(i).getInitScore()+""));
+					tbLoanRisk.setLoanId(tbLoanApply.getId());
+					tbLoanRisk.setRemark(remark);
+					tbLoanRisk.setScore((long)score);
+					tbLoanRisk.setTbRiskControl(tbrclist.get(i));
+					TbLoanRisk oldtbLoanRisk=tbLoanRiskService.get(tbLoanRisk);
+					if(oldtbLoanRisk==null){
+						tbLoanRiskService.insert(tbLoanRisk);
+					}else{						
+						tbLoanRiskService.save(tbLoanRisk);
+					}
+				}
+				oldtbLoanApply.setRiskScore(total+"");
+			}		
+			tbLoanApplyService.save(oldtbLoanApply);
 			tbProcessLogService.saveLog(Integer.parseInt(oldtbLoanApply.getApplyState()+""), TbProcessLog.APPLY_TYPE,null, oldtbLoanApply.getProductId()+"", oldtbLoanApply.getId(), request.getParameter("operationRemark"), 1, 1, 1,statusstring,tbLoanApply.getCompName());			
 		}
 		

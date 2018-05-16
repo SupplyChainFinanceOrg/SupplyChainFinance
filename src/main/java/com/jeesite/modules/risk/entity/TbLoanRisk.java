@@ -7,8 +7,11 @@ import org.hibernate.validator.constraints.Length;
 
 import com.jeesite.common.entity.DataEntity;
 import com.jeesite.common.mybatis.annotation.Column;
+import com.jeesite.common.mybatis.annotation.JoinTable;
+import com.jeesite.common.mybatis.annotation.JoinTable.Type;
 import com.jeesite.common.mybatis.annotation.Table;
 import com.jeesite.common.mybatis.mapper.query.QueryType;
+import com.jeesite.modules.control.entity.TbRiskControl;
 
 /**
  * tb_loan_riskEntity
@@ -22,7 +25,15 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="total_score", attrName="totalScore", label="分值"),
 		@Column(name="score", attrName="score", label="得分"),
 		@Column(name="remark", attrName="remark", label="备注"),
-	}, orderBy="a.id DESC"
+		@Column(name="complete", attrName="complete", label="齐全"),		
+	},
+    // 支持联合查询，如左右连接查询，支持设置查询自定义关联表的返回字段列
+    joinTable={
+      @JoinTable(type=Type.LEFT_JOIN, entity=TbRiskControl.class, alias="o", 
+              on="o.id = a.risk_id",
+              columns={@Column(includeEntity=TbRiskControl.class)}),
+       
+    }, orderBy="o.id DESC"
 )
 public class TbLoanRisk extends DataEntity<TbLoanRisk> {
 	
@@ -32,7 +43,26 @@ public class TbLoanRisk extends DataEntity<TbLoanRisk> {
 	private Long totalScore;		// 分值
 	private Long score;		// 得分
 	private String remark;		// 备注
+	private TbRiskControl tbRiskControl;	
+	private String complete;
+	public String getComplete() {
+		return complete;
+	}
+
+	public void setComplete(String complete) {
+		this.complete = complete;
+	}
+
 	
+
+	public TbRiskControl getTbRiskControl() {
+		return tbRiskControl;
+	}
+
+	public void setTbRiskControl(TbRiskControl tbRiskControl) {
+		this.tbRiskControl = tbRiskControl;
+	}
+
 	public TbLoanRisk() {
 		this(null);
 	}

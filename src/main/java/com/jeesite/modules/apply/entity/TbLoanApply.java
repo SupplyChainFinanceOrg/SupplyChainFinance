@@ -103,6 +103,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="org_code", attrName="orgCode", label="组织结构代码"),
 		@Column(name="tax_code", attrName="taxCode", label="税务登记号"),
 		@Column(name="card_no", attrName="cardNo", label="法人身份证号"),
+		@Column(name="risk_score", attrName="riskScore", label="分控分"),
 	}, orderBy="a.id DESC"
 )
 public class TbLoanApply extends DataEntity<TbLoanApply> {
@@ -188,6 +189,15 @@ public class TbLoanApply extends DataEntity<TbLoanApply> {
 	private String taxCode;		// 税务登记号
 	private String cardNo;	  //法人身份证号
 	
+	private String riskScore;//风控分
+	
+	public String getRiskScore() {
+		return riskScore;
+	}
+
+	public void setRiskScore(String riskScore) {
+		this.riskScore = riskScore;
+	}
 
 	public String getRegCode() {
 		return regCode;

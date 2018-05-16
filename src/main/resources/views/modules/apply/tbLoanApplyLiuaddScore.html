@@ -1,0 +1,206 @@
+<% layout('/layouts/default.html', {title: '借款申请管理', libs: ['validate','fileupload']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header with-border">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> 操作
+			</div>
+			<div class="box-tools pull-right">
+				<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+			</div>
+		</div>
+		<#form:form id="inputForm" model="${tbLoanApply}" action="${ctx}/apply/tbLoanApply/save" method="post" class="form-horizontal">
+			<div class="box-body">
+<!-- 				<div class="form-unit">${text('反馈信息')}</div>
+ -->				<#form:hidden path="id"/>
+				<input id="url" name="url" style="display: none">
+				<input id="nextstatus" name="nextstatus" style="display: none">		
+			<input id="compId" name="compId" type="hidden" value="${tbLoanApply.compId}">	
+			<!-- 0准备的资料 1企业调查 2个人调查 3综合部分 -->			
+			<div class="form-unit">${text('准备的资料')}</div>
+			<div class="row" style="padding-left: 55px">
+			<table style="width: 800px">
+				<%for(tbr in tbrclist_0){%> 			
+					<tr style="height: 50px">
+					<td style="width: 300px"><span style="float: right;">${tbr.name}是否齐全:</span></td>
+					<td style="width: 200px;padding-left: 10px"><input type="radio" checked="checked" name="complete_${tbr.id}" value="0">是<input type="radio" name="complete_${tbr.id}"  value="1">否</td>
+					<td style="width: 100px"><span style="float: right;">得分:</span></td>
+					<td style="width: 200px;padding-left: 10px"><input type="text" name="score_${tbr.id}" id="score_${tbr.id}"  onblur="scoreblur(this)"  parentname="${tbr.name}" maxscore="${tbr.initScore}"  maxlength="3"  onkeyup="this.value=this.value.replace(/\D/g,'')" value="${tbr.initScore}"   ></td>
+					</tr>
+					<tr>
+					<td style="width: 200px"><span style="float: right;">备注：</span></td>
+					<td colspan="3">
+					<textarea name="remark_${tbr.id}" rows="" cols="" style="width: 93%;height: 50px"></textarea>
+					</td>
+					</tr>
+				<%}%> 				
+			</table>
+			</div>
+			<div class="form-unit">${text('企业调查')}</div>
+						<div class="row" style="padding-left: 55px">
+			<table style="width: 800px">
+				<%for(tbr in tbrclist_1){%> 			
+					<tr style="height: 50px">
+					<td style="width: 300px"><span style="float: right;">${tbr.name}是否齐全:</span></td>
+					<td style="width: 200px;padding-left: 10px"><input type="radio" checked="checked" name="complete_${tbr.id}" value="0">是<input type="radio" name="complete_${tbr.id}"  value="1">否</td>
+					<td style="width: 100px"><span style="float: right;">得分:</span></td>
+					<td style="width: 200px;padding-left: 10px"><input type="text" name="score_${tbr.id}" id="score_${tbr.id}"  onblur="scoreblur(this)" parentname="${tbr.name}"  maxscore="${tbr.initScore}" maxlength="3"  onkeyup="this.value=this.value.replace(/\D/g,'')" value="${tbr.initScore}"  ></td>
+					</tr>
+					<tr>
+					<td style="width: 200px"><span style="float: right;">备注：</span></td>
+					<td colspan="3">
+					<textarea name="remark_${tbr.id}" rows="" cols="" style="width: 93%;height: 50px"></textarea>
+					</td>
+					</tr>
+				<%}%> 				
+			</table>
+			</div>
+			<div class="form-unit">${text('个人调查')}</div>
+						<div class="row" style="padding-left: 55px">
+			<table style="width: 800px">
+				<%for(tbr in tbrclist_2){%> 			
+					<tr style="height: 50px">
+					<td style="width: 300px"><span style="float: right;">${tbr.name}是否齐全:</span></td>
+					<td style="width: 200px;padding-left: 10px"><input type="radio" checked="checked" name="complete_${tbr.id}" value="0">是<input type="radio" name="complete_${tbr.id}"  value="1">否</td>
+					<td style="width: 100px"><span style="float: right;">得分:</span></td>
+					<td style="width: 200px;padding-left: 10px"><input type="text"  onblur="scoreblur(this)" id="score_${tbr.id}"  maxscore="${tbr.initScore}" parentname="${tbr.name}" name="score_${tbr.id}"  maxlength="3"  onkeyup="this.value=this.value.replace(/\D/g,'')" value="${tbr.initScore}"  ></td>
+					</tr>
+					<tr>
+					<td style="width: 200px"><span style="float: right;">备注：</span></td>
+					<td colspan="3">
+					<textarea name="remark_${tbr.id}" rows="" cols="" style="width: 93%;height: 50px"></textarea>
+					</td>
+					</tr>
+				<%}%> 				
+			</table>
+			</div>
+			<div class="form-unit">${text('综合调查')}</div>
+						<div class="row" style="padding-left: 55px">
+			<table style="width: 800px">
+				<%for(tbr in tbrclist_3){%> 			
+					<tr style="height: 50px">
+					<td style="width: 300px"><span style="float: right;">${tbr.name}是否齐全:</span></td>
+					<td style="width: 200px;padding-left: 10px"><input type="radio" name="complete_${tbr.id}"  checked="checked" value="0">是<input type="radio" name="complete_${tbr.id}"  value="1">否</td>
+					<td style="width: 100px"><span style="float: right;">得分:</span></td>
+					<td style="width: 200px;padding-left: 10px"><input type="text"   onblur="scoreblur(this)" name="score_${tbr.id}"  id="score_${tbr.id}"  parentname="${tbr.name}"  maxscore="${tbr.initScore}"  maxlength="3"  onkeyup="this.value=this.value.replace(/\D/g,'')" value="${tbr.initScore}"  ></td>
+					</tr>
+					<tr>
+					<td style="width: 200px"><span style="float: right;">备注：</span></td>
+					<td colspan="3">
+					<textarea name="remark_${tbr.id}" rows="" cols="" style="width: 93%;height: 50px"></textarea>
+					</td>
+					</tr>
+				<%}%> 				
+			</table>
+			</div>	
+			<div class="form-unit">${text('反馈信息')}</div>			
+				<%if(tbLoanApply.applyState!=0&&tbLoanApply.applyState!=17&&tbLoanApply.applyState!=18){%>
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group">
+							<label class="control-label col-sm-2">
+							<span class="required hide"></span>备注：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-10">
+							<div class="form-group">
+							<div class="col-sm-10">
+								<textarea id="operationRemark" name="operationRemark" class="form-control" style="height:100px"  rows="" cols=""></textarea>
+							</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<%}%>
+			</div>
+			
+			<div class="box-footer" align="center">
+				<div class="row" style="margin: 0 100px 0 0; ">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button type="submit" class="btn btn-sm btn-primary" id="btnSubmit" style="display: none"></button>		
+						<%for(bstate in prolist){%> 	
+						<button type="button" class="btn btn-sm btn-primary"  onclick="change('${bstate.nextStateId}','${bstate.url}','${bstate.remark}')">${bstate.name}</button>	&nbsp;&nbsp;												
+						<%}%>				
+						<button type="button" class="btn btn-sm btn-default" id="btnCancel" onclick="js.closeCurrentTabPage()"><i class="fa fa-reply-all"></i> ${text('关 闭')}</button>
+					</div>
+				</div>
+			</div>
+		</#form:form>
+	</div>
+</div>
+<% } %>
+<script>
+function scoreblur(e){
+	
+	var socre=Number($(e).val());
+	var maxscore=Number($(e).attr("maxscore"));
+	if(maxscore<socre){
+		var parentname =$(e).attr("parentname");
+		layer.alert(parentname+'分数最大为'+maxscore, {icon:5});
+	}
+}
+$("#inputForm").validate({
+	submitHandler: function(form){
+		js.ajaxSubmitForm($(form), function(data){
+			js.showMessage(data.message);
+			if(data.result == Global.TRUE){
+				js.closeCurrentTabPage(function(contentWindow){
+					contentWindow.page();
+				});
+			}
+		}, "json");
+    }
+});
+function change(status,url,remark){
+	/* 	layer.alert('见到你真的很高兴', {icon: 1});*/
+		layer.alert(remark, {
+			     skin: 'layui-layer-molv' //样式类名  自定义样式
+			     ,closeBtn: 1    // 是否显示关闭按钮
+			     ,anim: 1 //动画类型
+			    ,btn: ['确定','取消'] //按钮
+			    ,icon: 8    // icon
+			    ,yes:function(){
+			         $('#nextstatus').val(status);
+			    	if(url.length>0){
+			    		$('#inputForm').attr("action",url)
+			    	}
+			    	if(status==0){
+			    		 for(var i=0;i<$(".form-control").size();i++){
+			    				$(".form-control").eq(i).attr("class",$(".form-control").eq(i).attr("class").replace('required',' '))
+			    			} 
+			    		 for(var i=0;i<$(".wup_input").size();i++){
+			    				$(".wup_input").eq(i).attr("class",$(".wup_input").eq(i).attr("class").replace('required',' '))
+			    		 }
+			    	} 
+			    	var isok2=true;
+			    	if(status==4){
+			    	//验证分数和是否
+			    	for(var i=1;i<=15;i++){
+			    		debugger;
+		    			var ename="#score_"+i;
+			    		var socre=Number($(ename).val());
+			    		var maxscore=Number($(ename).attr("maxscore"));
+			    		var parentname =$(ename).attr("parentname");
+			    		if(maxscore<socre){
+			    			layer.alert(parentname+'分数最大为'+maxscore, {icon:5});
+			    			isok2=false;
+			    			break;
+			    		}
+			    		 var complete="complete_"+i;
+			    		 var list= $('input:radio[name="'+complete+'"]:checked').val();
+			    		 if(list==undefined||list.length==0){
+			    			 layer.alert(parentname+'是否齐全', {icon:5});
+				    			isok2=false;
+				    			break;
+			    		 }
+			    	}
+			    		
+			    	}
+			    	if(isok2){			    		
+			    		$("#btnSubmit").trigger("click");
+			    	}
+			    	
+			     }
+		     	,btn2:function(){
+			        layer.msg('已取消')
+			     }});
+	}
+</script>

@@ -20,7 +20,8 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="name", attrName="name", label="名称", queryType=QueryType.LIKE),
 		@Column(name="content", attrName="content", label="了解的内容"),
 		@Column(name="type", attrName="type", label="分类 0准备的资料 1企业调查 2个人调查 3综合部分"),
-	}, orderBy="a.id DESC"
+		@Column(name="init_score", attrName="initScore", label="分数"),
+	}, orderBy="a.id asc"
 )
 public class TbRiskControl extends DataEntity<TbRiskControl> {
 	
@@ -28,7 +29,18 @@ public class TbRiskControl extends DataEntity<TbRiskControl> {
 	private String name;		// 名称
 	private String content;		// 了解的内容
 	private Integer type;		// 分类 0准备的资料 1企业调查 2个人调查 3综合部分
+	private Integer initScore;
 	
+	
+
+	public Integer getInitScore() {
+		return initScore;
+	}
+
+	public void setInitScore(Integer initScore) {
+		this.initScore = initScore;
+	}
+
 	public TbRiskControl() {
 		this(null);
 	}
