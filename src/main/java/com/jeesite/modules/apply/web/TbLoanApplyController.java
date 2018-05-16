@@ -261,7 +261,23 @@ public class TbLoanApplyController extends BaseController {
 		if(StringUtils.isEmpty(tbLoanApply.getId())){
 			return "modules/apply/tbLoanApplyForm";
 		}
+		//审核情况
+		TbProcessLog tbpl=new TbProcessLog();
+		tbpl.setType(1);
+		tbpl.setLoanId(tbLoanApply.getId());
+		String [] status={"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18"};
+		tbpl.getSqlMap().getWhere().and("logState", QueryType.IN,status);
+		tbpl.getSqlMap().getWhere().and("operation_remark", QueryType.IS_NOT_NULL,"");
+		List<TbProcessLog> tbpllist=tbProcessLogService.findList(tbpl);
+		//状态的名字
+		TbState tbs=new TbState();
+		tbs.setType(1);
+		tbs.getSqlMap().getWhere().and("nowstatus", QueryType.IS_NOT_NULL, null);
+		List<TbState> tbslist=tbStateService.findList(tbs);
+		model.addAttribute("tbpllist", tbpllist);
+		model.addAttribute("tbslist", tbslist);
 		return "modules/apply/tbLoanApplyDetail";
+
 	}
 
 	/**
@@ -290,7 +306,7 @@ public class TbLoanApplyController extends BaseController {
 			oldtbLoanApply.setApplyState(Long.parseLong(request.getParameter("nextstatus")));
 			tbLoanApplyService.save(oldtbLoanApply);
 			String statusstring= oldstatus+"-"+oldtbLoanApply.getApplyState();
-			tbProcessLogService.saveLog(Integer.parseInt(oldstatus), TbProcessLog.APPLY_TYPE,null, oldtbLoanApply.getProductId()+"", oldtbLoanApply.getId(), request.getParameter("operationRemark"), 1, 1, 1,statusstring,tbLoanApply.getCompName());			
+			tbProcessLogService.saveLog(Integer.parseInt(oldtbLoanApply.getApplyState()+""), TbProcessLog.APPLY_TYPE,null, oldtbLoanApply.getProductId()+"", oldtbLoanApply.getId(), request.getParameter("operationRemark"), 1, 1, 1,statusstring,tbLoanApply.getCompName());			
 		}
 		
 		return renderResult(Global.TRUE, "操作成功！");

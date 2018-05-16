@@ -331,7 +331,22 @@
 					</div>
 				</div>
 				
-				
+				<%if(tbComp.applyState==2){%>							
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group">
+							<label class="control-label col-sm-2">
+							<span class="required hide"></span>审核情况：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-10">
+							<div class="form-group">
+							<div class="col-sm-10">
+							${tbpl.operationRemark}
+							</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<%}%>
 			</div>
 			<div class="box-footer" align="center">
 				<div class="row" style="margin: 0 100px 0 0; ">

@@ -33,9 +33,9 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="bank_comp_visible", attrName="bankCompVisible", label="金融机构可见"),
 		@Column(name="comp_id", attrName="compId", label="企业id"),
 		@Column(name="logState", attrName="logState", label="状态"),
-		@Column(name="user_name", attrName="userName", label="状态"),
-		@Column(name="comp_name", attrName="compName", label="状态"),
-	}, orderBy="a.operation_time desc"
+		@Column(name="user_name", attrName="userName", label="姓名"),
+		@Column(name="comp_name", attrName="compName", label="公司名"),
+	}, orderBy="a.operation_time asc"
 )
 public class TbProcessLog extends DataEntity<TbProcessLog> {
 	
