@@ -163,10 +163,11 @@ public class TbCompController extends BaseController {
 			//查询老的数据
 			TbComp oldtbComp=tbCompService.get(tbComp.getId());
 			String oldstatus=oldtbComp.getApplyState()+"";
-			oldtbComp.setApplyState(Long.parseLong(request.getParameter("nextstatus")));
 			if(0==oldtbComp.getApplyState()){
+				oldtbComp.setApplyState(Long.parseLong(request.getParameter("nextstatus")));
 				tbCompService.saveAndCreate(oldtbComp,true);
 			}else{
+				oldtbComp.setApplyState(Long.parseLong(request.getParameter("nextstatus")));
 				if(1==oldtbComp.getApplyState()||2==oldtbComp.getApplyState()){
 					oldtbComp.setOperationData(new Date());
 					oldtbComp.setOperationUserId(UserUtils.getUser().getUserCode());

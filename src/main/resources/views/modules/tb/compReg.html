@@ -226,7 +226,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class="required ">*</span> 是否特殊行业：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">							
-								<#form:radio path="speciaIndustry" dictType="specia_industry" class="form-control digits required" onclick="specia()" />
+								<#form:radio path="speciaIndustry" dictType="specia_industry" class="form-control digits required"  />
 							</div>
 						</div>
 					</div>
@@ -264,16 +264,7 @@
 					</div>
 				</div>
 			<div class="row">
-					<div class="col-xs-6" id="isspecialTradeLicense">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required"></span> 特殊行业许可证：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-							<#form:fileupload id="specialTradeLicense"  bizKey="${tbComp.id}" bizType="tbComp_specialTradeLicense" maxUploadNum="1"
-									uploadType="image" class="" readonly="false"/>
-							</div>
-						</div>
-					</div>
+					
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
@@ -281,6 +272,16 @@
 							<div class="col-sm-8">
 								<#form:fileupload id="businessLicense" bizKey="${tbComp.id}" bizType="tbComp_businessLicense" maxUploadNum="1"
 									uploadType="image" class="required" readonly="false"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6" id="isspecialTradeLicense" style="display: none">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required"></span> 特殊行业许可证：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+							<#form:fileupload id="specialTradeLicense"  bizKey="${tbComp.id}" bizType="tbComp_specialTradeLicense" maxUploadNum="1"
+									uploadType="image" class="" readonly="false"/>
 							</div>
 						</div>
 					</div>
@@ -358,6 +359,23 @@
 </div>
 <% } %>
 <script>
+$(function(){
+
+	$("#speciaIndustry1").next().click(function(){
+		speciaIndustry();
+	}) 
+	$("#speciaIndustry2").next().click(function(){
+		speciaIndustry();
+	}) 
+})
+function speciaIndustry(){
+
+	if($("#speciaIndustry2").parent().attr("aria-checked")=='true'){
+		$("#isspecialTradeLicense").attr("style","display:black");
+	}else{
+		$("#isspecialTradeLicense").attr("style","display:none");
+	}
+}
 function clicksubmit(){
 	//判断信用号和三证
 	var compCode=$("#compCode").val();
@@ -437,21 +455,7 @@ $(function(){
 	//setTimeout("speciashow()",2000);
 })
 function speciashow(){
-	/* var chage=$("#speciaIndustry2").attr("aria-invalid");
-	//alert(chage)
-	if(chage){
-		$("#specialTradeLicense").attr("class",'up_input image required');
-    	$("#isspecialTradeLicense").show();
-    	$("#specialTradeLicense").hide();
 
-    	
-	}else{
-		$("#specialTradeLicense").attr("class",'up_input image');
-    	$("#isspecialTradeLicense").hide();
-	}
-	setTimeout("speciashow()",2000); */
-
-	//speciaIndustry
 }
 
 </script>

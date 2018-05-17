@@ -264,16 +264,7 @@
 					</div>
 				</div>
 			<div class="row">
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required">*</span> 特殊行业许可证：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-							<#form:fileupload id="specialTradeLicense"  bizKey="${tbComp.id}" bizType="tbComp_specialTradeLicense" maxUploadNum="1"
-									uploadType="image" class="" readonly="false"/>
-							</div>
-						</div>
-					</div>
+					
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
@@ -281,6 +272,16 @@
 							<div class="col-sm-8">
 								<#form:fileupload id="businessLicense" bizKey="${tbComp.id}" bizType="tbComp_businessLicense" maxUploadNum="1"
 									uploadType="image" class="required" readonly="false"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6" id="isspecialTradeLicense">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required">*</span> 特殊行业许可证：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+							<#form:fileupload id="specialTradeLicense"  bizKey="${tbComp.id}" bizType="tbComp_specialTradeLicense" maxUploadNum="1"
+									uploadType="image" class="" readonly="false"/>
 							</div>
 						</div>
 					</div>
@@ -351,6 +352,27 @@
 </div>
 <% } %>
 <script>
+$(function(){
+	
+	$("#speciaIndustry1").next().click(function(){
+		speciaIndustry();
+	}) 
+	$("#speciaIndustry2").next().click(function(){
+		speciaIndustry();
+	})
+	if('${tbComp.speciaIndustry}'==1){		
+		$("#speciaIndustry2").next().trigger("click");
+	}else{
+		$("#isspecialTradeLicense").attr("style","display:none");
+	}
+})
+function speciaIndustry(){
+	if($("#speciaIndustry2").parent().attr("aria-checked")=='true'){
+		$("#isspecialTradeLicense").attr("style","display:black");
+	}else{
+		$("#isspecialTradeLicense").attr("style","display:none");
+	}
+}
 function change(status,url,remark){
 		layer.alert(remark, {
 			     skin: 'layui-layer-molv' //样式类名  自定义样式

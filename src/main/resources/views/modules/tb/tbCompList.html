@@ -147,13 +147,11 @@ $('#dataGrid').dataGrid({
 			var actions = [];
 			<% if(hasPermi('tb:tbComp:edit')){ %>
 				actions.push('<a href="${ctx}/tb/tbComp/form?id='+row.id+'&looktype=2" class="btnList" title="${text('查看')}">${text('查看')}</a>&nbsp;');	
-				actions.push('<a href="${ctx}" id="'+row.id+'_bottons"class="btnList" title=""></a>');				
-
-/* 				actions.push('<a href="${ctx}/tb/tbComp/form?id='+row.id+'" class="btnList" title="${text('编辑')}">${text('编辑')}</a>&nbsp;');		
- */				actions.push('<span id="'+row.id+'_botton"></span>');				
-				//alert(row.id)
-/* 				actions.push('<a href="${ctx}/tb/tbComp/delete?id='+row.id+'" class="btnList" title="${text('删除')}" data-confirm="${text('确认要删除该企业吗？')}">${text('删除')}</a>&nbsp;');
- */			
+				<%for(botton in bottonlist ){%>
+					if(row.applyState=='${botton.nowstatus}'){
+						actions.push('<a href="${ctx}/tb/tbComp/form?id='+row.id+'&looktype=1" class="btnList" title="'+'${botton.operationName}'+'">'+'${botton.operationName}'+'</a>&nbsp;');	
+					}
+				<%}%>
  				//其他按钮操作
  			<% } %>
  		
@@ -168,23 +166,7 @@ $('#dataGrid').dataGrid({
 });
 var newdata;
 function addbutton(){
-	data=newdata;
-	if('${bottonlist}'.length>2){
-		 if(data!=null&&data.centerNum){
-				var lists=data.list;
-				for(var i=0;i<data.centerNum;i++){
-					var state=lists[i].applyState;
-					<%for(bstate in bottonlist){%> 	
-					var nowstatus='${bstate.nowstatus}';
-					var operationName='${bstate.operationName}';
-					 if(nowstatus==state){
-						var bottonvar='<span href="${ctx}/tb/tbComp/form?looktype=1&id='+lists[i].id+'" name="'+lists[i].id+'_bottons" style="color:#3c8dbc;cursor: pointer;" onclick="openurl(this)" class="btnList" title="'+operationName+'">'+operationName+'</span>&nbsp;';
-						$('#'+lists[i].id+'_botton').html(bottonvar);
-					}else{} 
-					<%}%> 						
-				}
-			}
-	}
+	
 }
 function openurl(e){
 	$("#"+$(e).attr("name")).attr("href",$(e).attr("href"));
