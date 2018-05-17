@@ -11,33 +11,23 @@
 		</div>
 		<#form:form id="inputForm" model="${tbLoanApply}" action="${ctx}/apply/tbLoanApply/save" method="post" class="form-horizontal">
 			<div class="box-body">
-		<!-- 	<%for(tbp in tbpllist){%>												
-						<div class="form-unit">${text('审核详情')}</div>
-					<%break;}%>
-						<%for(tbp in tbpllist){%>												
+		
+					<div class="form-unit">${text('放款额度')}</div>			
 				<div class="row">
 					<div class="col-xs-12">
 						<div class="form-group">
-							<table style="width: 100%;margin-left: 4%">
-							 <tr>
-							 <td width="10%"></td>
-							 <td><span style="float: right;color: red">${trim(tbp.operationTime,"yyyy-MM-dd HH:mm:ss")}</span><span style="float: right;">${tbp.userName}&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
-							 </tr>
-							  <tr>
-							 <td style="padding-right: 10px;">
-		 						<%for(tbs in tbslist){
-		 						if(tbs.nowstatus+""==tbp.logState+""){
-		 						%>	
-		 						<span style="float: right">${tbs.stateName}</span>
-		 						<%}}%>																			 
-							 </td>
-							 <td style="min-height: 50px;padding-left: 10px;background-color: #2a909a;color: white;">${tbp.operationRemark}</td>
-							 </tr>
-							</table>
+							<label class="control-label col-sm-2">
+							<span class="required "></span>放款额度：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-10">
+							<div class="form-group">
+							<div class="col-sm-10" style="width: 200px">
+										${tbLoanApply.tbLend.lendAmount}
+							</div>
+							</div>
 						</div>
 					</div>
 				</div>
-				<%}%>	 -->
+			</div>
 				<div class="form-unit">${text('反馈信息')}</div>
 				<#form:hidden path="id"/>
 				<input id="url" name="url" style="display: none">

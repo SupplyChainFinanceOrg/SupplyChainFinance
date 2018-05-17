@@ -83,7 +83,7 @@ $('#dataGrid').dataGrid({
 	searchForm: $("#searchForm"),
 	columnModel: [
 		{header:'企业名称', name:'compName', index:'a.comp_name', width:150, align:"center", frozen:true, formatter: function(val, obj, row, act){
-			return '<a href="${ctx}/apply/tbLoanApply/form?id='+row.id+'" class="btnList" data-title="${text('编辑借款申请')}">'+(val||row.id)+'</a>';
+			return '<a href="${ctx}/apply/tbLoanApply/form?id='+row.id+'&looktype=2" class="btnList" data-title="${text('编辑借款申请')}">'+(val||row.id)+'</a>';
 		}},
 		{header:'信用代码', name:'compCode', index:'a.comp_code', width:150, align:"center"},
 		{header:'企业法人', name:'compLegalPerson', index:'a.comp_legal_person', width:150, align:"center"},

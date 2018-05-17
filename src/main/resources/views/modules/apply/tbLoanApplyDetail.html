@@ -772,6 +772,8 @@
 					</div>
 				</div>
 				<%}%>	
+				<%if(tbLoanApply.applyState==1||tbLoanApply.applyState==2||tbLoanApply.applyState==3||tbLoanApply.applyState==4||tbLoanApply.applyState==5||tbLoanApply.applyState==6||tbLoanApply.applyState==8){%>
+				
 					<%for(tbp in tbpllist){%>												
 						<div class="form-unit">${text('审核详情')}</div>
 					<%break;}%>
@@ -799,7 +801,7 @@
 					</div>
 				</div>
 				<%}%>	
-				
+				<%}%>
 			</div>
 			
 			<div class="box-footer">

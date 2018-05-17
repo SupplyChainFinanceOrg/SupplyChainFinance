@@ -3,7 +3,7 @@
 	<div class="box box-main">
 		<div class="box-header with-border">
 			<div class="box-title">
-				<i class="fa fa-list-alt"></i> ${text(tbComp.isNewRecord ? '新增企业' : '编辑企业')}
+				<i class="fa fa-list-alt"></i> 审核
 			</div>
 			<div class="box-tools pull-right">
 				<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
@@ -11,7 +11,7 @@
 		</div>
 		<#form:form id="inputForm" model="${tbComp}" action="${ctx}/tb/tbComp/save" method="post" class="form-horizontal">
 					<div class="box-body">
-				<div class="form-unit" ><span id='getlabel'></span>${text('基础信息')}</div>
+				<div class="form-unit" ><span id='getlabel'></span></div>
 				<#form:hidden path="id"/>
 				<input id="url" name="url" style="display: none">
 				<input id="nextstatus" name="nextstatus" style="display: none">				

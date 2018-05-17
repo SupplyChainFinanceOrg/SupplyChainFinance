@@ -162,3 +162,15 @@ ALTER TABLE `tb_loan_apply`
 ADD COLUMN `risk_score`  varchar(10) NULL DEFAULT '0' COMMENT '风控分' AFTER `card_no`
 
 ------------------------------------------------------------------------------------
+
+ALTER TABLE `tb_state`
+ADD COLUMN `pagename`  varchar(200) NULL COMMENT '去往的页面' AFTER `isstop`
+
+-----------------------------------------------------------------------------
+
+ALTER TABLE `tb_money_distribution`
+MODIFY COLUMN `id`  varchar(64) NOT NULL FIRST;
+--------------------------
+ALTER TABLE `tb_lend`
+MODIFY COLUMN `id`  varchar(64) NOT NULL FIRST
+--------------------------------------------
