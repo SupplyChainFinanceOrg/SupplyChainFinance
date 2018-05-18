@@ -138,7 +138,7 @@ public class TbCompController extends BaseController {
 			//获取角色，状态
 			List<TbProcess> prolist=tbProcessService.buttunList(tbComp.getApplyState()+"",TbProcess.COMPANYTYPE);							
 			model.addAttribute("prolist", prolist);	
-			if(tbComp.getApplyState()==1||tbComp.getApplyState()==3||tbComp.getApplyState()==2){
+			if(tbComp.getApplyState()==1||tbComp.getApplyState()==3||tbComp.getApplyState()==5){
 				return "modules/tb/tbCompForm";
 			}
 			return "modules/tb/tbCompLiu";
@@ -168,14 +168,13 @@ public class TbCompController extends BaseController {
 				tbCompService.saveAndCreate(oldtbComp,true);
 			}else{
 				oldtbComp.setApplyState(Long.parseLong(request.getParameter("nextstatus")));
-				if(1==oldtbComp.getApplyState()||2==oldtbComp.getApplyState()){
-					oldtbComp.setOperationData(new Date());
-					oldtbComp.setOperationUserId(UserUtils.getUser().getUserCode());
-				}
 				tbCompService.save(oldtbComp);
 			}
+			
 			tbProcessLogService.saveLog(Integer.parseInt(tbComp.getApplyState()+""), TbProcessLog.APPLY_TYPE,tbComp.getId(),null, null, request.getParameter("operationRemark"), 1, 1, 1,oldstatus+"-"+oldtbComp.getApplyState()+"",tbComp.getCompName());
-
+			if("2".equals(request.getParameter("nextstatus"))){
+				tbCompService.delete(oldtbComp);
+			}
 		}	
 
 		return renderResult(Global.TRUE, "保存企业成功！");

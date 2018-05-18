@@ -116,9 +116,21 @@ public class TbLoanApplyController extends BaseController {
 		List<Role> rolelist=roleService.findListByUserCode(r);
 		List<TbState> bottonlist=new ArrayList<>();
 		model.addAttribute("userrolecode", null);
+		//当前用户的企业
+		model.addAttribute("noapply", 0);
+		
 		if(rolelist!=null&&rolelist.size()>0){
 			bottonlist=tbStateService.findList(new TbState(TbState.APPLYTYPE, "1", rolelist.get(0).getRoleCode()));
 			model.addAttribute("userrolecode", rolelist.get(0).getRoleCode());
+			if(TbComp.JKQYROLECODE.equals(rolelist.get(0).getRoleCode())){
+				TbComp mycorp=new TbComp();
+				mycorp.setUserId(UserUtils.getUser().getUserCode());
+				mycorp.setApplyState(1l);
+				List<TbComp> mylist=tbCompService.findList(mycorp);
+				if(mylist!=null&&mylist.size()>0){
+					model.addAttribute("noapply", 1);
+				}
+			}
 		}
 		model.addAttribute("bottonlist", bottonlist);
 		model.addAttribute("tbLoanApply", tbLoanApply);
