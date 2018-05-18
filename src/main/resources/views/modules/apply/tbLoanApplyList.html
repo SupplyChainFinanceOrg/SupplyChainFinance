@@ -21,34 +21,29 @@
 						<#form:input path="compName" maxlength="100" class="form-control width-120"/>
 					</div>
 				</div>
-				<div class="form-group">
-					<label class="control-label">统一社会信用代码：</label>
-					<div class="control-inline">
-						<#form:input path="compCode" maxlength="50" class="form-control width-120"/>
-					</div>
-				</div>
+
 				
 				<div class="form-group">
-					<label class="control-label">借款人姓名：</label>
+					<label class="control-label">借款人：</label>
 					<div class="control-inline">
 						<#form:input path="loanName" maxlength="20" class="form-control width-120"/>
 					</div>
 				</div>
 				
-				<div class="form-group">
+			<!-- 	<div class="form-group">
 					<label class="control-label">借款产品：</label>
 					<div class="control-inline width-120">
 						<#form:select  path="productId" items="${tbProductlist}" itemLabel="prodctName" itemValue="id" class="form-control" />					
 					</div>
-				</div>
+				</div> -->
 				<div class="form-group">
-					<label class="control-label">申请状态：</label>
+					<label class="control-label">状态：</label>
 					<div class="control-inline width-120">
 						<#form:select path="applyState" dictType="apply_status" blankOption="true" class="form-control"/>
 					</div>
 				</div>
 				
-				<div class="form-group">
+				<!-- <div class="form-group">
 					<label class="control-label">授权核心企业：</label>
 					<div class="control-inline width-120">				
 						<#form:select  path="coreCompId" items="${comlist}" itemLabel="compName" itemValue="id" class="form-control" />										
@@ -63,7 +58,7 @@
 						<#form:input path="applyTime_lte" readonly="true" maxlength="20" class="form-control Wdate-date"
 							dataFormat="date" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
 					</div>
-				</div>
+				</div> -->
 				
 				
 				<div class="form-group">
@@ -78,20 +73,16 @@
 </div>
 <% } %>
 <script>
-// 初始化DataGrid对象
 $('#dataGrid').dataGrid({
 	searchForm: $("#searchForm"),
 	columnModel: [
 		{header:'企业名称', name:'compName', index:'a.comp_name', width:150, align:"center", frozen:true, formatter: function(val, obj, row, act){
 			return '<a href="${ctx}/apply/tbLoanApply/form?id='+row.id+'&looktype=2" class="btnList" data-title="${text('编辑借款申请')}">'+(val||row.id)+'</a>';
 		}},
-		{header:'信用代码', name:'compCode', index:'a.comp_code', width:150, align:"center"},
-		{header:'企业法人', name:'compLegalPerson', index:'a.comp_legal_person', width:150, align:"center"},
-/* 		{header:'企业联系人', name:'compContact', index:'a.comp_contact', width:150, align:"center"},
- */		{header:'借款金额', name:'loanAmount', index:'a.loan_amount', width:150, align:"center"},
-		{header:'借款人姓名', name:'loanName', index:'a.loan_name', width:150, align:"center"},
-/* 		{header:'借款人电话', name:'loanPhone', index:'a.loan_phone', width:150, align:"center"},
- */		{header:'借款产品', name:'productId', index:'a.product_id', width:150, align:"center", formatter: function(val, obj, row, act){
+		{header:'借款人', name:'loanName', index:'a.loan_name', width:150, align:"center"},
+		{header:'电话', name:'loanPhone', index:'a.loan_phone', width:150, align:"center"},
+		{header:'借款金额', name:'loanAmount', index:'a.loan_amount', width:150, align:"center"},
+    	{header:'借款产品', name:'productId', index:'a.product_id', width:150, align:"center", formatter: function(val, obj, row, act){
 			<%for(pr in tbProductlist){%>
 			if('${pr.id}'==val){
 				return '${pr.prodctName}';
@@ -110,8 +101,12 @@ $('#dataGrid').dataGrid({
 		{header:'申请时间', name:'applyTime', index:'a.apply_time', width:150, align:"center", formatter: function(val, obj, row, act){
 			return val.substring(0,11);
 		}},
+
 		{header:'状态', name:'applyState', index:'a.apply_state', width:150, align:"center", formatter: function(val, obj, row, act){
 			return js.getDictLabel(${@DictUtils.getDictListJson('apply_status')}, val, '${text('未知')}', true);
+		}},{header:'操作时间', name:'operationTime', index:'a.operation_time', width:150, align:"center", formatter: function(val, obj, row, act){
+			//alert(val)
+			return val.substring(0,11);
 		}},
 		{header:'${text('操作')}', name:'actions', width:180, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];

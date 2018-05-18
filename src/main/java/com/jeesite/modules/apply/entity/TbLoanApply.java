@@ -107,6 +107,8 @@ import com.jeesite.modules.lend.entity.TbLend;
 		@Column(name="tax_code", attrName="taxCode", label="税务登记号"),
 		@Column(name="card_no", attrName="cardNo", label="法人身份证号"),
 		@Column(name="risk_score", attrName="riskScore", label="风控分"),
+		@Column(name="blank_open", attrName="blankOpen", label="开户行"),
+		@Column(name="blank_cards", attrName="blankCards", label="银行卡"),
 	},
     // 支持联合查询，如左右连接查询，支持设置查询自定义关联表的返回字段列
     joinTable={
@@ -117,7 +119,7 @@ import com.jeesite.modules.lend.entity.TbLend;
               on="l.loan_id = a.id",
               columns={@Column(includeEntity=TbLend.class)}),
        
-    }, orderBy="a.apply_time DESC"
+    }, orderBy="a.operation_time DESC"
 )
 public class TbLoanApply extends DataEntity<TbLoanApply> {
 	
@@ -205,7 +207,25 @@ public class TbLoanApply extends DataEntity<TbLoanApply> {
 	private String riskScore;//风控分
 	private TbMoneyDistribution tbMoneyDistribution;
 	private TbLend tbLend;
+	private String blankOpen;
+	private String  blankCards;
 	
+	public String getBlankOpen() {
+		return blankOpen;
+	}
+
+	public void setBlankOpen(String blankOpen) {
+		this.blankOpen = blankOpen;
+	}
+
+	public String getBlankCards() {
+		return blankCards;
+	}
+
+	public void setBlankCards(String blankCards) {
+		this.blankCards = blankCards;
+	}
+
 	public TbLend getTbLend() {
 		return tbLend;
 	}

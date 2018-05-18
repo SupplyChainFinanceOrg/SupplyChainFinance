@@ -142,7 +142,82 @@ public class TbLoanApplyController extends BaseController {
 		//model.addAttribute("tbProductBorrowTypelist", tbProductBorrowTypeService.findList(new TbProductBorrowType()));
 		return "modules/apply/tbLoanApplyList";
 	}
-	
+	/**
+	 * 申请列表
+	 * */
+	@RequiresPermissions("apply:tbLoanApply:view")
+	@RequestMapping(value = {"listapply", ""})
+	public String listapply(TbLoanApply tbLoanApply, Model model,HttpServletRequest req) {
+		User user =UserUtils.getUser();
+		Role r=new Role();
+		r.setUserCode(user.getUserCode());
+		List<Role> rolelist=roleService.findListByUserCode(r);
+		List<TbState> bottonlist=new ArrayList<>();
+		model.addAttribute("userrolecode", null);
+		if(rolelist!=null&&rolelist.size()>0){
+			bottonlist=tbStateService.findList(new TbState(TbState.APPLYTYPE, "1", rolelist.get(0).getRoleCode()));
+			model.addAttribute("userrolecode", rolelist.get(0).getRoleCode());
+		}
+		model.addAttribute("bottonlist", bottonlist);
+		model.addAttribute("tbLoanApply", tbLoanApply);
+		 List<TbProduct>	tbProductlist =new ArrayList<TbProduct>();
+		 tbProductlist.add(new TbProduct());
+		 tbProductlist.addAll(tbProductService.findList(new TbProduct()));
+		model.addAttribute("tbProductlist", tbProductlist);
+		//企业
+		TbComp tbComp= new TbComp();
+		//tbComp.setCompType((int)TbComp.HXQYTYPE);
+		//tbComp.setStatus("1");
+		List<TbComp > comlist=new ArrayList<TbComp>();
+		comlist.add(new TbComp());
+		comlist.addAll(tbCompService.findList(tbComp));
+		model.addAttribute("comlist", comlist);
+		model.addAttribute("tbProductBorrowTypelist", tbProductBorrowTypeService.findList(new TbProductBorrowType()));
+		model.addAttribute("type", req.getParameter("type"));
+		if("0".equals(req.getParameter("type"))){
+			return "modules/apply/tbLoanApplyListAll";
+		}
+		//model.addAttribute("tbProductBorrowTypelist", tbProductBorrowTypeService.findList(new TbProductBorrowType()));
+		return "modules/apply/tbLoanApplyListapply";
+	}
+	/**
+	 * 放款列表
+	 * */
+	@RequiresPermissions("apply:tbLoanApply:view")
+	@RequestMapping(value = {"listload", ""})
+	public String listload(TbLoanApply tbLoanApply, Model model,HttpServletRequest req) {
+		User user =UserUtils.getUser();
+		Role r=new Role();
+		r.setUserCode(user.getUserCode());
+		List<Role> rolelist=roleService.findListByUserCode(r);
+		List<TbState> bottonlist=new ArrayList<>();
+		model.addAttribute("userrolecode", null);
+		if(rolelist!=null&&rolelist.size()>0){
+			bottonlist=tbStateService.findList(new TbState(TbState.APPLYTYPE, "1", rolelist.get(0).getRoleCode()));
+			model.addAttribute("userrolecode", rolelist.get(0).getRoleCode());
+		}
+		model.addAttribute("bottonlist", bottonlist);
+		model.addAttribute("tbLoanApply", tbLoanApply);
+		 List<TbProduct>	tbProductlist =new ArrayList<TbProduct>();
+		 tbProductlist.add(new TbProduct());
+		 tbProductlist.addAll(tbProductService.findList(new TbProduct()));
+		model.addAttribute("tbProductlist", tbProductlist);
+		//企业
+		TbComp tbComp= new TbComp();
+		//tbComp.setCompType((int)TbComp.HXQYTYPE);
+		//tbComp.setStatus("1");
+		List<TbComp > comlist=new ArrayList<TbComp>();
+		comlist.add(new TbComp());
+		comlist.addAll(tbCompService.findList(tbComp));
+		model.addAttribute("comlist", comlist);
+		model.addAttribute("tbProductBorrowTypelist", tbProductBorrowTypeService.findList(new TbProductBorrowType()));
+		model.addAttribute("type", req.getParameter("type"));
+		if("0".equals(req.getParameter("type"))){
+			return "modules/apply/tbLoanApplyListAll";
+		}
+		//model.addAttribute("tbProductBorrowTypelist", tbProductBorrowTypeService.findList(new TbProductBorrowType()));
+		return "modules/apply/tbLoanApplyListLoad";
+	}
 	/**
 	 * 查询列表数据
 	 */
@@ -199,8 +274,11 @@ public class TbLoanApplyController extends BaseController {
 					tbLoanApply.setCompId(list.get(0).getId());
 				}else{
 					tbLoanApply.setCompId("没有");
-				}
-				
+				}				
+			}
+			
+			if(!TbComp.JKQYROLECODE.equals(rolecode)){
+				tbLoanApply.getSqlMap().getWhere().and("apply_state", QueryType.NE, 0);		
 			}
 		}
 		
@@ -241,6 +319,15 @@ public class TbLoanApplyController extends BaseController {
 		jrcorplist.add(corp);
 		jrcorplist.addAll(tbCompService.findList(corp));
 		model.addAttribute("jrcorplist", jrcorplist);
+		
+		//核心机构列表
+		TbComp comp=new TbComp();
+		comp.setApplyState((long)1);
+		comp.setCompType((int)TbComp.HXQYTYPE);
+		List<TbComp> hxcorplist=new ArrayList<TbComp>();
+		hxcorplist.add(comp);
+		hxcorplist.addAll(tbCompService.findList(comp));
+		model.addAttribute("hxcorplist", hxcorplist);
 		//查询产品表
 		model.addAttribute("tbLoanApply", tbLoanApply);
 		model.addAttribute("tbProductlist", tbProductService.findList(new TbProduct()));
@@ -351,6 +438,20 @@ public class TbLoanApplyController extends BaseController {
 				}
 				return "modules/apply/tbLoanApplyLiuaddScoreed";
 			}
+			if(13==tbLoanApply.getApplyState()){
+				TbProcessLog tbpl=new TbProcessLog();
+				tbpl.setType(1);
+				tbpl.setLoanId(tbLoanApply.getId());
+				String [] status={"12"};
+				tbpl.getSqlMap().getWhere().and("logState", QueryType.IN,status);
+				tbpl.getSqlMap().getWhere().and("operation_remark", QueryType.IS_NOT_NULL,"");
+				List<TbProcessLog> tbpllist=tbProcessLogService.findList(tbpl);
+				model.addAttribute("tbpllist", tbpllist);
+				model.addAttribute("titlename", null);
+				if(tbpllist!=null&&tbpllist.size()>0){					
+					model.addAttribute("titlename", "确权审核情况");
+				}
+			}
 			return "modules/apply/tbLoanApplyLiu";
 		}else if("3".equals(request.getParameter("looktype"))){
 			//查看审核情况
@@ -367,11 +468,64 @@ public class TbLoanApplyController extends BaseController {
 
 	}
 	/**
+	 * 复审
+	 * */
+	@RequiresPermissions("apply:tbLoanApply:view")
+	@RequestMapping(value = "againaduit")
+	public String againaduit(TbLoanApply tbLoanApply, Model model,HttpServletRequest request) {	
+		//审核情况
+		TbProcessLog tbpl=new TbProcessLog();
+		tbpl.setType(1);
+		tbpl.setLoanId(tbLoanApply.getId());
+		String [] status={"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18"};
+		tbpl.getSqlMap().getWhere().and("logState", QueryType.IN,status);
+		tbpl.getSqlMap().getWhere().and("operation_remark", QueryType.IS_NOT_NULL,"");
+		List<TbProcessLog> tbpllist=tbProcessLogService.findList(tbpl);
+		//状态的名字
+		TbState tbs=new TbState();
+		tbs.setType(1);
+		tbs.getSqlMap().getWhere().and("nowstatus", QueryType.IS_NOT_NULL, null);
+		List<TbState> tbslist=tbStateService.findList(tbs);
+		model.addAttribute("tbpllist", tbpllist);
+		model.addAttribute("tbslist", tbslist);
+		//核心机构列表
+		TbComp corp=new TbComp();
+		corp.setApplyState((long)1);
+		corp.setCompType((int)TbComp.HXQYTYPE);
+		List<TbComp> hxcorplist=new ArrayList<TbComp>();
+		hxcorplist.add(corp);
+		hxcorplist.addAll(tbCompService.findList(corp));
+		model.addAttribute("hxcorplist", hxcorplist);
+		model.addAttribute("tbLoanApply", tbLoanApply);	
+		//风控评分
+		for(int i=0;i<4;i++){
+			TbLoanRisk tblr=new TbLoanRisk();
+			tblr.setLoanId(tbLoanApply.getId());
+			TbRiskControl tbrc=new TbRiskControl();
+			tbrc.setType(i);
+			tblr.setTbRiskControl(tbrc);
+			List<TbLoanRisk> tblrlist=tbLoanRiskService.findList(tblr);
+			model.addAttribute("tblrlist_"+i, tblrlist);
+		}
+		//获取角色，状态
+		List<TbProcess> prolist=tbProcessService.buttunList(tbLoanApply.getApplyState()+"",TbProcess.APPALYTYPE);							
+		model.addAttribute("prolist", prolist);		
+		return "modules/apply/tbLoanApplyLiuagainaduit";
+
+	}
+	/**
 	 * 确权
 	 */
 	@RequiresPermissions("apply:tbLoanApply:view")
 	@RequestMapping(value = "rightSure")
 	public String rightSure(TbLoanApply tbLoanApply, Model model,HttpServletRequest request) {	
+		TbProcessLog tbpl=new TbProcessLog();
+		tbpl.setType(1);
+		tbpl.setLoanId(tbLoanApply.getId());
+		String [] status={"12","13"};
+		tbpl.getSqlMap().getWhere().and("logState", QueryType.IN,status);
+		tbpl.getSqlMap().getWhere().and("operation_remark", QueryType.IS_NOT_NULL,"");
+		List<TbProcessLog> tbpllist=tbProcessLogService.findList(tbpl);
 		//核心机构列表
 		TbComp corp=new TbComp();
 		corp.setApplyState((long)1);
@@ -429,6 +583,7 @@ public class TbLoanApplyController extends BaseController {
 		return "modules/apply/tbLoanApplyLiuload";
 
 	}
+	
 	/*
 	 * 收款
 	 * **/
@@ -465,6 +620,9 @@ public class TbLoanApplyController extends BaseController {
 			}
 		}
 		if(StringUtils.isEmpty(request.getParameter("nextstatus"))||StringUtils.isEmpty(tbLoanApply.getId())){
+			if(tbLoanApply.getProductId()==null){
+				tbLoanApply.setProductId(0l);
+			}
 			tbLoanApplyService.save(tbLoanApply);
 			//日志
 			tbProcessLogService.saveLog(Integer.parseInt(tbLoanApply.getApplyState()+""), TbProcessLog.APPLY_TYPE,null, tbLoanApply.getProductId()+"", tbLoanApply.getId(), request.getParameter("operationRemark"), 1, 1, 1,tbLoanApply.getApplyState()+"",tbLoanApply.getCompName());
@@ -524,17 +682,99 @@ public class TbLoanApplyController extends BaseController {
 						tbLoanApply.getTbMoneyDistribution().setLoanId(tbLoanApply.getId());
 						tbMoneyDistributionService.save(tbLoanApply.getTbMoneyDistribution());
 					}
-					/*TbMoneyDistribution tbMoneyDistribution=tbMoneyDistributionService.get(tbLoanApply.getId());
-					if(tbMoneyDistribution!=null){					
-						tbMoneyDistributionService.save(tbMoneyDistribution);
-					}else{
-						
-					}*/
 				}
 			}
-			tbLoanApplyService.save(oldtbLoanApply);
+			if(nextstatus==0||nextstatus==1){
+				//暂存或者提交
+				tbLoanApply.setApplyState(nextstatus);
+				tbLoanApplyService.save(tbLoanApply);			
+			}else{		
+				tbLoanApplyService.save(oldtbLoanApply);
+			}
 			tbProcessLogService.saveLog(Integer.parseInt(oldtbLoanApply.getApplyState()+""), TbProcessLog.APPLY_TYPE,null, oldtbLoanApply.getProductId()+"", oldtbLoanApply.getId(), request.getParameter("operationRemark"), 1, 1, 1,statusstring,tbLoanApply.getCompName());			
 		}
+		
+		return renderResult(Global.TRUE, "操作成功！");
+	}
+	/**
+	 * 确权保存
+	 */
+	@RequiresPermissions("apply:tbLoanApply:edit")
+	@PostMapping(value = "saveApply")
+	@ResponseBody
+	public String saveApply(TbLoanApply tbLoanApply,HttpServletRequest request) {
+		
+		if(StringUtils.isEmpty(tbLoanApply.getCompId())&&StringUtils.isEmpty(tbLoanApply.getId())){
+			TbComp tbComp=new TbComp();
+			if(tbLoanApply==null||StringUtils.isEmpty(tbLoanApply.getId())){
+				//查询关联企业
+				tbComp.setUserId(UserUtils.getUser().getUserCode());
+				List<TbComp> tbComplist=tbCompService.findList(tbComp);
+				if(tbComplist!=null&&tbComplist.size()>0){
+					//新加申请
+					tbComp=tbComplist.get(0);
+					tbLoanApply.setCompName(tbComp.getCompName());
+					tbLoanApply.setCompCode(tbComp.getCompCode());
+					tbLoanApply.setRegisterDate(tbComp.getRegisterDate());
+					tbLoanApply.setRegisterAddress(tbComp.getRegisterAddress());
+					tbLoanApply.setCompLegalPerson(tbComp.getCompLegalPerson());
+					tbLoanApply.setLegalPersonPhone(tbComp.getLegalPersonPhone());
+					tbLoanApply.setCompContact(tbComp.getCompContact());
+					tbLoanApply.setContactPhone(tbComp.getContactPhone());
+					tbLoanApply.setNatureId(tbComp.getNatureId());				
+					tbLoanApply.setIndustry(tbComp.getIndustry());
+					tbLoanApply.setMainBusiness(tbComp.getMainBusiness());
+					tbLoanApply.setCompProfile(tbComp.getCompProfile());
+					tbLoanApply.setSpeciaIndustry(tbComp.getSpeciaIndustry());
+					tbLoanApply.setSpecialTradeLicense(tbComp.getSpecialTradeLicense());
+					tbLoanApply.setBusinessLicense(tbComp.getBusinessLicense());
+					tbLoanApply.setCompPhone(tbComp.getCompPhone());
+					tbLoanApply.setCompEmail(tbComp.getCompEmail());
+					tbLoanApply.setEmployeesCount(tbComp.getEmployeesCount());
+					tbLoanApply.setCompId(tbComp.getId());
+					tbLoanApply.setRegCode(tbComp.getRegCode());
+					tbLoanApply.setOrgCode(tbComp.getOrgCode());
+					tbLoanApply.setTaxCode(tbComp.getTaxCode());
+					tbLoanApply.setCardNo(tbComp.getCardNo());
+			
+			}
+			}
+		}
+		
+		
+			TbLoanApply	oldtbLoanApply=tbLoanApplyService.get(tbLoanApply.getId());
+			//日志
+			long nextstatus=Long.parseLong(request.getParameter("nextstatus"));
+			String oldstatus=oldtbLoanApply.getApplyState()+"";
+			oldtbLoanApply.setApplyState(nextstatus);
+			String statusstring= oldstatus+"-"+oldtbLoanApply.getApplyState();
+			oldtbLoanApply.setCoreCompId(tbLoanApply.getCoreCompId());
+			tbLoanApplyService.save(oldtbLoanApply);
+			tbProcessLogService.saveLog(Integer.parseInt(oldtbLoanApply.getApplyState()+""), TbProcessLog.APPLY_TYPE,null, oldtbLoanApply.getProductId()+"", oldtbLoanApply.getId(), request.getParameter("operationRemark"), 1, 1, 1,statusstring,tbLoanApply.getCompName());			
+		
+		
+		return renderResult(Global.TRUE, "操作成功！");
+	}
+	
+	/**
+	 * 复审
+	 */
+	@RequiresPermissions("apply:tbLoanApply:edit")
+	@PostMapping(value = "saveLetters")
+	@ResponseBody
+	public String saveLetters(TbLoanApply tbLoanApply,HttpServletRequest request) {
+			TbLoanApply	oldtbLoanApply=tbLoanApplyService.get(tbLoanApply.getId());
+			//日志
+			long nextstatus=Long.parseLong(request.getParameter("nextstatus"));
+			String oldstatus=oldtbLoanApply.getApplyState()+"";
+			oldtbLoanApply.setApplyState(nextstatus);
+			String statusstring= oldstatus+"-"+oldtbLoanApply.getApplyState();
+			  //授信企业，授信额度
+			oldtbLoanApply.setCoreCompId(tbLoanApply.getCoreCompId());
+			oldtbLoanApply.setLineCredit(tbLoanApply.getLineCredit());
+			tbLoanApplyService.save(oldtbLoanApply);
+			tbProcessLogService.saveLog(Integer.parseInt(oldtbLoanApply.getApplyState()+""), TbProcessLog.APPLY_TYPE,null, oldtbLoanApply.getProductId()+"", oldtbLoanApply.getId(), request.getParameter("operationRemark"), 1, 1, 1,statusstring,tbLoanApply.getCompName());			
+		
 		
 		return renderResult(Global.TRUE, "操作成功！");
 	}
@@ -551,7 +791,7 @@ public class TbLoanApplyController extends BaseController {
 			String oldstatus=oldtbLoanApply.getApplyState()+"";
 			oldtbLoanApply.setApplyState(nextstatus);
 			String statusstring= oldstatus+"-"+oldtbLoanApply.getApplyState();
-			oldtbLoanApply.setCoreCompId(tbLoanApply.getCoreCompId());
+			///oldtbLoanApply.setCoreCompId(tbLoanApply.getCoreCompId());
 			tbLoanApplyService.save(oldtbLoanApply);
 			tbProcessLogService.saveLog(Integer.parseInt(oldtbLoanApply.getApplyState()+""), TbProcessLog.APPLY_TYPE,null, oldtbLoanApply.getProductId()+"", oldtbLoanApply.getId(), request.getParameter("operationRemark"), 1, 1, 1,statusstring,tbLoanApply.getCompName());			
 		

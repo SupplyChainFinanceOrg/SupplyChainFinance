@@ -174,3 +174,8 @@ MODIFY COLUMN `id`  varchar(64) NOT NULL FIRST;
 ALTER TABLE `tb_lend`
 MODIFY COLUMN `id`  varchar(64) NOT NULL FIRST
 --------------------------------------------
+
+ALTER TABLE `tb_loan_apply`
+ADD COLUMN `blank_cards`  varchar(100) NULL COMMENT '银行卡' AFTER `risk_score`,
+ADD COLUMN `blank_open`  varchar(100) NULL COMMENT '开户行' AFTER `blank_cards`
+-------------------------------------------------------------------------------------

@@ -20,79 +20,125 @@
 			<div class="form-unit">${text('准备的资料')}</div>
 			<div class="row" style="padding-left: 55px">
 			<table style="width: 800px">
-				<%for(tbr in tbrclist_0){%> 			
+				<%for(tbr in tblrlist_0){%> 			
 					<tr style="height: 50px">
-					<td style="width: 300px"><span style="float: right;">${tbr.name}是否齐全:</span></td>
-					<td style="width: 200px;padding-left: 10px"><input type="radio" checked="checked" name="complete_${tbr.id}" value="0">是<input type="radio" name="complete_${tbr.id}"  value="1">否</td>
-					<td style="width: 100px"><span style="float: right;">得分:</span></td>
-					<td style="width: 200px;padding-left: 10px"><input type="text" name="score_${tbr.id}" id="score_${tbr.id}"  onblur="scoreblur(this)"  parentname="${tbr.name}" maxscore="${tbr.initScore}"  maxlength="3"  onkeyup="this.value=this.value.replace(/\D/g,'')" value="${tbr.initScore}"   ></td>
+					<td style="width: 300px"><span style="float: right;">${tbr.tbRiskControl.name}是否齐全:</span></td>
+					<td style="width: 200px;padding-left: 10px">
+					<%if(tbr.complete=="0"){%>
+					是
+					<%}else{%>
+					否
+					<%}%>
+					</td>
+					<td style="width: 100px"><span style="float: right;">得分(总分${tbr.tbRiskControl.initScore}):</span></td>
+					<td style="width: 200px;padding-left: 10px">${tbr.score}</td>
 					</tr>
+					<%if(isNotBlank(tbr.remark)){%>					
 					<tr>
 					<td style="width: 200px"><span style="float: right;">备注：</span></td>
 					<td colspan="3">
-					<textarea name="remark_${tbr.id}" rows="" cols="" style="width: 93%;height: 50px"></textarea>
+					${tbr.remark}
 					</td>
 					</tr>
+					<%}%>
 				<%}%> 				
 			</table>
 			</div>
 			<div class="form-unit">${text('企业调查')}</div>
-						<div class="row" style="padding-left: 55px">
+					<div class="row" style="padding-left: 55px">
 			<table style="width: 800px">
-				<%for(tbr in tbrclist_1){%> 			
+				<%for(tbr in tblrlist_1){%> 			
 					<tr style="height: 50px">
-					<td style="width: 300px"><span style="float: right;">${tbr.name}是否齐全:</span></td>
-					<td style="width: 200px;padding-left: 10px"><input type="radio" checked="checked" name="complete_${tbr.id}" value="0">是<input type="radio" name="complete_${tbr.id}"  value="1">否</td>
-					<td style="width: 100px"><span style="float: right;">得分:</span></td>
-					<td style="width: 200px;padding-left: 10px"><input type="text" name="score_${tbr.id}" id="score_${tbr.id}"  onblur="scoreblur(this)" parentname="${tbr.name}"  maxscore="${tbr.initScore}" maxlength="3"  onkeyup="this.value=this.value.replace(/\D/g,'')" value="${tbr.initScore}"  ></td>
+					<td style="width: 300px"><span style="float: right;">${tbr.tbRiskControl.name}是否齐全:</span></td>
+					<td style="width: 200px;padding-left: 10px">
+					<%if(tbr.complete==0){%>
+					是
+					<%}else{%>
+					否
+					<%}%>
+					</td>
+					<td style="width: 100px"><span style="float: right;">得分(总分${tbr.tbRiskControl.initScore}):</span></td>
+					<td style="width: 200px;padding-left: 10px">${tbr.score}</td>
 					</tr>
+					<%if(isNotBlank(tbr.remark)){%>					
 					<tr>
 					<td style="width: 200px"><span style="float: right;">备注：</span></td>
 					<td colspan="3">
-					<textarea name="remark_${tbr.id}" rows="" cols="" style="width: 93%;height: 50px" maxlength="200"></textarea>
+					${tbr.remark}
 					</td>
 					</tr>
+					<%}%>
 				<%}%> 				
 			</table>
 			</div>
 			<div class="form-unit">${text('个人调查')}</div>
-						<div class="row" style="padding-left: 55px">
+					<div class="row" style="padding-left: 55px">
 			<table style="width: 800px">
-				<%for(tbr in tbrclist_2){%> 			
+				<%for(tbr in tblrlist_2){%> 			
 					<tr style="height: 50px">
-					<td style="width: 300px"><span style="float: right;">${tbr.name}是否齐全:</span></td>
-					<td style="width: 200px;padding-left: 10px"><input type="radio" checked="checked" name="complete_${tbr.id}" value="0">是<input type="radio" name="complete_${tbr.id}"  value="1">否</td>
-					<td style="width: 100px"><span style="float: right;">得分:</span></td>
-					<td style="width: 200px;padding-left: 10px"><input type="text"  onblur="scoreblur(this)" id="score_${tbr.id}"  maxscore="${tbr.initScore}" parentname="${tbr.name}" name="score_${tbr.id}"  maxlength="3"  onkeyup="this.value=this.value.replace(/\D/g,'')" value="${tbr.initScore}"  ></td>
+					<td style="width: 300px"><span style="float: right;">${tbr.tbRiskControl.name}是否齐全:</span></td>
+					<td style="width: 200px;padding-left: 10px">
+					<%if(tbr.complete==0){%>
+					是
+					<%}else{%>
+					否
+					<%}%>
+					</td>
+					<td style="width: 100px"><span style="float: right;">得分(总分${tbr.tbRiskControl.initScore}):</span></td>
+					<td style="width: 200px;padding-left: 10px">${tbr.score}</td>
 					</tr>
+					<%if(isNotBlank(tbr.remark)){%>					
 					<tr>
 					<td style="width: 200px"><span style="float: right;">备注：</span></td>
 					<td colspan="3">
-					<textarea name="remark_${tbr.id}" rows="" cols="" style="width: 93%;height: 50px" maxlength="200"></textarea>
+					${tbr.remark}
 					</td>
 					</tr>
+					<%}%>
 				<%}%> 				
 			</table>
-			</div>
+			</div>		
 			<div class="form-unit">${text('综合调查')}</div>
-						<div class="row" style="padding-left: 55px">
+					<div class="row" style="padding-left: 55px">
 			<table style="width: 800px">
-				<%for(tbr in tbrclist_3){%> 			
+				<%for(tbr in tblrlist_3){%> 			
 					<tr style="height: 50px">
-					<td style="width: 300px"><span style="float: right;">${tbr.name}是否齐全:</span></td>
-					<td style="width: 200px;padding-left: 10px"><input type="radio" name="complete_${tbr.id}"  checked="checked" value="0">是<input type="radio" name="complete_${tbr.id}"  value="1">否</td>
-					<td style="width: 100px"><span style="float: right;">得分:</span></td>
-					<td style="width: 200px;padding-left: 10px"><input type="text"   onblur="scoreblur(this)" name="score_${tbr.id}"  id="score_${tbr.id}"  parentname="${tbr.name}"  maxscore="${tbr.initScore}"  maxlength="3"  onkeyup="this.value=this.value.replace(/\D/g,'')" value="${tbr.initScore}"  ></td>
+					<td style="width: 300px"><span style="float: right;">${tbr.tbRiskControl.name}是否齐全:</span></td>
+					<td style="width: 200px;padding-left: 10px">
+					<%if(tbr.complete==0){%>
+					是
+					<%}else{%>
+					否
+					<%}%>
+					</td>
+					<td style="width: 100px"><span style="float: right;">得分(总分${tbr.tbRiskControl.initScore}):</span></td>
+					<td style="width: 200px;padding-left: 10px">${tbr.score}</td>
 					</tr>
+					<%if(isNotBlank(tbr.remark)){%>					
 					<tr>
 					<td style="width: 200px"><span style="float: right;">备注：</span></td>
 					<td colspan="3">
-					<textarea name="remark_${tbr.id}" rows="" cols="" style="width: 93%;height: 50px" maxlength="200"></textarea>
+					${tbr.remark}
 					</td>
 					</tr>
+					<%}%>
 				<%}%> 				
 			</table>
 			</div>	
+			<div class="form-unit">${text('合计')}</div>
+					<div class="row" style="padding-left: 55px">
+			<table style="width: 800px">
+					<tr style="height: 50px">
+					<td style="width: 300px"><span style="float: right;"></span></td>
+					<td style="width: 200px;padding-left: 10px">
+
+					</td>
+					<td style="width: 100px"><span style="float: right;">合计：</span></td>
+					<td style="width: 200px;padding-left: 10px">${tbLoanApply.riskScore}</td>
+					</tr>
+				
+			</table>
+			</div>		
 			<%for(tbp in tbpllist){%>												
 						<div class="form-unit">${text('审核详情')}</div>
 					<%break;}%>
@@ -120,8 +166,31 @@
 					</div>
 				</div>
 				<%}%>	
+			<div class="form-unit">${text('授信')}</div>	
+			<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> 核心企业：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:select  path="coreCompId" items="${hxcorplist}" itemLabel="compName" itemValue="id" class="form-control required" />					
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required">*</span> 授信额度：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="lineCredit" maxlength="20" class="form-control digits  required"/>
+							</div>
+						</div>
+					</div>
+				</div>		
+				
+			</div>
 			<div class="form-unit">${text('反馈信息')}</div>			
-				<%if(tbLoanApply.applyState!=0&&tbLoanApply.applyState!=17&&tbLoanApply.applyState!=18){%>
+					<%if(tbLoanApply.applyState!=0&&tbLoanApply.applyState!=17&&tbLoanApply.applyState!=18){%>
 				<div class="row">
 					<div class="col-xs-12">
 						<div class="form-group">
@@ -189,7 +258,7 @@ function change(status,url,remark){
 			    	if(url.length>0){
 			    		$('#inputForm').attr("action",url)
 			    	}
-			    	if(status==0){
+			    	if(status==6){
 			    		 for(var i=0;i<$(".form-control").size();i++){
 			    				$(".form-control").eq(i).attr("class",$(".form-control").eq(i).attr("class").replace('required',' '))
 			    			} 
@@ -198,29 +267,6 @@ function change(status,url,remark){
 			    		 }
 			    	} 
 			    	var isok2=true;
-			    	if(status==4){
-			    	//验证分数和是否
-			    	for(var i=1;i<=15;i++){
-			    		debugger;
-		    			var ename="#score_"+i;
-			    		var socre=Number($(ename).val());
-			    		var maxscore=Number($(ename).attr("maxscore"));
-			    		var parentname =$(ename).attr("parentname");
-			    		if(maxscore<socre){
-			    			layer.alert(parentname+'分数最大为'+maxscore, {icon:5});
-			    			isok2=false;
-			    			break;
-			    		}
-			    		 var complete="complete_"+i;
-			    		 var list= $('input:radio[name="'+complete+'"]:checked').val();
-			    		 if(list==undefined||list.length==0){
-			    			 layer.alert(parentname+'是否齐全', {icon:5});
-				    			isok2=false;
-				    			break;
-			    		 }
-			    	}
-			    		
-			    	}
 			    	if(isok2){			    		
 			    		$("#btnSubmit").trigger("click");
 			    	}

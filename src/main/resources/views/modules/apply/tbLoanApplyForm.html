@@ -16,7 +16,7 @@
 				<input id="url" name="url" style="display: none">
 				<input id="nextstatus" name="nextstatus" style="display: none">		
 			<input id="compId" name="compId" type="hidden" value="${tbLoanApply.compId}">				
-				
+				<div style="display: none">
 				<div class="row">
 					<div class="col-xs-6">
 						<div class="form-group">
@@ -227,7 +227,7 @@
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 是否特殊行业：<i class="fa icon-question hide"></i></label>
+								<span class="required "></span> 是否特殊行业：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">							
 								<#form:radio path="speciaIndustry" dictType="specia_industry" class="form-control digits required" />
 							</div>
@@ -244,11 +244,243 @@
 						</div>
 					</div>
 				</div>
+				</div>
+				
 				<div class="row">
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 法人身份证正面：<i class="fa icon-question hide"></i></label>
+								<span class="required "></span> 企业名称：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								${tbLoanApply.compName}
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required"></span> 统一社会信用代码：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								${tbLoanApply.compCode}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required "></span> 工商注册号：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								${tbLoanApply.regCode}
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required"></span> 组织结构代码：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								${tbLoanApply.orgCode}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required "></span> 税务登记号：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								${tbLoanApply.taxCode}
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required"></span>法人身份证号：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								${tbLoanApply.cardNo}
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required "></span> 注册时间：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+							${trim(tbLoanApply.registerDate,"yyyy-MM-dd")}</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide"></span> 注册资金：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+							${tbLoanApply.registerMoney}
+							</div>
+						</div>
+					</div>
+					
+				</div>
+
+									<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group">
+							<label class="control-label col-sm-2">注册地址：</label>
+							<div class="col-sm-10">
+							${tbLoanApply.registerAddress}
+							</div>
+						</div>
+					</div>
+				</div>
+					
+				<div class="row">
+					
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required"></span> 企业法人：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+							${tbLoanApply.compLegalPerson}
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required"></span> 法人电话：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+							${tbLoanApply.legalPersonPhone}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required "></span> 企业联系人：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+							${tbLoanApply.compContact}
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required "></span> 联系人电话：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+							${tbLoanApply.contactPhone}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required "></span> 公司电话：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+							${tbLoanApply.compPhone}
+							</div>
+						</div>
+						
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required "></span> 公司邮箱：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+							${tbLoanApply.compEmail}
+							</div>
+						</div>
+					</div>
+				</div>
+					<div class="row">
+					
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required"></span> 主营业务：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								${tbLoanApply.mainBusiness}							
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide"></span> 员工数量：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+							${tbLoanApply.employeesCount}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required "></span> 公司性质：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+							<span id="anatureId"></span>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required "></span> 所属行业：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+														<span id="aindustry"></span>
+							
+							</div>
+						</div>
+					</div>
+				</div>
+			
+				
+				<div class="row">
+					
+					
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required "></span> 是否特殊行业：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">		
+																					<span id="aspeciaIndustry"></span>
+												
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group">
+							<label class="control-label col-sm-2">公司简介：</label>
+							<div class="col-sm-10">
+							${tbLoanApply.compProfile}
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required "></span> 法人身份证正面：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
 								<#form:fileupload id="idCardA"    bizKey="${tbLoanApply.compId}" bizType="tbComp_idCardA" maxUploadNum="1"
 									uploadType="image" class="" readonly="false"/>
@@ -258,7 +490,7 @@
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> 法人身份证反面：<i class="fa icon-question hide"></i></label>
+								<span class="required "></span> 法人身份证反面：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
 							<#form:fileupload id="idCardB" bizKey="${tbLoanApply.compId}" bizType="tbComp_idCardB" maxUploadNum="1"
 									uploadType="image" class="" readonly="false"/>
@@ -270,30 +502,33 @@
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required">*</span> 特殊行业许可证：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-							<#form:fileupload id="specialTradeLicense"  bizKey="${tbLoanApply.compId}" bizType="tbComp_specialTradeLicense" maxUploadNum="1"
-									uploadType="image" class="" readonly="false"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required">*</span> 营业执照：<i class="fa icon-question hide"></i></label>
+								<span class="required"></span> 营业执照：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
 								<#form:fileupload id="businessLicense" bizKey="${tbLoanApply.compId}" bizType="tbComp_businessLicense" maxUploadNum="1"
 									uploadType="image" class="" readonly="false"/>
 							</div>
 						</div>
 					</div>
+										<%if(tbLoanApply.speciaIndustry==1){%>
+					
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required"></span> 特殊行业许可证：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+							<#form:fileupload id="specialTradeLicense"  bizKey="${tbLoanApply.compId}" bizType="tbComp_specialTradeLicense" maxUploadNum="1"
+									uploadType="image" class="" readonly="false"/>
+							</div>
+						</div>
+					</div>
+					<%}%>
 				</div>	
 			
 <div class="row">
 					<div class="col-xs-12">
 						<div class="form-group">
 							<label class="control-label col-sm-2">
-							<span class="required ">*</span>企业简介附件：<i class="fa icon-question hide"></i></label>
+							<span class="required "></span>企业简介附件：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-10">
 							<#form:fileupload id="compProfileAttachment" bizKey="${tbLoanApply.compId}" bizType="tbComp_compProfileAttachment" maxUploadNum="1"
 									uploadType="image" class="" readonly="false"/>
@@ -348,6 +583,28 @@
 						</div>
 					</div>
 				</div>
+				
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> 收款开户行：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="blankOpen" maxlength="100" class="form-control required"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> 收款账号：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="blankCards" maxlength="100" class="form-control required "/>
+							</div>
+						</div>
+					</div>
+				</div>
+				
 				<div class="row">
 					<div class="col-xs-6">
 						<div class="form-group">
@@ -456,6 +713,100 @@
 					</div>
 					
 				</div>
+				
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> 购销合同编号（应收账款）：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="contarctCode" maxlength="50" class="form-control"/>
+							</div>
+						</div>
+					</div>
+						<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> 账款金额：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="contactAmount" maxlength="50" class="form-control"/>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+				
+				
+				
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> 应收账款起：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="urgeDateStart" maxlength="50" class="form-control"/>
+							</div>
+						</div>
+					</div>
+						<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> 应收账款止：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="urgeDateEnd" maxlength="50" class="form-control"/>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+				
+				
+				
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> 资金回笼账号：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="moneyCollectingAccount" maxlength="50" class="form-control"/>
+							</div>
+						</div>
+					</div>
+						<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> 资金回笼开户行：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="moneyCollectingBank" maxlength="100" class="form-control"/>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+				
+				
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> 资金回笼用户名：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="moneyCollectingName" maxlength="20" class="form-control"/>
+							</div>
+						</div>
+					</div>
+						
+					
+				</div>
+				
+				
+				
+				
+				
+				
+				
+				
+				
 				<div class="row">
 					<div class="col-xs-6">
 						<div class="form-group">
@@ -860,4 +1211,14 @@ function change(status,url,remark){
 			        layer.msg('已取消')
 			     }});
 	}
+$(function(){
+	detailinfo();
+})
+function detailinfo(){
+	//公司性质  所属行业  是否特殊								
+	$("#anatureId").text(js.getDictLabel(${@DictUtils.getDictListJson('nature_type')}, '${tbLoanApply.natureId}', '${text('未知')}', true)); 
+	$("#aindustry").text(js.getDictLabel(${@DictUtils.getDictListJson('industry_type')}, '${tbLoanApply.industry}', '${text('未知')}', true)); 
+	$("#aspeciaIndustry").text(js.getDictLabel(${@DictUtils.getDictListJson('specia_industry')}, '${tbLoanApply.speciaIndustry}', '${text('未知')}', true)); 
+
+}
 </script>
