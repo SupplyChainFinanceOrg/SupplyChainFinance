@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jeesite.modules.contract.dao.TbSginContractDao">
+<mapper namespace="com.jeesite.modules.contract.dao.TbContractSginFieldDao">
 	
 	<!-- 查询数据
 	<select id="findList" resultType="TbSginContract">
@@ -11,9 +11,9 @@
 		</where>
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
-	<insert id="saveByXml" parameterType="TbSginContract">
+	<insert id="saveByXml" parameterType="TbContractSginField">
 	
-	INSERT INTO jeesite.tb_sgin_contract (
+	INSERT INTO jeesite.tb_contract_sgin_field (
   		loan_id,
   		contract_field_id,
   		contract_value,

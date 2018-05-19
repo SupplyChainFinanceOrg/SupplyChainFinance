@@ -10,8 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.service.CrudService;
-import com.jeesite.modules.contract.entity.TbSginContract;
-import com.jeesite.modules.contract.dao.TbSginContractDao;
+import com.jeesite.modules.contract.entity.TbContractSginField;
+import com.jeesite.modules.contract.dao.TbContractSginFieldDao;
 import com.jeesite.modules.file.utils.FileUploadUtils;
 
 /**
@@ -21,7 +21,7 @@ import com.jeesite.modules.file.utils.FileUploadUtils;
  */
 @Service
 @Transactional(readOnly=true)
-public class TbSginContractService extends CrudService<TbSginContractDao, TbSginContract> {
+public class TbContractSginFieldService extends CrudService<TbContractSginFieldDao, TbContractSginField> {
 	
 	/**
 	 * 获取单条数据
@@ -29,7 +29,7 @@ public class TbSginContractService extends CrudService<TbSginContractDao, TbSgin
 	 * @return
 	 */
 	@Override
-	public TbSginContract get(TbSginContract tbSginContract) {
+	public TbContractSginField get(TbContractSginField tbSginContract) {
 		return super.get(tbSginContract);
 	}
 	
@@ -40,7 +40,7 @@ public class TbSginContractService extends CrudService<TbSginContractDao, TbSgin
 	 * @return
 	 */
 	@Override
-	public Page<TbSginContract> findPage(Page<TbSginContract> page, TbSginContract tbSginContract) {
+	public Page<TbContractSginField> findPage(Page<TbContractSginField> page, TbContractSginField tbSginContract) {
 		return super.findPage(page, tbSginContract);
 	}
 	
@@ -50,7 +50,7 @@ public class TbSginContractService extends CrudService<TbSginContractDao, TbSgin
 	 */
 	@Override
 	@Transactional(readOnly=false)
-	public void save(TbSginContract tbSginContract) {
+	public void save(TbContractSginField tbSginContract) {
 		super.save(tbSginContract);
 		// 保存上传图片
 		FileUploadUtils.saveFileUpload(tbSginContract.getId(), "tbSginContract_image");
@@ -64,7 +64,7 @@ public class TbSginContractService extends CrudService<TbSginContractDao, TbSgin
 	 */
 	@Override
 	@Transactional(readOnly=false)
-	public void updateStatus(TbSginContract tbSginContract) {
+	public void updateStatus(TbContractSginField tbSginContract) {
 		super.updateStatus(tbSginContract);
 	}
 	
@@ -74,7 +74,7 @@ public class TbSginContractService extends CrudService<TbSginContractDao, TbSgin
 	 */
 	@Override
 	@Transactional(readOnly=false)
-	public void delete(TbSginContract tbSginContract) {
+	public void delete(TbContractSginField tbSginContract) {
 		super.delete(tbSginContract);
 	}
 	

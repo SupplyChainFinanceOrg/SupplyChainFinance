@@ -31,15 +31,17 @@ import com.jeesite.common.config.Global;
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.lang.StringUtils;
 import com.jeesite.common.web.BaseController;
+import com.jeesite.modules.apply.service.TbLoanApplyService;
 import com.jeesite.modules.contract.dao.TbContractSignDao;
-import com.jeesite.modules.contract.entity.TbContract;
+import com.jeesite.modules.contract.entity.TbContractTemp;
 import com.jeesite.modules.contract.entity.TbContractApi;
 import com.jeesite.modules.contract.entity.TbContractSign;
-import com.jeesite.modules.contract.entity.TbSginContract;
+import com.jeesite.modules.contract.entity.TbContractSginField;
 import com.jeesite.modules.contract.service.TbContractApiService;
 import com.jeesite.modules.contract.service.TbContractService;
 import com.jeesite.modules.contract.utils.ContarctUtils;
 import com.jeesite.modules.counter.dao.TbCounterDao;
+import com.jeesite.modules.tb.service.TbCompService;
 
 /**
  * tb_contractController
@@ -56,10 +58,8 @@ public class TbContractController extends BaseController {
 	private TbContractService tbContractService;
 	@Autowired
 	private TbContractSignDao tbContractSignDao;
-//	@Autowired 
-//	private TbContractFieldService tbContractFieldService;
 	@Autowired
-	private TbContractApiService tbContractApiService;
+	private TbLoanApplyService tbLoanApplyService;
 
 
 
@@ -68,7 +68,7 @@ public class TbContractController extends BaseController {
 	 * 获取数据
 	 */
 	@ModelAttribute
-	public TbContract get(String id, boolean isNewRecord) {
+	public TbContractTemp get(String id, boolean isNewRecord) {
 		return tbContractService.get(id, isNewRecord);
 	}
 
@@ -77,7 +77,7 @@ public class TbContractController extends BaseController {
 	 */
 	@RequiresPermissions("contract:tbContract:view")
 	@RequestMapping(value = {"list", ""})
-	public String list(TbContract tbContract, Model model) {
+	public String list(TbContractTemp tbContract, Model model) {
 		model.addAttribute("tbContract", tbContract);
 		return "modules/contract/tbContractList";
 	}
@@ -88,8 +88,8 @@ public class TbContractController extends BaseController {
 	@RequiresPermissions("contract:tbContract:view")
 	@RequestMapping(value = "listData")
 	@ResponseBody
-	public Page<TbContract> listData(TbContract tbContract, HttpServletRequest request, HttpServletResponse response) {
-		Page<TbContract> page = tbContractService.findPage(new Page<TbContract>(request, response), tbContract); 
+	public Page<TbContractTemp> listData(TbContractTemp tbContract, HttpServletRequest request, HttpServletResponse response) {
+		Page<TbContractTemp> page = tbContractService.findPage(new Page<TbContractTemp>(request, response), tbContract); 
 		return page;
 	}
 
@@ -98,7 +98,7 @@ public class TbContractController extends BaseController {
 	 */
 	@RequiresPermissions("contract:tbContract:view")
 	@RequestMapping(value = "form")
-	public String form(TbContract tbContract, Model model) {
+	public String form(TbContractTemp tbContract, Model model) {
 		model.addAttribute("tbContract", tbContract);
 		return "modules/contract/tbContractForm";
 	}
@@ -109,7 +109,7 @@ public class TbContractController extends BaseController {
 	@RequiresPermissions("contract:tbContract:edit")
 	@PostMapping(value = "save")
 	@ResponseBody
-	public String save(@Validated TbContract tbContract) {
+	public String save(@Validated TbContractTemp tbContract) {
 		tbContractService.save(tbContract);
 		return renderResult(Global.TRUE, "保存合同成功！");
 	}
@@ -120,8 +120,8 @@ public class TbContractController extends BaseController {
 	@RequiresPermissions("contract:tbContract:edit")
 	@RequestMapping(value = "disable")
 	@ResponseBody
-	public String disable(TbContract tbContract) {
-		tbContract.setStatus(TbContract.STATUS_DISABLE);
+	public String disable(TbContractTemp tbContract) {
+		tbContract.setStatus(TbContractTemp.STATUS_DISABLE);
 		tbContractService.updateStatus(tbContract);
 		return renderResult(Global.TRUE, "停用合同成功");
 	}
@@ -132,8 +132,8 @@ public class TbContractController extends BaseController {
 	@RequiresPermissions("contract:tbContract:edit")
 	@RequestMapping(value = "enable")
 	@ResponseBody
-	public String enable(TbContract tbContract) {
-		tbContract.setStatus(TbContract.STATUS_NORMAL);
+	public String enable(TbContractTemp tbContract) {
+		tbContract.setStatus(TbContractTemp.STATUS_NORMAL);
 		tbContractService.updateStatus(tbContract);
 		return renderResult(Global.TRUE, "启用合同成功");
 	}
@@ -144,7 +144,7 @@ public class TbContractController extends BaseController {
 	@RequiresPermissions("contract:tbContract:edit")
 	@RequestMapping(value = "delete")
 	@ResponseBody
-	public String delete(TbContract tbContract) {
+	public String delete(TbContractTemp tbContract) {
 		tbContractService.delete(tbContract);
 		return renderResult(Global.TRUE, "删除合同成功！");
 	}
@@ -158,17 +158,15 @@ public class TbContractController extends BaseController {
 	@RequestMapping(value = {"contractMain"})
 	public String contractMain(HttpServletResponse response,HttpServletRequest request,Model model) {
 		String loanId=request.getParameter("loanId");
-		String state=request.getParameter("state");
-		String productId=request.getParameter("productId");
 		TbContractSign contractSign=new TbContractSign();
 		contractSign.setLoanId(loanId);
-		TbContract contract=new TbContract();
-		contract.setProductId(productId);
-		List<TbContract> contractList=tbContractService.findList(contract);
+		TbContractTemp contract=new TbContractTemp();
+		contract.setProductId(tbLoanApplyService.get(loanId).getProductId()+"");
+		List<TbContractTemp> contractList=tbContractService.findList(contract);
 		List<TbContractSign> contractSignList=tbContractSignDao.findList(contractSign);
 		System.err.println(contractSignList.size());
 		if(contractSignList==null||contractSignList.size()==0){
-			contractSignList=tbContractService.contractSetting(state,loanId,contractList);
+			contractSignList=tbContractService.contractSetting(loanId,contractList);
 		}
 		model.addAttribute("contractSignList", contractSignList);
 		model.addAttribute("contractList", contractList);
@@ -185,14 +183,13 @@ public class TbContractController extends BaseController {
 	@RequestMapping(value = {"parmSetting"})
 	public String parmSetting(HttpServletResponse response,HttpServletRequest request,Model model){
 		String loanId=request.getParameter("loanId");
-		String state=request.getParameter("state");
-		TbContract contract=new TbContract();
+		TbContractTemp contract=new TbContractTemp();
 		contract.setProductId(loanId);
-		List<TbContract> contractList=tbContractService.findList(contract);
-		Map<String,Object> map=tbContractService.getSettingData(state, loanId);
+		List<TbContractTemp> contractList=tbContractService.findList(contract);
+		Map<String,Object> map=tbContractService.getSettingData(loanId);
 		model.addAttribute("contractList", contractList);
 		model.addAttribute("csList", (List<TbContractSign>)map.get("csList"));
-		model.addAttribute("scList", (List<TbSginContract>)map.get("scList"));
+		model.addAttribute("scList", (List<TbContractSginField>)map.get("scList"));
 		return "modules/contract/tbContractFieldForm";
 
 	}
@@ -211,7 +208,7 @@ public class TbContractController extends BaseController {
 		return "redirect:contractMain"; 
 	}
 	/**
-	 * 一键签约
+	 * 平台用户一键签约
 	 * @param response
 	 * @param request
 	 * @param model
@@ -233,18 +230,39 @@ public class TbContractController extends BaseController {
 	}
 	
 	/**
-	 * 付签约
+	 * 借款企业签约
 	 * @param response
 	 * @param request
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = {"signCountarctByOthers"})
-	public String signCountarctByOthers(HttpServletResponse response,HttpServletRequest request,Model model){
+	@RequestMapping(value = {"signCountarctByLoanComp"})
+	public String signCountarctByLoanComp(HttpServletResponse response,HttpServletRequest request,Model model){
 		String loanId=request.getParameter("loanId");
-		String compId=request.getParameter("compId");
 		try {
-			boolean sign=tbContractService.signCountarctOthers(loanId);
+			boolean sign=tbContractService.signCountarctByLoanComp(loanId);
+			
+		//	boolean sign=tbContractService.signCountarct(state, loanId,compId);
+			System.err.println(sign);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return "";
+	}
+	/**
+	 * 核心企业签署回执
+	 * @param response
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = {"signCountarctByCoreComp"})
+	public String signCountarctByCoreComp(HttpServletResponse response,HttpServletRequest request,Model model){
+		String loanId=request.getParameter("loanId");
+		try {
+			boolean sign=tbContractService.signCountarctByCoreComp(loanId);
 			
 		//	boolean sign=tbContractService.signCountarct(state, loanId,compId);
 			System.err.println(sign);

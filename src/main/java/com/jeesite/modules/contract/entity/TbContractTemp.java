@@ -15,7 +15,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
  * @author z
  * @version 2018-05-08
  */
-@Table(name="tb_contract", alias="a", columns={
+@Table(name="tb_contract_temp", alias="a", columns={
 		@Column(name="id", attrName="id", label="id", isPK=true),
 		@Column(name="name", attrName="name", label="合同名称", queryType=QueryType.LIKE),
 		@Column(name="product_id", attrName="productId", label="产品id"),
@@ -25,7 +25,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		
 	}, orderBy="a.id ASC"
 )
-public class TbContract extends DataEntity<TbContract> {
+public class TbContractTemp extends DataEntity<TbContractTemp> {
 	
 	private static final long serialVersionUID = 1L;
 	private String name;			// 合同名称
@@ -50,11 +50,11 @@ public class TbContract extends DataEntity<TbContract> {
 		this.shortName = shortName;
 	}
 
-	public TbContract() {
+	public TbContractTemp() {
 		this(null);
 	}
 
-	public TbContract(String id){
+	public TbContractTemp(String id){
 		super(id);
 	}
 	

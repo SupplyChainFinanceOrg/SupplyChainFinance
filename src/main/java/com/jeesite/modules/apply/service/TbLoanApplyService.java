@@ -3,6 +3,7 @@
  */
 package com.jeesite.modules.apply.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +62,8 @@ public class TbLoanApplyService extends CrudService<TbLoanApplyDao, TbLoanApply>
 	@Override
 	@Transactional(readOnly=false)
 	public void save(TbLoanApply tbLoanApply) {
+		tbLoanApply.setOperationTime(new Date());
+		tbLoanApply.setOperationUserId(UserUtils.getUser().getUserCode());
 		super.save(tbLoanApply);
 		// 保存上传图片
 		FileUploadUtils.saveFileUpload(tbLoanApply.getId(), "tbLoanApply_image");

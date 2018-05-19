@@ -30,9 +30,12 @@ import com.jeesite.modules.contract.utils.ContarctUtils;
 import com.jeesite.modules.tb.entity.TbComp;
 import com.jeesite.modules.tb.service.TbCompService;
 import com.jeesite.modules.utils.BestSignDemo;
+import com.jeesite.modules.apply.entity.TbLoanApply;
+import com.jeesite.modules.apply.service.TbLoanApplyService;
 import com.jeesite.modules.contract.dao.TbContractApiChildDao;
 import com.jeesite.modules.contract.dao.TbContractApiDao;
 import com.jeesite.modules.contract.dao.TbContractSignDao;
+import com.jeesite.modules.contract.dao.TbContractSignPointDao;
 
 /**
  * tb_contract_apiService
@@ -66,14 +69,14 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 	@Autowired
 	private TbContractApiChildService tbContractApiChildService;
 	@Autowired
-	private TbContractSignPointService tbContractSignPointService;
+	private TbContractSignPointDao tbContractSignPointDao;
 	@Autowired
 	private TbContractSignDao tbContractSignDao;
 	@Autowired
 	private TbContractApiChildDao tbContractApiChildDao;
-	private BestSignDemo bestSignDemo = null;
 	@Autowired
-	private HttpServletResponse response;
+	private TbLoanApplyService tbLoanApplyService;
+	private BestSignDemo bestSignDemo = null;
 	/**
 	 * 获取单条数据
 	 * @param tbContractApi
@@ -129,37 +132,42 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 	 * @return
 	 */
 	@Transactional(readOnly=false)
-	public boolean regSSQ(String compId){
+	public boolean regSSQ(String loanId,String compId,String coreCompId){
+		if(!registeredByCompId(compId,loanId,1)) {
+			return false;
+		}
+
+		if(!registeredByCompId(compId,loanId,2)) {
+			return false;
+		}
+		if(!registeredByCompId(coreCompId,loanId,1)) {
+			return false;
+		}
+		if(!registeredByCompId(coreCompId,loanId,2)) {
+			return false;
+		}
+
+		return true;
+	}
+	/*
+	 * type   1注册个人用户并且签名 2注册企业用户并且签名
+	 */
+	private boolean registeredByCompId(String compId,String loanId,int type) {
 		boolean flag=false;
 		TbComp comp=tbCompService.get(compId);
 		TbContractApi api=new TbContractApi();
 		api.setCompId(compId);
-		api.setSsqType(1);
+		api.setSsqType(type);
 		api=tbContractApiDao.getByEntity(api);
-		if(api==null&&registered(comp,1)){//注册个人用户并且签名
-			flag=createASignatureSeal(comp,1);
+		if(api==null&&registered(comp,loanId,type)){
+			flag=createASignatureSeal(loanId,comp,type);
 		}else{
 			flag=true;
 			if(StringUtils.isBlank(api.getCert())){
-				flag=applyCert(comp,1);
+				flag=applyCert(loanId,comp,type);
 			}
 			if(api.getHasSeal()==0){
-				flag=createASignatureSeal(comp,1);
-			}
-		}
-		api=new TbContractApi();
-		api.setCompId(compId);
-		api.setSsqType(2);
-		api=tbContractApiDao.getByEntity(api);
-		if(api==null&&registered(comp,2)){//注册企业用户并且签名
-			flag=createASignatureSeal(comp,2);
-		}else{
-			flag=true;
-			if(StringUtils.isBlank(api.getCert())){
-				flag=applyCert(comp,2);
-			}
-			if(api.getHasSeal()==0){
-				flag=createASignatureSeal(comp,2);
+				flag=createASignatureSeal(loanId,comp,type);
 			}
 		}
 		return flag;
@@ -168,7 +176,7 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 	 * 注册
 	 */
 	@Transactional(readOnly=false)
-	private  boolean registered(TbComp comp,int type){
+	private  boolean registered(TbComp comp,String loanId,int type){
 		try {
 			String addTime=new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(new Date());
 			bestSignDemo=BestSignDemo.getInstance(developerId, praviteKey, host);
@@ -183,10 +191,10 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 			JSONObject jsonObl=JSONObject.parseObject(resultStr);
 			System.err.println("注册："+jsonObl);
 			if(jsonObl.get("errno").toString().equals("0")||jsonObl.get("errno").toString().equals("241208")){
-				return settingCompInfo(comp,type);
+				return settingCompInfo(loanId,comp,type);
 			}else{
 				TbContractApiLog log=new TbContractApiLog();
-				log.setCompid(comp.getId());
+				log.setLoanId(loanId);
 				log.setAddTime(addTime);
 				log.setErrCode(jsonObl.get("errno").toString());
 				log.setErrMsg(jsonObl.get("errmsg").toString());
@@ -202,7 +210,7 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 	 * 设置企业信息
 	 */
 	@Transactional(readOnly=false)
-	private boolean settingCompInfo(TbComp comp,int type){
+	private boolean settingCompInfo(String loanId,TbComp comp,int type){
 		try {
 			String addTime=new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(new Date());
 			bestSignDemo=BestSignDemo.getInstance(developerId, praviteKey, host);
@@ -224,10 +232,10 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 			JSONObject jsonObl=JSONObject.parseObject(resultStr);
 			System.err.println("设置信息："+jsonObl);
 			if(jsonObl.get("errno").toString().equals("0")||jsonObl.get("errno").toString().equals("241308")){
-				return applyCert(comp,type);
+				return applyCert(loanId,comp,type);
 			}else{
 				TbContractApiLog log=new TbContractApiLog();
-				log.setCompid(comp.getId());
+				log.setLoanId(loanId);
 				log.setAddTime(addTime);
 				log.setErrCode(jsonObl.get("errno").toString());
 				log.setErrMsg(jsonObl.get("errmsg").toString());
@@ -244,7 +252,7 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 	 * 申请数字证书
 	 */
 	@Transactional(readOnly=false)
-	private boolean applyCert(TbComp comp,int type){
+	private boolean applyCert(String loanId,TbComp comp,int type){
 		try {
 			String addTime=new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(new Date());
 			bestSignDemo=BestSignDemo.getInstance(developerId, praviteKey, host);
@@ -253,10 +261,10 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 			JSONObject jsonObl=JSONObject.parseObject(resultStr);
 			System.err.println("申请证书："+jsonObl);
 			if(jsonObl.get("errno").toString().equals("0")||jsonObl.get("errno").toString().equals("241308")){
-				return getCert(comp,type);
+				return getCert(loanId,comp,type);
 			}else{
 				TbContractApiLog log=new TbContractApiLog();
-				log.setCompid(comp.getId());
+				log.setLoanId(loanId);
 				log.setAddTime(addTime);
 				log.setErrCode(jsonObl.get("errno").toString());
 				log.setErrMsg(jsonObl.get("errmsg").toString());
@@ -271,7 +279,7 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 	 * 获取数字证书
 	 */
 	@Transactional(readOnly=false)
-	private boolean getCert(TbComp comp,int type){
+	private boolean getCert(String loanId,TbComp comp,int type){
 		try {
 			String addTime=new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(new Date());
 			bestSignDemo=BestSignDemo.getInstance(developerId, praviteKey, host);
@@ -299,7 +307,7 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 
 			}else{
 				TbContractApiLog log=new TbContractApiLog();
-				log.setCompid(comp.getId());
+				log.setLoanId(loanId);
 				log.setAddTime(addTime);
 				log.setErrCode(jsonOb.get("errno").toString());
 				log.setErrMsg(jsonOb.get("errmsg").toString());
@@ -314,7 +322,7 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 	 * 创建印章
 	 */
 	@Transactional(readOnly=false)
-	private boolean createASignatureSeal(TbComp comp,int type){
+	private boolean createASignatureSeal(String loanId,TbComp comp,int type){
 		try {
 			String addTime=new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(new Date());
 			bestSignDemo=BestSignDemo.getInstance(developerId, praviteKey, host);
@@ -333,7 +341,7 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 				return true;
 			}else{
 				TbContractApiLog log=new TbContractApiLog();
-				log.setCompid(comp.getId());
+				log.setLoanId(loanId);
 				log.setAddTime(addTime);
 				log.setErrCode(jsonOb.get("errno").toString());
 				log.setErrMsg(jsonOb.get("errmsg").toString());
@@ -350,7 +358,7 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 	 * 
 	 */
 	@Transactional(readOnly=false)
-	public String uploadPDF(String path,String compId,String contractId){
+	public String uploadPDF(String loanId,String path,String contractId){
 		try{
 			bestSignDemo=BestSignDemo.getInstance(developerId, praviteKey, host);
 			String addTime=new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(new Date());
@@ -362,10 +370,10 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 				String fid=jsonOb1.get("fid").toString();
 				String fileName=path.substring(path.lastIndexOf("/")).substring(1);
 				fileName=path.substring(0, path.lastIndexOf("."));
-				return createContract(contractId, compId, fid, fileName);
+				return createContract(loanId,contractId, fid, fileName);
 			}else{
 				TbContractApiLog log=new TbContractApiLog();
-				log.setCompid(compId);
+				log.setLoanId(loanId);
 				log.setAddTime(addTime);
 				log.setErrCode(jsonOb.get("errno").toString());
 				log.setErrMsg(jsonOb.get("errmsg").toString());
@@ -380,7 +388,7 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 	 * 创建合同
 	 */
 	@Transactional(readOnly=false)
-	public String createContract(String contarctId,String compId,String fid,String contractName){
+	public String createContract(String loanId,String contarctId,String fid,String contractName){
 		try{
 			bestSignDemo=BestSignDemo.getInstance(developerId, praviteKey, host);
 			long extime=ContarctUtils.getNowTimeStamp(Long.parseLong(expireTime));
@@ -399,7 +407,7 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 				return apiContractId;
 			}else{
 				TbContractApiLog log=new TbContractApiLog();
-				log.setCompid(compId);
+				log.setLoanId(loanId);
 				log.setAddTime(addTime);
 				log.setErrCode(jsonOb.get("errno").toString());
 				log.setErrMsg(jsonOb.get("errmsg").toString());
@@ -415,7 +423,7 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 	 * 
 	 */
 	@Transactional(readOnly=false)
-	public boolean addSigners(String apiContractId,TbContractSign cs,String compId){
+	public boolean addSigners(String apiContractId,TbContractSign cs,String loanId){
 		boolean flag=false;
 		try {
 			String addTime=new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(new Date());
@@ -426,7 +434,7 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 			String resultStr="";
 			JSONObject jsonOb=null;
 			if(apiChild.getHasAddSigner()==0){//判断是否添加过签约者
-				JSONArray jsonArray=getSignersJSONArray(cs,compId);
+				JSONArray jsonArray=getSignersJSONArray(cs,loanId);
 				if(jsonArray!=null&&jsonArray.size()>0){
 					resultStr=bestSignDemo.addSignersList(apiContractId,jsonArray).toJSONString();
 					jsonOb=JSONObject.parseObject(resultStr);
@@ -436,11 +444,11 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 						apiChild.setHasAddSigner(1);
 						tbContractApiChildDao.update(apiChild);
 						if(cs.getSignType()!=1&&cs.getSignType()!=2){
-							flag= setSignerConfig(compId, apiContractId, account,cs);
+							flag= setSignerConfig(loanId, apiContractId, account,cs);
 						}
 					}else{
 						TbContractApiLog log=new TbContractApiLog();
-						log.setCompid(compId);
+						log.setLoanId(loanId);
 						log.setAddTime(addTime);
 						log.setErrCode(jsonOb.get("errno").toString());
 						log.setErrMsg(jsonOb.get("errmsg").toString());
@@ -450,7 +458,7 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 			}else{
 				flag=true;
 				if(cs.getSignType()!=1&&cs.getSignType()!=2){//当该合同不是对方单独签字和盖章的时候  走签约方法 否则return
-					flag= setSignerConfig(compId, apiContractId, account,cs);
+					flag= setSignerConfig(loanId, apiContractId, account,cs);
 				}
 			}
 		} catch (Exception e) {
@@ -462,52 +470,53 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 	 * 签署合同
 	 */
 	@Transactional(readOnly=false)
-	public boolean signApiContract(String compId,String contractId,String signer,TbContractSign cs){
+	public boolean signApiContract(String loanId,String contractId,String signer,TbContractSign cs){
 		try{
 			bestSignDemo=BestSignDemo.getInstance(developerId, praviteKey, host);
-			JSONArray jsonArray=getPointsJSONArrayBySinger(cs,signer);
+			JSONArray jsonArray=getPointsJSONArrayBySinger(cs,signer,loanId);
 			String addTime=new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(new Date());
 			String resultStr=bestSignDemo.signContract(contractId,signer,jsonArray).toJSONString();
 			JSONObject jsonOb=JSONObject.parseObject(resultStr);
 			System.err.println("签署合同："+resultStr);
 			System.err.println(signer);
 			if(jsonOb.get("errno").toString().equals("0")||jsonOb.get("errno").toString().equals("241212")){
-				if(cs.getSignType()==3) {
-					TbContractApiChild apiChild=new TbContractApiChild();
-					apiChild.setApiContractId(contractId);
-					apiChild=tbContractApiChildDao.getByEntity(apiChild);
-					if(overContract(compId, apiChild.getApiContractId())&&apiChild!=null){
-						TbContractSign tbCs=new TbContractSign();
-						tbCs.setId(apiChild.getContractId());
-						tbCs=tbContractSignDao.getByEntity(tbCs);
-						if(getDownloadURLs(compId, apiChild.getApiContractId())) {
-							apiChild=tbContractApiChildDao.getByEntity(apiChild);
-							if(StringUtils.isNoneBlank(apiChild.getApiContractAttUrl())&&
-									StringUtils.isNoneBlank(apiChild.getApiContractUrl())) {
-								SimpleDateFormat sdf=new SimpleDateFormat("YYYYMMdd");
-								Date date=new Date();
-								String path=downloadPath+"/"+ sdf.format(date)+"/"+tbCs.getLoanId()+"/";
-								File file=new File(path);
-								if(!file.exists()){//创建签约路径
-									file.mkdirs();
-								}
-								String path1=path+"/"+tbCs.getShortName()+"_"+System.currentTimeMillis()+"con.pdf";
-								ContarctUtils.downloadNet(response,apiChild.getApiContractUrl(),path1);
-								tbCs.setDownPdfpath(path1);
-								path1=path+"/"+tbCs.getShortName()+"_"+System.currentTimeMillis()+"att.pdf";
-								ContarctUtils.downloadNet(response,apiChild.getApiContractAttUrl(),path1);
-								tbCs.setDownAttpath(path1);
-								tbContractSignDao.update(tbCs);
-								return true;
-							}
-						}
-					}
-				}else{
-					return true;
-				}
+				return true;
+				//				if(cs.getSignType()==3) {
+				//					TbContractApiChild apiChild=new TbContractApiChild();
+				//					apiChild.setApiContractId(contractId);
+				//					apiChild=tbContractApiChildDao.getByEntity(apiChild);
+				//					if(overContract(compId, apiChild.getApiContractId())&&apiChild!=null){
+				//						TbContractSign tbCs=new TbContractSign();
+				//						tbCs.setId(apiChild.getContractId());
+				//						tbCs=tbContractSignDao.getByEntity(tbCs);
+				//						if(getDownloadURLs(compId, apiChild.getApiContractId())) {
+				//							apiChild=tbContractApiChildDao.getByEntity(apiChild);
+				//							if(StringUtils.isNoneBlank(apiChild.getApiContractAttUrl())&&
+				//									StringUtils.isNoneBlank(apiChild.getApiContractUrl())) {
+				//								SimpleDateFormat sdf=new SimpleDateFormat("YYYYMMdd");
+				//								Date date=new Date();
+				//								String path=downloadPath+"/"+ sdf.format(date)+"/"+tbCs.getLoanId()+"/";
+				//								File file=new File(path);
+				//								if(!file.exists()){//创建签约路径
+				//									file.mkdirs();
+				//								}
+				//								String path1=path+"/"+tbCs.getShortName()+"_"+System.currentTimeMillis()+"con.pdf";
+				//								ContarctUtils.downloadNet(response,apiChild.getApiContractUrl(),path1);
+				//								tbCs.setDownPdfpath(path1);
+				//								path1=path+"/"+tbCs.getShortName()+"_"+System.currentTimeMillis()+"att.pdf";
+				//								ContarctUtils.downloadNet(response,apiChild.getApiContractAttUrl(),path1);
+				//								tbCs.setDownAttpath(path1);
+				//								tbContractSignDao.update(tbCs);
+				//								return true;
+				//							}
+				//						}
+				//					}
+				//				}else{
+				//					return true;
+				//				}
 			}else{
 				TbContractApiLog log=new TbContractApiLog();
-				log.setCompid(compId);
+				log.setLoanId(loanId);
 				log.setAddTime(addTime);
 				log.setErrCode(jsonOb.get("errno").toString());
 				log.setErrMsg(jsonOb.get("errmsg").toString());
@@ -522,7 +531,7 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 	 * 设置合同参数
 	 */
 	@Transactional(readOnly=false)
-	public boolean setSignerConfig(String compId,String contractId,String signer,TbContractSign cs){
+	public boolean setSignerConfig(String loanId,String contractId,String signer,TbContractSign cs){
 		try{
 			bestSignDemo=BestSignDemo.getInstance(developerId, praviteKey, host);
 			String addTime=new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(new Date());
@@ -532,10 +541,10 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 			System.err.println(signer);
 			System.err.println("设置合同参数："+resultStr);
 			if(jsonOb.get("errno").toString().equals("0")){
-				return signApiContract(compId, contractId, signer,cs);
+				return signApiContract(loanId, contractId, signer,cs);
 			}else{
 				TbContractApiLog log=new TbContractApiLog();
-				log.setCompid(compId);
+				log.setLoanId(loanId);
 				log.setAddTime(addTime);
 				log.setErrCode(jsonOb.get("errno").toString());
 				log.setErrMsg(jsonOb.get("errmsg").toString());
@@ -551,7 +560,7 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 	 * 查看合同信息
 	 */
 	@Transactional(readOnly=false)
-	public boolean getContractInfo(String compId,String contractId){
+	public boolean getContractInfo(String loanId,String contractId){
 		try{
 			bestSignDemo=BestSignDemo.getInstance(developerId, praviteKey, host);
 			String addTime=new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(new Date());
@@ -562,7 +571,7 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 				return true;
 			}else{
 				TbContractApiLog log=new TbContractApiLog();
-				log.setCompid(compId);
+				log.setLoanId(loanId);
 				log.setAddTime(addTime);
 				log.setErrCode(jsonOb.get("errno").toString());
 				log.setErrMsg(jsonOb.get("errmsg").toString());
@@ -578,7 +587,7 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 	 * 结束合同
 	 */
 	@Transactional(readOnly=false)
-	public boolean overContract(String compId,String contractId){
+	public boolean overContract(String loanId,String contractId){
 		try{
 			bestSignDemo=BestSignDemo.getInstance(developerId, praviteKey, host);
 			String addTime=new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(new Date());
@@ -589,7 +598,7 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 				return true;
 			}else{
 				TbContractApiLog log=new TbContractApiLog();
-				log.setCompid(compId);
+				log.setLoanId(loanId);
 				log.setAddTime(addTime);
 				log.setErrCode(jsonOb.get("errno").toString());
 				log.setErrMsg(jsonOb.get("errmsg").toString());
@@ -604,7 +613,7 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 	 * 获取下载地址
 	 */
 	@Transactional(readOnly=false)
-	public boolean getDownloadURLs(String compId,String contractId){
+	public boolean getDownloadURLs(String loanId,String contractId){
 		try{
 			bestSignDemo=BestSignDemo.getInstance(developerId, praviteKey, host);
 			String addTime=new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(new Date());
@@ -637,7 +646,7 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 				return true;
 			}else{
 				TbContractApiLog log=new TbContractApiLog();
-				log.setCompid(compId);
+				log.setLoanId(loanId);
 				log.setAddTime(addTime);
 				log.setErrCode(jsonOb.get("errno").toString());
 				log.setErrMsg(jsonOb.get("errmsg").toString());
@@ -652,7 +661,7 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 	 * 查看合同签署状态
 	 */
 	@Transactional(readOnly=false)
-	public boolean getSignerStatus(String compId,String contractId){
+	public boolean getSignerStatus(String loanId,String contractId){
 		try{
 			bestSignDemo=BestSignDemo.getInstance(developerId, praviteKey, host);
 			String addTime=new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(new Date());
@@ -663,7 +672,7 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 				return true;
 			}else{
 				TbContractApiLog log=new TbContractApiLog();
-				log.setCompid(compId);
+				log.setLoanId(loanId);
 				log.setAddTime(addTime);
 				log.setErrCode(jsonOb.get("errno").toString());
 				log.setErrMsg(jsonOb.get("errmsg").toString());
@@ -678,8 +687,8 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 		JSONArray jsonArray=new JSONArray();
 		JSONObject json=new JSONObject();
 		TbContractSignPoint csp=new TbContractSignPoint();
-		csp.setContractId(cs.getContractId());
-		List<TbContractSignPoint> cspList=tbContractSignPointService.findList(csp);
+		csp.setContractTempId(cs.getContractTempId());
+		List<TbContractSignPoint> cspList=tbContractSignPointDao.findList(csp);
 		for(TbContractSignPoint cspItem:cspList) {
 			json.put("pageNum", cspItem.getPageNum());
 			json.put("x", cspItem.getPageXpoint());
@@ -688,32 +697,17 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 		}
 		return jsonArray;
 	}
-	private JSONArray getPointsJSONArrayBySinger(TbContractSign cs,String signer){
-
-
-//
-		JSONArray jsonArray=new JSONArray();
-//		JSONObject json=new JSONObject();
-//		if(account.endsWith(signer)){
-//			json.put("pageNum", cs.getSingPagea());
-//			json.put("x", cs.getSingXa());
-//			json.put("y", cs.getSingYa());
-//			jsonArray.add(json);
-//		}else{
-//			json.put("pageNum", cs.getSingPageb());
-//			json.put("x", cs.getSingXb());
-//			json.put("y", cs.getSingYb());
-//			jsonArray.add(json);
-//		}
-
-		return jsonArray;
-	}
-	private JSONArray getSignersJSONArray(TbContractSign cs,String compId){
-		// 0双方章 1对方章 2对方签字 3我方章 4对方签字 我方章
+	/*
+	 * 签署合同获取签署位置
+	 */
+	private JSONArray getPointsJSONArrayBySinger(TbContractSign cs,String signer,String loanId){
+		TbLoanApply loan=tbLoanApplyService.get(loanId);
+		// 签署类型 0甲乙双方盖章 1甲方盖章  2甲方签字3甲乙丙三方盖章
 		String compAccount="";
 		String singleAccount="";
+		String coreAccount="";
 		TbContractApi api=new TbContractApi();
-		api.setCompId(compId);
+		api.setCompId(loan.getCompId());
 		List<TbContractApi> apiList=tbContractApiDao.findList(api);
 		if(apiList!=null&&apiList.size()>0){
 			for(TbContractApi apiItem:apiList){
@@ -726,6 +720,69 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 				}
 			}
 		}
+		api=new TbContractApi();
+		api.setCompId(loan.getCoreCompId());
+		api.setSsqType(2);
+		api=tbContractApiDao.getByEntity(api);//获取核心企业上上签account
+		coreAccount=api.getSsqId();
+		TbContractSignPoint csp=new TbContractSignPoint();
+		csp.setContractTempId(cs.getContractTempId());
+		JSONObject json=new JSONObject();
+		JSONArray jsonArray=new JSONArray();
+		if(account.endsWith(signer)){
+			csp.setAccountType(1l);
+			csp=tbContractSignPointDao.getByEntity(csp);
+			json.put("pageNum", csp.getPageNum());
+			json.put("x", csp.getPageXpoint());
+			json.put("y", csp.getPageYpoint());
+			jsonArray.add(json);
+		}
+		if(compAccount.endsWith(signer)||singleAccount.endsWith(signer)){
+			csp.setAccountType(2l);
+			csp=tbContractSignPointDao.getByEntity(csp);
+			json.put("pageNum", csp.getPageNum());
+			json.put("x", csp.getPageXpoint());
+			json.put("y", csp.getPageYpoint());
+			jsonArray.add(json);
+		}
+		if(coreAccount.endsWith(signer)){
+			csp.setAccountType(3l);
+			csp=tbContractSignPointDao.getByEntity(csp);
+			json.put("pageNum", csp.getPageNum());
+			json.put("x", csp.getPageXpoint());
+			json.put("y", csp.getPageYpoint());
+			jsonArray.add(json);
+		}
+		return jsonArray;
+	}
+	/*
+	 * 添加签署者
+	 */
+	private JSONArray getSignersJSONArray(TbContractSign cs,String loanId){
+		TbLoanApply loan=tbLoanApplyService.get(loanId);
+		// 签署类型 0甲乙双方盖章 1甲方盖章  2甲方签字3甲乙丙三方盖章
+		String compAccount="";
+		String singleAccount="";
+		String coreAccount="";
+		TbContractApi api=new TbContractApi();
+		api.setCompId(loan.getCompId());
+		List<TbContractApi> apiList=tbContractApiDao.findList(api);
+		if(apiList!=null&&apiList.size()>0){
+			for(TbContractApi apiItem:apiList){
+				if(apiItem.getSsqType()==1){
+					singleAccount=apiItem.getSsqId();
+				}
+				if(apiItem.getSsqType()==2){
+					compAccount=apiItem.getSsqId();
+
+				}
+			}
+		}
+		api=new TbContractApi();
+		api.setCompId(loan.getCoreCompId());
+		api.setSsqType(2);
+		api=tbContractApiDao.getByEntity(api);//获取核心企业上上签account
+		coreAccount=api.getSsqId();
 		JSONArray jsonArray=new JSONArray();
 		switch (cs.getSignType()) {
 		case 0:
@@ -745,7 +802,11 @@ public class TbContractApiService extends CrudService<TbContractApiDao, TbContra
 			}
 			break;
 		case 3:
-			jsonArray.add(account);
+			if(StringUtils.isNoneBlank(compAccount)&&StringUtils.isNoneBlank(coreAccount)){
+				jsonArray.add(account);
+				jsonArray.add(compAccount);
+				jsonArray.add(coreAccount);
+			}
 			break;
 		default:
 			break;

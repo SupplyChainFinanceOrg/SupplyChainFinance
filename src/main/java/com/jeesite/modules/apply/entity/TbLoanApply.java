@@ -7,6 +7,9 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 
 import java.util.Date;
+
+import com.jeesite.common.mybatis.annotation.JoinTable;
+import com.jeesite.common.mybatis.annotation.JoinTable.Type;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.validation.constraints.NotNull;
@@ -15,7 +18,8 @@ import com.jeesite.common.entity.DataEntity;
 import com.jeesite.common.mybatis.annotation.Column;
 import com.jeesite.common.mybatis.annotation.Table;
 import com.jeesite.common.mybatis.mapper.query.QueryType;
-
+import com.jeesite.modules.distribution.entity.TbMoneyDistribution;
+import com.jeesite.modules.lend.entity.TbLend;
 /**
  * tb_loan_applyEntity
  * @author z
@@ -100,7 +104,20 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="org_code", attrName="orgCode", label="组织结构代码"),
 		@Column(name="tax_code", attrName="taxCode", label="税务登记号"),
 		@Column(name="card_no", attrName="cardNo", label="法人身份证号"),
-	}, orderBy="a.id DESC"
+		@Column(name="risk_score", attrName="riskScore", label="风控分"),
+		@Column(name="blank_open", attrName="blankOpen", label="开户行"),
+		@Column(name="blank_cards", attrName="blankCards", label="银行卡"),
+	},
+    // 支持联合查询，如左右连接查询，支持设置查询自定义关联表的返回字段列
+    joinTable={
+      @JoinTable(type=Type.LEFT_JOIN, entity=TbMoneyDistribution.class, alias="m", 
+              on="m.loan_id = a.id",
+              columns={@Column(includeEntity=TbMoneyDistribution.class)}),
+      @JoinTable(type=Type.LEFT_JOIN, entity=TbLend.class, alias="l", 
+              on="l.loan_id = a.id",
+              columns={@Column(includeEntity=TbLend.class)}),
+       
+    }, orderBy="a.operation_time DESC"
 )
 public class TbLoanApply extends DataEntity<TbLoanApply> {
 	
@@ -185,6 +202,51 @@ public class TbLoanApply extends DataEntity<TbLoanApply> {
 	private String taxCode;		// 税务登记号
 	private String cardNo;	  //法人身份证号
 	
+	private String riskScore;//风控分
+	private TbMoneyDistribution tbMoneyDistribution;
+	private TbLend tbLend;
+	private String blankOpen;
+	private String  blankCards;
+	
+	public String getBlankOpen() {
+		return blankOpen;
+	}
+
+	public void setBlankOpen(String blankOpen) {
+		this.blankOpen = blankOpen;
+	}
+
+	public String getBlankCards() {
+		return blankCards;
+	}
+
+	public void setBlankCards(String blankCards) {
+		this.blankCards = blankCards;
+	}
+
+	public TbLend getTbLend() {
+		return tbLend;
+	}
+
+	public void setTbLend(TbLend tbLend) {
+		this.tbLend = tbLend;
+	}
+
+	public TbMoneyDistribution getTbMoneyDistribution() {
+		return tbMoneyDistribution;
+	}
+
+	public void setTbMoneyDistribution(TbMoneyDistribution tbMoneyDistribution) {
+		this.tbMoneyDistribution = tbMoneyDistribution;
+	}
+
+	public String getRiskScore() {
+		return riskScore;
+	}
+
+	public void setRiskScore(String riskScore) {
+		this.riskScore = riskScore;
+	}
 
 	public String getRegCode() {
 		return regCode;

@@ -5,6 +5,8 @@ package com.jeesite.modules.tb.service;
 
 
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,7 @@ import com.jeesite.modules.sys.service.PostService;
 import com.jeesite.modules.sys.service.RoleService;
 import com.jeesite.modules.sys.service.UserService;
 import com.jeesite.modules.sys.utils.EmpUtils;
+import com.jeesite.modules.sys.utils.UserUtils;
 import com.jeesite.modules.tb.entity.TbComp;
 import com.jeesite.modules.tb.dao.TbCompDao;
 import com.jeesite.modules.add.entity.UserRoleBase;
@@ -83,6 +86,8 @@ public class TbCompService extends CrudService<TbCompDao, TbComp> {
 	@Override
 	@Transactional(readOnly=false)
 	public void save(TbComp tbComp) {
+		tbComp.setOperationData(new Date());
+		tbComp.setOperationUserId(UserUtils.getUser().getUserCode());
 		super.save(tbComp);
 		// 保存上传图片
 		FileUploadUtils.saveFileUpload(tbComp.getId(), "tbComp_image");

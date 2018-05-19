@@ -8,9 +8,7 @@
 			</div>
 			<div class="box-tools pull-right">
 				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
-				<% if(hasPermi('tb:tbComp:edit')){ %>
-					<a href="${ctx}/tb/tbComp/form" class="btn btn-default btnTool" title="${text('新增企业')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
-				<% } %>
+
 			</div>
 		</div>
 		<div class="box-body">
@@ -22,24 +20,24 @@
 						<#form:input path="compName" maxlength="100" class="form-control width-120"/>
 					</div>
 				</div>
-				<div class="form-group">
+				<!-- <div class="form-group">
 					<label class="control-label">统一社会信用代码：</label>
 					<div class="control-inline">
 						<#form:input path="compCode" maxlength="50" class="form-control width-120"/>
 					</div>
-				</div>
+				</div> -->
 			<!-- 	<div class="form-group">
 					<label class="control-label">注册资金：</label>
 					<div class="control-inline">
 						<#form:input path="registerMoney" maxlength="20" class="form-control width-120"/>
 					</div>
 				</div> -->
-				<div class="form-group">
+				<!-- <div class="form-group">
 					<label class="control-label">企业法人：</label>
 					<div class="control-inline">
 						<#form:input path="compLegalPerson" maxlength="20" class="form-control width-120"/>
 					</div>
-				</div>
+				</div> -->
 				<div class="form-group">
 					<label class="control-label">企业联系人：</label>
 					<div class="control-inline">
@@ -72,12 +70,13 @@
 					
 					</div>
 				</div>
-				<!-- <div class="form-group">
-					<label class="control-label">审核状态：</label>
+				 <div class="form-group">
+					<label class="control-label">状态：</label>
 					<div class="control-inline width-120">
+							<#form:select path="applyState" dictType="company_status" blankOption="true" class="form-control"/>					
 					</div>
 				</div>
-				<div class="form-group">
+				<!--<div class="form-group">
 					<label class="control-label">注册日期：</label>
 					<div class="control-inline">
 						<#form:input path="applyDate" class="form-control width-120"/>
@@ -119,7 +118,7 @@ $('#dataGrid').dataGrid({
 	searchForm: $("#searchForm"),
 	columnModel: [
 		{header:'企业名称', name:'compName', index:'a.comp_name', width:150, align:"center", frozen:true, formatter: function(val, obj, row, act){
-			return '<a href="${ctx}/tb/tbComp/form?id='+row.id+'" class="btnList" data-title="${text('编辑企业')}">'+(val||row.id)+'</a>';
+			return '<a href="${ctx}/tb/tbComp/form?id='+row.id+'&looktype=2" class="btnList" data-title="${text('编辑企业')}">'+(val||row.id)+'</a>';
 		}},
 		{header:'信用代码', name:'compCode', index:'a.comp_code', width:150, align:"center"},
 		{header:'注册资金', name:'registerMoney', index:'a.register_money', width:150, align:"center"},
@@ -148,14 +147,12 @@ $('#dataGrid').dataGrid({
 		{header:'${text('操作')}', name:'actions', width:240, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('tb:tbComp:edit')){ %>
-				actions.push('<a href="${ctx}/tb/tbComp/form?id='+row.id+'" class="btnList" title="${text('查看')}">${text('查看')}</a>&nbsp;');	
-				actions.push('<a href="${ctx}" id="'+row.id+'_bottons"class="btnList" title=""></a>');				
-
-/* 				actions.push('<a href="${ctx}/tb/tbComp/form?id='+row.id+'" class="btnList" title="${text('编辑')}">${text('编辑')}</a>&nbsp;');		
- */				actions.push('<span id="'+row.id+'_botton"></span>');				
-				//alert(row.id)
-/* 				actions.push('<a href="${ctx}/tb/tbComp/delete?id='+row.id+'" class="btnList" title="${text('删除')}" data-confirm="${text('确认要删除该企业吗？')}">${text('删除')}</a>&nbsp;');
- */			
+				actions.push('<a href="${ctx}/tb/tbComp/form?id='+row.id+'&looktype=2" class="btnList" title="${text('查看')}">${text('查看')}</a>&nbsp;');	
+				<%for(botton in bottonlist ){%>
+					if(row.applyState=='${botton.nowstatus}'){
+						actions.push('<a href="${ctx}/tb/tbComp/form?id='+row.id+'&looktype=1" class="btnList" title="'+'${botton.operationName}'+'">'+'${botton.operationName}'+'</a>&nbsp;');	
+					}
+				<%}%>
  				//其他按钮操作
  			<% } %>
  		
@@ -170,23 +167,7 @@ $('#dataGrid').dataGrid({
 });
 var newdata;
 function addbutton(){
-	data=newdata;
-	if('${bottonlist}'.length>2){
-		 if(data!=null&&data.centerNum){
-				var lists=data.list;
-				for(var i=0;i<data.centerNum;i++){
-					var state=lists[i].applyState;
-					<%for(bstate in bottonlist){%> 	
-					var nowstatus='${bstate.nowstatus}';
-					var operationName='${bstate.operationName}';
-					 if(nowstatus==state){
-						var bottonvar='<span href="${ctx}/tb/tbComp/form?looktype=1&id='+lists[i].id+'" name="'+lists[i].id+'_bottons" style="color:#3c8dbc;cursor: pointer;" onclick="openurl(this)" class="btnList" title="'+operationName+'">'+operationName+'</span>&nbsp;';
-						$('#'+lists[i].id+'_botton').html(bottonvar);
-					}else{} 
-					<%}%> 						
-				}
-			}
-	}
+	
 }
 function openurl(e){
 	$("#"+$(e).attr("name")).attr("href",$(e).attr("href"));

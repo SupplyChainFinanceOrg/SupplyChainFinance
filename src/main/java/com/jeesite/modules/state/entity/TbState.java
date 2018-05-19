@@ -24,6 +24,9 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="nowstatus", attrName="nowstatus", label="状态"),
 		@Column(name="rolecode", attrName="rolecode", label="角色"),
 		@Column(name="isstop", attrName="isstop", label="0启用  1停用"),
+		@Column(name="pagename", attrName="pagename", label="去往页面"),
+
+		
 	}, orderBy="a.id DESC"
 )
 public class TbState extends DataEntity<TbState> {
@@ -38,6 +41,14 @@ public class TbState extends DataEntity<TbState> {
 	private String rolecode;		// 角色
 	private String isstop;		// 0启用  1停用
 	private String nowstatus;
+	private String  pagename;
+	
+	public String getPagename() {
+		return pagename;
+	}
+	public void setPagename(String pagename) {
+		this.pagename = pagename;
+	}
 	public TbState() {
 		this(null);
 	}

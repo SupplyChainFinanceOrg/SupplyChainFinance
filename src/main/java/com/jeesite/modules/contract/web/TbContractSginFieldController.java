@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.jeesite.common.config.Global;
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.web.BaseController;
-import com.jeesite.modules.contract.entity.TbSginContract;
-import com.jeesite.modules.contract.service.TbSginContractService;
+import com.jeesite.modules.contract.entity.TbContractSginField;
+import com.jeesite.modules.contract.service.TbContractSginFieldService;
 
 /**
  * tb_sgin_contractController
@@ -28,17 +28,17 @@ import com.jeesite.modules.contract.service.TbSginContractService;
  * @version 2018-05-08
  */
 @Controller
-@RequestMapping(value = "${adminPath}/contract/tbSginContract")
-public class TbSginContractController extends BaseController {
+@RequestMapping(value = "${adminPath}/contract/tbContractSginField")
+public class TbContractSginFieldController extends BaseController {
 
 	@Autowired
-	private TbSginContractService tbSginContractService;
+	private TbContractSginFieldService tbSginContractService;
 	
 	/**
 	 * 获取数据
 	 */
 	@ModelAttribute
-	public TbSginContract get(String id, boolean isNewRecord) {
+	public TbContractSginField get(String id, boolean isNewRecord) {
 		return tbSginContractService.get(id, isNewRecord);
 	}
 	
@@ -47,7 +47,7 @@ public class TbSginContractController extends BaseController {
 	 */
 	@RequiresPermissions("contract:tbSginContract:view")
 	@RequestMapping(value = {"list", ""})
-	public String list(TbSginContract tbSginContract, Model model) {
+	public String list(TbContractSginField tbSginContract, Model model) {
 		model.addAttribute("tbSginContract", tbSginContract);
 		return "modules/contract/tbSginContractList";
 	}
@@ -58,8 +58,8 @@ public class TbSginContractController extends BaseController {
 	@RequiresPermissions("contract:tbSginContract:view")
 	@RequestMapping(value = "listData")
 	@ResponseBody
-	public Page<TbSginContract> listData(TbSginContract tbSginContract, HttpServletRequest request, HttpServletResponse response) {
-		Page<TbSginContract> page = tbSginContractService.findPage(new Page<TbSginContract>(request, response), tbSginContract); 
+	public Page<TbContractSginField> listData(TbContractSginField tbSginContract, HttpServletRequest request, HttpServletResponse response) {
+		Page<TbContractSginField> page = tbSginContractService.findPage(new Page<TbContractSginField>(request, response), tbSginContract); 
 		return page;
 	}
 
@@ -68,7 +68,7 @@ public class TbSginContractController extends BaseController {
 	 */
 	@RequiresPermissions("contract:tbSginContract:view")
 	@RequestMapping(value = "form")
-	public String form(TbSginContract tbSginContract, Model model) {
+	public String form(TbContractSginField tbSginContract, Model model) {
 		model.addAttribute("tbSginContract", tbSginContract);
 		return "modules/contract/tbSginContractForm";
 	}
@@ -79,7 +79,7 @@ public class TbSginContractController extends BaseController {
 	@RequiresPermissions("contract:tbSginContract:edit")
 	@PostMapping(value = "save")
 	@ResponseBody
-	public String save(@Validated TbSginContract tbSginContract) {
+	public String save(@Validated TbContractSginField tbSginContract) {
 		tbSginContractService.save(tbSginContract);
 		return renderResult(Global.TRUE, "保存合同成功！");
 	}
@@ -90,8 +90,8 @@ public class TbSginContractController extends BaseController {
 	@RequiresPermissions("contract:tbSginContract:edit")
 	@RequestMapping(value = "disable")
 	@ResponseBody
-	public String disable(TbSginContract tbSginContract) {
-		tbSginContract.setStatus(TbSginContract.STATUS_DISABLE);
+	public String disable(TbContractSginField tbSginContract) {
+		tbSginContract.setStatus(TbContractSginField.STATUS_DISABLE);
 		tbSginContractService.updateStatus(tbSginContract);
 		return renderResult(Global.TRUE, "停用合同成功");
 	}
@@ -102,8 +102,8 @@ public class TbSginContractController extends BaseController {
 	@RequiresPermissions("contract:tbSginContract:edit")
 	@RequestMapping(value = "enable")
 	@ResponseBody
-	public String enable(TbSginContract tbSginContract) {
-		tbSginContract.setStatus(TbSginContract.STATUS_NORMAL);
+	public String enable(TbContractSginField tbSginContract) {
+		tbSginContract.setStatus(TbContractSginField.STATUS_NORMAL);
 		tbSginContractService.updateStatus(tbSginContract);
 		return renderResult(Global.TRUE, "启用合同成功");
 	}
@@ -114,7 +114,7 @@ public class TbSginContractController extends BaseController {
 	@RequiresPermissions("contract:tbSginContract:edit")
 	@RequestMapping(value = "delete")
 	@ResponseBody
-	public String delete(TbSginContract tbSginContract) {
+	public String delete(TbContractSginField tbSginContract) {
 		tbSginContractService.delete(tbSginContract);
 		return renderResult(Global.TRUE, "删除合同成功！");
 	}

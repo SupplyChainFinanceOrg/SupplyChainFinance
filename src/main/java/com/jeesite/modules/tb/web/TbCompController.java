@@ -137,10 +137,13 @@ public class TbCompController extends BaseController {
 			//流程
 			//获取角色，状态
 			List<TbProcess> prolist=tbProcessService.buttunList(tbComp.getApplyState()+"",TbProcess.COMPANYTYPE);							
-			model.addAttribute("prolist", prolist);		
+			model.addAttribute("prolist", prolist);	
+			if(tbComp.getApplyState()==1||tbComp.getApplyState()==3||tbComp.getApplyState()==5){
+				return "modules/tb/tbCompForm";
+			}
 			return "modules/tb/tbCompLiu";
 		}else if("2".equals(request.getParameter("looktype"))){
-			return "modules/tb/tbCompDetai";
+			return "modules/tb/tbCompDetail";
 		}
 		
 		return "modules/tb/tbCompForm";
@@ -155,23 +158,23 @@ public class TbCompController extends BaseController {
 	public String save(TbComp tbComp,HttpServletRequest request, HttpServletResponse response) {
 		if(StringUtils.isEmpty(request.getParameter("nextstatus"))){
 			tbCompService.save(tbComp);
-			tbProcessLogService.saveLog(Integer.parseInt(tbComp.getApplyState()+""), TbProcessLog.APPLY_TYPE,tbComp.getId(),null, null, request.getParameter("operationRemark"), 1, 1, 1,tbComp.getApplyState()+"");
+			tbProcessLogService.saveLog(Integer.parseInt(tbComp.getApplyState()+""), TbProcessLog.APPLY_TYPE,tbComp.getId(),null, null, request.getParameter("operationRemark"), 1, 1, 1,tbComp.getApplyState()+"",tbComp.getCompName());
 		}else{
 			//查询老的数据
 			TbComp oldtbComp=tbCompService.get(tbComp.getId());
 			String oldstatus=oldtbComp.getApplyState()+"";
-			oldtbComp.setApplyState(Long.parseLong(request.getParameter("nextstatus")));
 			if(0==oldtbComp.getApplyState()){
+				oldtbComp.setApplyState(Long.parseLong(request.getParameter("nextstatus")));
 				tbCompService.saveAndCreate(oldtbComp,true);
 			}else{
-				if(1==oldtbComp.getApplyState()||2==oldtbComp.getApplyState()){
-					oldtbComp.setOperationData(new Date());
-					oldtbComp.setOperationUserId(UserUtils.getUser().getUserCode());
-				}
-				tbCompService.save(tbComp);
+				oldtbComp.setApplyState(Long.parseLong(request.getParameter("nextstatus")));
+				tbCompService.save(oldtbComp);
 			}
-			tbProcessLogService.saveLog(Integer.parseInt(tbComp.getApplyState()+""), TbProcessLog.APPLY_TYPE,tbComp.getId(),null, null, request.getParameter("operationRemark"), 1, 1, 1,oldstatus+"-"+oldtbComp.getApplyState()+"");
-
+			
+			tbProcessLogService.saveLog(Integer.parseInt(tbComp.getApplyState()+""), TbProcessLog.APPLY_TYPE,tbComp.getId(),null, null, request.getParameter("operationRemark"), 1, 1, 1,oldstatus+"-"+oldtbComp.getApplyState()+"",tbComp.getCompName());
+			if("2".equals(request.getParameter("nextstatus"))){
+				tbCompService.delete(oldtbComp);
+			}
 		}	
 
 		return renderResult(Global.TRUE, "保存企业成功！");

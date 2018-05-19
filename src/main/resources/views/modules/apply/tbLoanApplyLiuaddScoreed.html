@@ -1,0 +1,300 @@
+<% layout('/layouts/default.html', {title: '借款申请管理', libs: ['validate','fileupload']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header with-border">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> 操作
+			</div>
+			<div class="box-tools pull-right">
+				<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+			</div>
+		</div>
+		<#form:form id="inputForm" model="${tbLoanApply}" action="${ctx}/apply/tbLoanApply/save" method="post" class="form-horizontal">
+			<div class="box-body">
+<!-- 				<div class="form-unit">${text('反馈信息')}</div>
+ -->				<#form:hidden path="id"/>
+				<input id="url" name="url" style="display: none">
+				<input id="nextstatus" name="nextstatus" style="display: none">		
+			<input id="compId" name="compId" type="hidden" value="${tbLoanApply.compId}">	
+			<!-- 0准备的资料 1企业调查 2个人调查 3综合部分 -->			
+			<div class="form-unit">${text('准备的资料')}</div>
+			<div class="row" style="padding-left: 55px">
+			<table style="width: 800px">
+				<%for(tbr in tblrlist_0){%> 			
+					<tr style="height: 50px">
+					<td style="width: 300px"><span style="float: right;">${tbr.tbRiskControl.name}是否齐全:</span></td>
+					<td style="width: 200px;padding-left: 10px">
+					<%if(tbr.complete=="0"){%>
+					是
+					<%}else{%>
+					否
+					<%}%>
+					</td>
+					<td style="width: 100px"><span style="float: right;">得分(总分${tbr.tbRiskControl.initScore}):</span></td>
+					<td style="width: 200px;padding-left: 10px">${tbr.score}</td>
+					</tr>
+					<%if(isNotBlank(tbr.remark)){%>					
+					<tr>
+					<td style="width: 200px"><span style="float: right;">备注：</span></td>
+					<td colspan="3">
+					${tbr.remark}
+					</td>
+					</tr>
+					<%}%>
+				<%}%> 				
+			</table>
+			</div>
+			<div class="form-unit">${text('企业调查')}</div>
+					<div class="row" style="padding-left: 55px">
+			<table style="width: 800px">
+				<%for(tbr in tblrlist_1){%> 			
+					<tr style="height: 50px">
+					<td style="width: 300px"><span style="float: right;">${tbr.tbRiskControl.name}是否齐全:</span></td>
+					<td style="width: 200px;padding-left: 10px">
+					<%if(tbr.complete==0){%>
+					是
+					<%}else{%>
+					否
+					<%}%>
+					</td>
+					<td style="width: 100px"><span style="float: right;">得分(总分${tbr.tbRiskControl.initScore}):</span></td>
+					<td style="width: 200px;padding-left: 10px">${tbr.score}</td>
+					</tr>
+					<%if(isNotBlank(tbr.remark)){%>					
+					<tr>
+					<td style="width: 200px"><span style="float: right;">备注：</span></td>
+					<td colspan="3">
+					${tbr.remark}
+					</td>
+					</tr>
+					<%}%>
+				<%}%> 				
+			</table>
+			</div>
+			<div class="form-unit">${text('个人调查')}</div>
+					<div class="row" style="padding-left: 55px">
+			<table style="width: 800px">
+				<%for(tbr in tblrlist_2){%> 			
+					<tr style="height: 50px">
+					<td style="width: 300px"><span style="float: right;">${tbr.tbRiskControl.name}是否齐全:</span></td>
+					<td style="width: 200px;padding-left: 10px">
+					<%if(tbr.complete==0){%>
+					是
+					<%}else{%>
+					否
+					<%}%>
+					</td>
+					<td style="width: 100px"><span style="float: right;">得分(总分${tbr.tbRiskControl.initScore}):</span></td>
+					<td style="width: 200px;padding-left: 10px">${tbr.score}</td>
+					</tr>
+					<%if(isNotBlank(tbr.remark)){%>					
+					<tr>
+					<td style="width: 200px"><span style="float: right;">备注：</span></td>
+					<td colspan="3">
+					${tbr.remark}
+					</td>
+					</tr>
+					<%}%>
+				<%}%> 				
+			</table>
+			</div>		
+			<div class="form-unit">${text('综合调查')}</div>
+					<div class="row" style="padding-left: 55px">
+			<table style="width: 800px">
+				<%for(tbr in tblrlist_3){%> 			
+					<tr style="height: 50px">
+					<td style="width: 300px"><span style="float: right;">${tbr.tbRiskControl.name}是否齐全:</span></td>
+					<td style="width: 200px;padding-left: 10px">
+					<%if(tbr.complete==0){%>
+					是
+					<%}else{%>
+					否
+					<%}%>
+					</td>
+					<td style="width: 100px"><span style="float: right;">得分(总分${tbr.tbRiskControl.initScore}):</span></td>
+					<td style="width: 200px;padding-left: 10px">${tbr.score}</td>
+					</tr>
+					<%if(isNotBlank(tbr.remark)){%>					
+					<tr>
+					<td style="width: 200px"><span style="float: right;">备注：</span></td>
+					<td colspan="3">
+					${tbr.remark}
+					</td>
+					</tr>
+					<%}%>
+				<%}%> 				
+			</table>
+			</div>	
+			<div class="form-unit">${text('合计')}</div>
+					<div class="row" style="padding-left: 55px">
+			<table style="width: 800px">
+					<tr style="height: 50px">
+					<td style="width: 300px"><span style="float: right;"></span></td>
+					<td style="width: 200px;padding-left: 10px">
+
+					</td>
+					<td style="width: 100px"><span style="float: right;">合计：</span></td>
+					<td style="width: 200px;padding-left: 10px">${tbLoanApply.riskScore}</td>
+					</tr>
+				
+			</table>
+			</div>		
+			<div class="form-unit">${text('授信')}</div>			
+				
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required "></span> 核心企业：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8" style="margin-top: 3px">
+							  <%for(comp in hxcorplist){
+							  if(comp.id==tbLoanApply.coreCompId){
+							  %>
+							  ${comp.compName}
+							  <%}}%>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required"></span> 授信额度：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8" style="margin-top: 3px">
+							${tbLoanApply.lineCredit}
+							</div>
+						</div>
+					</div>
+				</div>
+			<%for(tbp in tbpllist){%>												
+						<div class="form-unit">${text('审核详情')}</div>
+					<%break;}%>
+						<%for(tbp in tbpllist){%>												
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group">
+							<table style="width: 100%;margin-left: 4%">
+							 <tr>
+							 <td width="10%"></td>
+							 <td><span style="float: right;color: red">${trim(tbp.operationTime,"yyyy-MM-dd HH:mm:ss")}</span><span style="float: right;">${tbp.userName}&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+							 </tr>
+							  <tr>
+							 <td style="padding-right: 10px;">
+		 						<%for(tbs in tbslist){
+		 						if(tbs.nowstatus+""==tbp.logState+""){
+		 						%>	
+		 						<span style="float: right">${tbs.stateName}</span>
+		 						<%}}%>																			 
+							 </td>
+							 <td style="min-height: 50px;padding-left: 10px;background-color: #2a909a;color: white;">${tbp.operationRemark}</td>
+							 </tr>
+							</table>
+						</div>
+					</div>
+				</div>
+				<%}%>	
+							
+			<div class="form-unit">${text('金融机构')}</div>			
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group">
+							<label class="control-label col-sm-2">
+							<span class="required ">*</span>金融机构：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-10">
+							<div class="form-group">
+							<div class="col-sm-10" style="width: 300px">
+								<#form:select  path="tbMoneyDistribution.bankCompId" items="${jrcorplist}" itemLabel="compName" itemValue="id" class="form-control required" />					
+							</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+			<div class="form-unit">${text('反馈信息')}</div>			
+					<%if(tbLoanApply.applyState!=0&&tbLoanApply.applyState!=17&&tbLoanApply.applyState!=18){%>
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group">
+							<label class="control-label col-sm-2">
+							<span class="required hide"></span>备注：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-10">
+							<div class="form-group">
+							<div class="col-sm-10">
+								<textarea id="operationRemark" name="operationRemark" class="form-control" style="height:100px"  rows="" cols=""></textarea>
+							</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<%}%>
+			</div>
+			
+			<div class="box-footer" align="center">
+				<div class="row" style="margin: 0 100px 0 0; ">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button type="submit" class="btn btn-sm btn-primary" id="btnSubmit" style="display: none"></button>		
+						<%for(bstate in prolist){%> 	
+						<button type="button" class="btn btn-sm btn-primary"  onclick="change('${bstate.nextStateId}','${bstate.url}','${bstate.remark}')">${bstate.name}</button>	&nbsp;&nbsp;												
+						<%}%>				
+						<button type="button" class="btn btn-sm btn-default" id="btnCancel" onclick="js.closeCurrentTabPage()"><i class="fa fa-reply-all"></i> ${text('关 闭')}</button>
+					</div>
+				</div>
+			</div>
+		</#form:form>
+	</div>
+</div>
+<% } %>
+<script>
+function scoreblur(e){
+	
+	var socre=Number($(e).val());
+	var maxscore=Number($(e).attr("maxscore"));
+	if(maxscore<socre){
+		var parentname =$(e).attr("parentname");
+		layer.alert(parentname+'分数最大为'+maxscore, {icon:5});
+	}
+}
+$("#inputForm").validate({
+	submitHandler: function(form){
+		js.ajaxSubmitForm($(form), function(data){
+			js.showMessage(data.message);
+			if(data.result == Global.TRUE){
+				js.closeCurrentTabPage(function(contentWindow){
+					contentWindow.page();
+				});
+			}
+		}, "json");
+    }
+});
+function change(status,url,remark){
+	/* 	layer.alert('见到你真的很高兴', {icon: 1});*/
+		layer.alert(remark, {
+			     skin: 'layui-layer-molv' //样式类名  自定义样式
+			     ,closeBtn: 1    // 是否显示关闭按钮
+			     ,anim: 1 //动画类型
+			    ,btn: ['确定','取消'] //按钮
+			    ,icon: 8    // icon
+			    ,yes:function(){
+			         $('#nextstatus').val(status);
+			    	if(url.length>0){
+			    		$('#inputForm').attr("action",url)
+			    	}
+			    	if(status==6){
+			    		 for(var i=0;i<$(".form-control").size();i++){
+			    				$(".form-control").eq(i).attr("class",$(".form-control").eq(i).attr("class").replace('required',' '))
+			    			} 
+			    		 for(var i=0;i<$(".wup_input").size();i++){
+			    				$(".wup_input").eq(i).attr("class",$(".wup_input").eq(i).attr("class").replace('required',' '))
+			    		 }
+			    	} 
+			    	var isok2=true;
+			    	if(isok2){			    		
+			    		$("#btnSubmit").trigger("click");
+			    	}
+			    	
+			     }
+		     	,btn2:function(){
+			        layer.msg('已取消')
+			     }});
+	}
+</script>

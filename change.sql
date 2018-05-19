@@ -141,4 +141,39 @@ ALTER TABLE `jeesite`.`tb_contract_api` ADD COLUMN `file_id` VARCHAR(200) NULL C
 
 ALTER TABLE `tb_process_log`
 ADD COLUMN `comp_id`  varchar(64) NULL COMMENT '企业id' AFTER `logState`
+---------------------------------------------------------------------
+ALTER TABLE `tb_process_log`
+ADD COLUMN `user_name`  varchar(200) NULL COMMENT '操作人' AFTER `comp_id`,
+ADD COLUMN `comp_name`  varchar(200) NULL COMMENT '企业名' AFTER `user_name`
+---------------------------------------------------------------------------
+
+-----------------------------------------------
+ALTER TABLE `tb_risk_control`
+ADD COLUMN `init_score`  int(2) NULL DEFAULT 10 COMMENT '分数' AFTER `type`
+----------------------
+------------------------------------
+ALTER TABLE `tb_loan_risk`
+ADD COLUMN `complete`  varchar(2) NULL COMMENT '是否齐全 0是 1否' AFTER `remark`
+-------------------------------------------------------------------
+
+ALTER TABLE `tb_loan_apply`
+ADD COLUMN `risk_score`  varchar(10) NULL DEFAULT '0' COMMENT '风控分' AFTER `card_no`
+
+------------------------------------------------------------------------------------
+
+ALTER TABLE `tb_state`
+ADD COLUMN `pagename`  varchar(200) NULL COMMENT '去往的页面' AFTER `isstop`
+
 -----------------------------------------------------------------------------
+
+ALTER TABLE `tb_money_distribution`
+MODIFY COLUMN `id`  varchar(64) NOT NULL FIRST;
+--------------------------
+ALTER TABLE `tb_lend`
+MODIFY COLUMN `id`  varchar(64) NOT NULL FIRST
+--------------------------------------------
+
+ALTER TABLE `tb_loan_apply`
+ADD COLUMN `blank_cards`  varchar(100) NULL COMMENT '银行卡' AFTER `risk_score`,
+ADD COLUMN `blank_open`  varchar(100) NULL COMMENT '开户行' AFTER `blank_cards`
+-------------------------------------------------------------------------------------

@@ -17,21 +17,21 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
  */
 @Table(name="tb_contract_sign_point", alias="a", columns={
 		@Column(name="id", attrName="id", label="id", isPK=true),
-		@Column(name="contract_id", attrName="contractId", label="contract_id"),
+		@Column(name="contract_temp_id", attrName="contractTempId", label="contract_id"),
 		@Column(name="page_num", attrName="pageNum", label="page_num"),
 		@Column(name="page_xpoint", attrName="pageXpoint", label="page_xpoint"),
 		@Column(name="page_ypoint", attrName="pageYpoint", label="page_ypoint"),
-		@Column(name="account", attrName="account", label="account"),
+		@Column(name="account_type", attrName="accountType", label="account"),//用户类型1平台2借款企业3核心企业
 	}, orderBy="a.id ASC"
 )
 public class TbContractSignPoint extends DataEntity<TbContractSignPoint> {
 	
 	private static final long serialVersionUID = 1L;
-	private Long contractId;		// contract_id
+	private Long contractTempId;		// contract_id
 	private String pageNum;		// page_num
 	private String pageXpoint;		// page_xpoint
 	private String pageYpoint;		// page_ypoint
-	private String account;		// account
+	private Long accountType;		// account
 	
 	public TbContractSignPoint() {
 		this(null);
@@ -41,13 +41,6 @@ public class TbContractSignPoint extends DataEntity<TbContractSignPoint> {
 		super(id);
 	}
 	
-	public Long getContractId() {
-		return contractId;
-	}
-
-	public void setContractId(Long contractId) {
-		this.contractId = contractId;
-	}
 	
 	@Length(min=0, max=20, message="page_num长度不能超过 20 个字符")
 	public String getPageNum() {
@@ -75,14 +68,22 @@ public class TbContractSignPoint extends DataEntity<TbContractSignPoint> {
 	public void setPageYpoint(String pageYpoint) {
 		this.pageYpoint = pageYpoint;
 	}
-	
-	@Length(min=0, max=50, message="account长度不能超过 50 个字符")
-	public String getAccount() {
-		return account;
+
+	public Long getContractTempId() {
+		return contractTempId;
 	}
 
-	public void setAccount(String account) {
-		this.account = account;
+	public void setContractTempId(Long contractTempId) {
+		this.contractTempId = contractTempId;
 	}
+
+	public Long getAccountType() {
+		return accountType;
+	}
+
+	public void setAccountType(Long accountType) {
+		this.accountType = accountType;
+	}
+	
 	
 }

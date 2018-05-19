@@ -19,7 +19,7 @@ import com.jeesite.common.mybatis.annotation.Table;
 @Table(name="tb_contract_sign", alias="a", columns={
 		@Column(name="id", attrName="id", label="id", isPK=true),
 		@Column(name="loan_id", attrName="loanId", label="借款id"),
-		@Column(name="contract_id", attrName="contractId", label="合同id"),
+		@Column(name="contract_temp_id", attrName="contractTempId", label="合同id"),
 		@Column(name="contract_content", attrName="contractContent", label="合同内容"),
 		@Column(name="upload_pdfpath", attrName="uploadPdfpath", label="合同模板pdf路径"),
 		@Column(name="operation_time", attrName="operationTime", label="操作时间"),
@@ -34,7 +34,7 @@ public class TbContractSign extends DataEntity<TbContractSign> {
 
 	private static final long serialVersionUID = 1L;
 	private String loanId;		// 借款id
-	private Long contractId;		// 合同id
+	private Long contractTempId;		// 合同id
 	private String contractContent;		// 合同内容
 	private String uploadPdfpath;// 合同模板pdf路径
 	private Date operationTime;// 操作时间
@@ -117,12 +117,12 @@ public class TbContractSign extends DataEntity<TbContractSign> {
 		this.loanId = loanId;
 	}
 
-	public Long getContractId() {
-		return contractId;
+	public Long getContractTempId() {
+		return contractTempId;
 	}
 
-	public void setContractId(Long contractId) {
-		this.contractId = contractId;
+	public void setContractTempId(Long contractTempId) {
+		this.contractTempId = contractTempId;
 	}
 
 	public String getContractContent() {
