@@ -7,6 +7,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.net.MalformedURLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
@@ -34,6 +38,7 @@ import com.jeesite.modules.contract.entity.TbContractSign;
 import com.jeesite.modules.contract.entity.TbSginContract;
 import com.jeesite.modules.contract.service.TbContractApiService;
 import com.jeesite.modules.contract.service.TbContractService;
+import com.jeesite.modules.contract.utils.ContarctUtils;
 import com.jeesite.modules.counter.dao.TbCounterDao;
 
 /**
@@ -45,6 +50,8 @@ import com.jeesite.modules.counter.dao.TbCounterDao;
 @RequestMapping(value = "${adminPath}/contract/tbContract")
 public class TbContractController extends BaseController {
 
+	@Value("${contractApi.downloadPath}")
+	String downloadPath;
 	@Autowired
 	private TbContractService tbContractService;
 	@Autowired
@@ -152,13 +159,14 @@ public class TbContractController extends BaseController {
 	public String contractMain(HttpServletResponse response,HttpServletRequest request,Model model) {
 		String loanId=request.getParameter("loanId");
 		String state=request.getParameter("state");
+		String productId=request.getParameter("productId");
 		TbContractSign contractSign=new TbContractSign();
 		contractSign.setLoanId(loanId);
 		TbContract contract=new TbContract();
-		contract.setProductId(1+"");
-		contract.setSignState(state);
+		contract.setProductId(productId);
 		List<TbContract> contractList=tbContractService.findList(contract);
 		List<TbContractSign> contractSignList=tbContractSignDao.findList(contractSign);
+		System.err.println(contractSignList.size());
 		if(contractSignList==null||contractSignList.size()==0){
 			contractSignList=tbContractService.contractSetting(state,loanId,contractList);
 		}
@@ -180,7 +188,6 @@ public class TbContractController extends BaseController {
 		String state=request.getParameter("state");
 		TbContract contract=new TbContract();
 		contract.setProductId(loanId);
-		contract.setSignState(state);
 		List<TbContract> contractList=tbContractService.findList(contract);
 		Map<String,Object> map=tbContractService.getSettingData(state, loanId);
 		model.addAttribute("contractList", contractList);
@@ -213,11 +220,34 @@ public class TbContractController extends BaseController {
 	@RequestMapping(value = {"signCountarct"})
 	public String signCountarct(HttpServletResponse response,HttpServletRequest request,Model model){
 		String loanId=request.getParameter("loanId");
-		String state=request.getParameter("state");
+		try {
+			boolean sign=tbContractService.signCountarct(loanId);//注册 获取 上上签 并且生成pdf合同模板 进行签约
+			
+			System.err.println(sign);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return "";
+	}
+	
+	/**
+	 * 付签约
+	 * @param response
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = {"signCountarctByOthers"})
+	public String signCountarctByOthers(HttpServletResponse response,HttpServletRequest request,Model model){
+		String loanId=request.getParameter("loanId");
 		String compId=request.getParameter("compId");
 		try {
-			tbContractService.signCountarct(state, loanId,compId);
+			boolean sign=tbContractService.signCountarctOthers(loanId);
 			
+		//	boolean sign=tbContractService.signCountarct(state, loanId,compId);
+			System.err.println(sign);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -229,10 +259,21 @@ public class TbContractController extends BaseController {
 	TbCounterDao tbCounterDao;
 	@RequestMapping(value = {"counterTest"})
 	public String counterTest(HttpServletResponse response,HttpServletRequest request,Model model){
-		TbContractApi api=new TbContractApi();
-		api.setCompId("995160567265361920");
-		api=tbContractApiService.get(api);
-		System.err.println(api.getCert());
+		String loanId="995224879621619712";
+		SimpleDateFormat sdf=new SimpleDateFormat("YYYYMMdd");
+		Date date=new Date();
+		String path=downloadPath+"/"+ sdf.format(date)+"/"+loanId+"/";
+		File file=new File(path);
+		if(!file.exists()){//创建签约路径
+			file.mkdirs();
+		}
+		path=path+"/hhhhh.pdf";
+		try {
+			ContarctUtils.downloadNet(response,"https://openapi.bestsign.info/openapi/v3/storage/download/?developerId=1845372398275133986&rtick=1526446535441&dataToken=eyJzZXJ2ZXIiOiJodHRwczovL29wZW5hcGkuYmVzdHNpZ24uaW5mby9vcGVuYXBpL3YzLyIsImZuYW1lIjoi5L%2Bd55CG5ZCI5ZCMXzE1MjYyODExNTcxMDgucGRmIiwiZGhhc2giOiIxOTkzMjA5MDIzNTc4NTA3MjMyIiwiZnR5cGUiOiJwZGYiLCJydGljayI6IjE1MjY0NDY1MzU0NDEiLCJmc2l6ZSI6IjE4NjYzOSIsImZwYWdlcyI6IjEzIiwiZHJpdmVyTmFtZSI6ImNuLmJlc3RzaWduLmFwaS5vcGVuLnN0b3JhZ2UuZHJpdmVycy5GaWxlQ2xpZW50U3RvcmFnZSIsImZoYXNoIjoiMzNmOWY5MzQ2NWZmN2MzMTlkNGUxYzc5MjM3N2JmMmU5ZGE5Yzk1OSIsInVzZXJJZCI6IjE5OTE5MTczNDE2ODM3NDUzMjAifQ%3D%3D.3080dca0004fc5ba7a44a41f4d5347d0&signType=md5&sign=48d91e5d3086bcff3082622c7998bf54",path);
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return "counter";
 	}
 	public static void main(String[] args) {

@@ -94,7 +94,7 @@ public class TbProcessLogService extends CrudService<TbProcessLogDao, TbProcessL
 				// 金融机构可见
 	 * */
 	@Transactional(readOnly=false)
-	public void saveLog(Integer  state,Integer type,String productId,String loanId,String operationRemark,Integer loanCompVisible,Integer coreCompVisible,Integer bankCompVisible) {
+	public void saveLog(Integer  state,Integer type,String compId,String productId,String loanId,String operationRemark,Integer loanCompVisible,Integer coreCompVisible,Integer bankCompVisible,String operationLog) {
 		TbProcessLog tbProcessLog=new TbProcessLog ();
 		tbProcessLog.setLogState(state);
 		tbProcessLog.setType(type);
@@ -102,7 +102,12 @@ public class TbProcessLogService extends CrudService<TbProcessLogDao, TbProcessL
 		tbProcessLog.setLoanId(loanId);
 		tbProcessLog.setUserId(UserUtils.getUser().getId());
 		tbProcessLog.setOperationTime(new Date());
+		tbProcessLog.setCompId(compId);
 		tbProcessLog.setOperationRemark(operationRemark);
+		tbProcessLog.setOperationLog(operationLog);
+		if((operationRemark!=null&&operationRemark.length()==0)||"".equals(operationRemark)){
+			tbProcessLog.setOperationRemark(null);
+		}
 		tbProcessLog.setCoreCompVisible(coreCompVisible);
 		tbProcessLog.setLoanCompVisible(loanCompVisible);
 		tbProcessLog.setBankCompVisible(bankCompVisible);

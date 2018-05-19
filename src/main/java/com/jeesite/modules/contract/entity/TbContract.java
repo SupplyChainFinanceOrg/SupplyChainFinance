@@ -19,10 +19,10 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="id", attrName="id", label="id", isPK=true),
 		@Column(name="name", attrName="name", label="合同名称", queryType=QueryType.LIKE),
 		@Column(name="product_id", attrName="productId", label="产品id"),
-		@Column(name="sign_state", attrName="signState", label="签署状态id"),
 		@Column(name="temp_content", attrName="tempContent", label="合同模板路径"),
 		@Column(name="short_name", attrName="shortName", label="简称"),
-		@Column(name="type", attrName="type", label="类型"),
+		@Column(name="sign_type", attrName="signType", label="类型"),
+		
 	}, orderBy="a.id ASC"
 )
 public class TbContract extends DataEntity<TbContract> {
@@ -30,17 +30,16 @@ public class TbContract extends DataEntity<TbContract> {
 	private static final long serialVersionUID = 1L;
 	private String name;			// 合同名称
 	private String productId;		// 产品id
-	private String signState;		// 签署状态id
 	private String tempContent;		// 合同模板路径
 	private String shortName;		// 简称
-	private int type;		// 简称
-	
-	public int getType() {
-		return type;
+	private Integer signType;		// 简称
+
+	public Integer getSignType() {
+		return signType;
 	}
 
-	public void setType(int type) {
-		this.type = type;
+	public void setSignType(Integer signType) {
+		this.signType = signType;
 	}
 
 	public String getShortName() {
@@ -67,15 +66,6 @@ public class TbContract extends DataEntity<TbContract> {
 	public void setProductId(String productId) {
 		this.productId = productId;
 	}
-	
-	public String getSignState() {
-		return signState;
-	}
-
-	public void setSignState(String signState) {
-		this.signState = signState;
-	}
-	
 	@Length(min=0, max=200, message="合同模板路径长度不能超过 200 个字符")
 	public String getName() {
 		return name;

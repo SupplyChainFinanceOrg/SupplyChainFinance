@@ -31,9 +31,10 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="loan_comp_visible", attrName="loanCompVisible", label="借款企业可见"),
 		@Column(name="core_comp_visible", attrName="coreCompVisible", label="核心企业可见"),
 		@Column(name="bank_comp_visible", attrName="bankCompVisible", label="金融机构可见"),
+		@Column(name="comp_id", attrName="compId", label="企业id"),
 		@Column(name="logState", attrName="logState", label="状态"),
 
-	}, orderBy="a.operation_time asc"
+	}, orderBy="a.operation_time desc"
 )
 public class TbProcessLog extends DataEntity<TbProcessLog> {
 	
@@ -51,7 +52,16 @@ public class TbProcessLog extends DataEntity<TbProcessLog> {
 	private Integer coreCompVisible;		// 核心企业可见
 	private Integer bankCompVisible;		// 金融机构可见
 	private Integer logState;		// 日志的状态
+	private String compId;
 	
+	public String getCompId() {
+		return compId;
+	}
+
+	public void setCompId(String compId) {
+		this.compId = compId;
+	}
+
 	public Integer getLogState() {
 		return logState;
 	}

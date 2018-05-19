@@ -35,6 +35,56 @@
 						</div>
 					</div>
 				</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required">*</span> 统一社会信用代码：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="compCode" maxlength="50" class="form-control required"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> 工商注册号：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="regCode" maxlength="100" class="form-control"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required">*</span> 组织结构代码：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="orgCode" maxlength="50" class="form-control "/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> 税务登记号：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="taxCode" maxlength="100" class="form-control "/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required">*</span>法人身份证号：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="cardNo" maxlength="50" class="form-control idcard required"/>
+							</div>
+						</div>
+					</div>
+				</div>
 				<div class="row">
 					<div class="col-xs-6">
 						<div class="form-group">
@@ -293,7 +343,40 @@
 					</div>
 				</div>
 				
+				<%if(tbComp.applyState==0&&tbComp.applyState==4){%>
 				
+				
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group">
+							<label class="control-label col-sm-2">
+							<span class="required hide"></span>审核备注：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-10">
+							<div class="form-group">
+							<div class="col-sm-10">
+								<textarea id="operationRemark" name="operationRemark" class="form-control" style="height:100px"  rows="" cols=""></textarea>
+							</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<%}%>
+				<%if(tbComp.applyState==2){%>							
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group">
+							<label class="control-label col-sm-2">
+							<span class="required hide"></span>审核情况：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-10">
+							<div class="form-group">
+							<div class="col-sm-10">
+							${tbpl.operationRemark}
+							</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<%}%>
 			</div>
 			<div class="box-footer" align="center">
 				<div class="row" style="margin: 0 100px 0 0; ">

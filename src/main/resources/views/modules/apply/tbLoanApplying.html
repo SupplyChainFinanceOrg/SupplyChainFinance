@@ -1,0 +1,120 @@
+<% layout('/layouts/default.html', {title: '流程日志管理', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> ${text('审核情况')}
+			</div>
+			<div class="box-tools pull-right hide">
+				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
+				<% if(hasPermi('state:tbProcessLog:edit')){ %>
+					<a href="${ctx}/state/tbProcessLog/form" class="btn btn-default btnTool" title="${text('新增流程日志')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+				<% } %>
+			</div>
+		</div>
+		<div class="box-body">
+			<#form:form id="searchForm" model="${tbProcessLog}" action="${ctx}/state/tbProcessLog/listData" method="post" class="form-inline hide"
+					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
+				<div class="form-group">
+					<label class="control-label">类型 0注册 1借款：</label>
+					<div class="control-inline">
+						<#form:input path="type" maxlength="1" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">产品id：</label>
+					<div class="control-inline">
+						<#form:input path="productId" maxlength="11" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">借款id：</label>
+					<div class="control-inline">
+						<#form:input path="loanId" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">用户id：</label>
+					<div class="control-inline">
+						<#form:input path="userId" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">操作时间：</label>
+					<div class="control-inline">
+						<#form:input path="operationTime" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">操作内容：</label>
+					<div class="control-inline">
+						<#form:input path="operationLog" maxlength="500" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">操作意见：</label>
+					<div class="control-inline">
+						<#form:input path="operationRemark" maxlength="500" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">借款企业可见：</label>
+					<div class="control-inline">
+						<#form:input path="loanCompVisible" maxlength="1" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">核心企业可见：</label>
+					<div class="control-inline">
+						<#form:input path="coreCompVisible" maxlength="1" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">金融机构可见：</label>
+					<div class="control-inline">
+						<#form:input path="bankCompVisible" maxlength="1" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
+					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
+				</div>
+			</#form:form>
+			<table id="dataGrid"></table>
+			<div id="dataGridPage"></div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+// 初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [
+		/* {header:'类型 0注册 1借款', name:'type', index:'a.type', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+			return '<a href="${ctx}/state/tbProcessLog/form?id='+row.id+'" class="btnList" data-title="${text('编辑流程日志')}">'+(val||row.id)+'</a>';
+		}},
+		{header:'产品id', name:'productId', index:'a.product_id', width:150, align:"left"},
+		{header:'借款id', name:'loanId', index:'a.loan_id', width:150, align:"left"}, */
+		
+		{header:'操作人', name:'userId', index:'a.user_id', width:150, align:"center"},
+		{header:'操作时间', name:'operationTime', index:'a.operation_time', width:150, align:"center"},
+		{header:'操作内容', name:'operationLog', index:'a.operation_log', width:150, align:"center", formatter: function(val, obj, row, act){
+			if(val.indexOf("-")>-1){
+				var vals=val.split("-");
+				return js.getDictLabel(${@DictUtils.getDictListJson('apply_status')}, vals[0], '${text('未知')}', true)+"-"+js.getDictLabel(${@DictUtils.getDictListJson('apply_status')}, vals[1], '${text('未知')}', true)
+			}
+			return js.getDictLabel(${@DictUtils.getDictListJson('apply_status')}, val, '${text('未知')}', true);
+		}},
+		{header:'操作意见', name:'operationRemark', index:'a.operation_remark', width:150, align:"left"},
+		/* {header:'借款企业可见', name:'loanCompVisible', index:'a.loan_comp_visible', width:150, align:"center"},
+		{header:'核心企业可见', name:'coreCompVisible', index:'a.core_comp_visible', width:150, align:"center"},
+		{header:'金融机构可见', name:'bankCompVisible', index:'a.bank_comp_visible', width:150, align:"center"},
+		 */
+	],
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+		
+	}
+});
+</script>

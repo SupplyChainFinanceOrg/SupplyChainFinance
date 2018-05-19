@@ -6,6 +6,7 @@ package com.jeesite.modules.contract.service;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,15 +16,20 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSONArray;
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.lang.StringUtils;
 import com.jeesite.common.service.CrudService;
 import com.jeesite.modules.contract.entity.TbContract;
+import com.jeesite.modules.contract.entity.TbContractApi;
 import com.jeesite.modules.contract.entity.TbContractApiChild;
 import com.jeesite.modules.contract.entity.TbContractField;
 import com.jeesite.modules.contract.entity.TbContractSign;
@@ -38,6 +44,7 @@ import com.jeesite.modules.tb.service.TbCompService;
 import com.jeesite.modules.apply.entity.TbLoanApply;
 import com.jeesite.modules.apply.service.TbLoanApplyService;
 import com.jeesite.modules.contract.dao.TbContractApiChildDao;
+import com.jeesite.modules.contract.dao.TbContractApiDao;
 import com.jeesite.modules.contract.dao.TbContractDao;
 import com.jeesite.modules.contract.dao.TbContractSignDao;
 import com.jeesite.modules.contract.dao.TbSginContractDao;
@@ -61,6 +68,9 @@ public class TbContractService extends CrudService<TbContractDao, TbContract> {
 	private  String fontPath;
 	@Value("${contractApi.savePath}")
 	private String savePath;
+
+	@Value("${contractApi.downloadPath}")
+	String downloadPath;
 	//	@Autowired
 	//	private TbContractFieldService tbContractFieldService;
 	@Autowired
@@ -82,7 +92,11 @@ public class TbContractService extends CrudService<TbContractDao, TbContract> {
 	@Autowired
 	private TbContractApiService tbContractApiService;
 	@Autowired
+	private TbContractApiDao tbContractApiDao;
+	@Autowired
 	private TbContractApiChildDao tbContractApiChildDao;
+	@Autowired
+	private HttpServletResponse response;
 
 
 
@@ -163,13 +177,12 @@ public class TbContractService extends CrudService<TbContractDao, TbContract> {
 				String fileName=realSavePath+c.getShortName()+"_"+System.currentTimeMillis()+".pdf";
 				TbContractSign contractSign=new TbContractSign();//查询实体
 				contractSign.setLoanId(loanId);
-				contractSign.setState(state);
 				contractSign.setContractId(Long.parseLong(c.getId()));
 				TbContractSign contractSign1=tbContractSignDao.getByEntity(contractSign);//判断数据库是否存在
 				contractSign.setContractContent(tmp);
 				contractSign.setUploadPdfpath(fileName);
 				contractSign.setShortName(c.getShortName());
-				contractSign.setType(c.getType());
+				contractSign.setSignType(c.getSignType());
 				if(contractSign1==null){
 					tbContractSignDao.saveSign(contractSign);//插入签约表
 				}else{
@@ -203,7 +216,6 @@ public class TbContractService extends CrudService<TbContractDao, TbContract> {
 			counter=tbCounterDao.getByEntity(counter);
 			System.err.println(counter.getValue());
 			int num=Integer.parseInt(counter.getValue())+1;
-			System.err.println("num:"+num);
 			TbCounter counterNew=new TbCounter();
 			counterNew.setValue(num+"");
 			tbCounterDao.updateByEntity(counterNew,counter);
@@ -219,7 +231,8 @@ public class TbContractService extends CrudService<TbContractDao, TbContract> {
 					sc.setContractFieldId(Long.parseLong(cfield.getId()));
 					sc.setFieldName(cfield.getFieldName());
 					sc.setFieldCode(cfield.getFieldCode());
-					sc.setState(cfield.getState()+"");
+					sc.setRemark(cfield.getRemark());
+					sc.setIsEdite(cfield.getIsEdite());
 					if(cfield.getFieldDefaultValue()!=null&&!"".equals(cfield.getFieldDefaultValue())){
 						sc.setContractValue(cfield.getFieldDefaultValue());
 						String tmp=c.getContractContent();
@@ -255,10 +268,8 @@ public class TbContractService extends CrudService<TbContractDao, TbContract> {
 	public Map<String,Object> getSettingData(String state,String loanId) {
 		Map<String,Object> map=new HashMap<String,Object>();
 		TbContractSign cs=new TbContractSign();
-		cs.setState(state);
 		cs.setLoanId(loanId);
 		TbSginContract sc=new TbSginContract();
-		sc.setState(state);
 		sc.setLoanId(loanId);
 		List<TbContractSign> csList=tbContractSignDao.findList(cs);
 		List<TbSginContract> scList=tbSginContractService.findList(sc);
@@ -358,8 +369,42 @@ public class TbContractService extends CrudService<TbContractDao, TbContract> {
 		map.put("jd_bl_zmfcz_", "");
 		map.put("jd_bl_zmflxr_", loanApply.getCompLegalPerson()!=null?loanApply.getCompLegalPerson():"");
 		map.put("jd_bl_zmfyx_", loanApply.getCompEmail()!=null?loanApply.getCompEmail():"");
+		
 
+		map.put("jd_zr_htbh_", contractNum);
+		map.put("jd_zr_crr_", loanApply.getCompName()!=null?loanApply.getCompName():"");
+		map.put("jd_zr_blhtmcjbh_", contractNum);
+		map.put("jd_zr_sfzjhm_", loanApply.getCardNo()!=null?loanApply.getCardNo():"");
+		map.put("jd_zr_qsrq_", loanDateStart);
+		map.put("jd_zr_crfr_", loanApply.getCompLegalPerson()!=null?loanApply.getCompLegalPerson():"");
 
+		map.put("jd_db_htbh_", contractNum);
+		map.put("jd_db_zwr_", loanApply.getCompName()!=null?loanApply.getCompName():"");
+		map.put("jd_db_blhtmcjbh_", contractNum);
+		map.put("jd_db_cnrzz_", loanApply.getActualLivingAddress()!=null?loanApply.getActualLivingAddress():"");
+		map.put("jd_db_cnrsdh_", loanApply.getLegalPersonPhone()!=null?loanApply.getLegalPersonPhone():"");
+		map.put("jd_db_blhtqsrq_", loanDateStart);
+		map.put("jd_db_cnrq_", loanDateStart);
+		map.put("jd_db_cnr_", loanApply.getCompLegalPerson()!=null?loanApply.getCompLegalPerson():"");
+		map.put("jd_db_cnrsfz_", loanApply.getCardNo()!=null?loanApply.getCardNo():"");
+		
+		map.put("jd_qd_htbh_", contractNum);
+		map.put("jd_qd_crq_", loanApply.getCompName()!=null?loanApply.getCompName():"");
+		map.put("jd_qd_blhtmcjbh_", contractNum);
+		map.put("jd_qd_mfmc1_", coreComp.getCompName()!=null?coreComp.getCompName():"");
+		map.put("jd_qd_gxht1_", loanApply.getContarctCode()!=null?loanApply.getContarctCode():"");
+		map.put("jd_qd_htje1_", loanApply.getContactAmount()!=null?loanApply.getContactAmount():"");
+		map.put("jd_qd_fr_", loanApply.getCompLegalPerson()!=null?loanApply.getCompLegalPerson():"");
+		map.put("jd_qd_qsrq_", loanDateStart);
+		
+		map.put("jd_qq_htmcjbh_", contractNum);
+		map.put("jd_qq_hxqymc_", coreComp.getCompName()!=null?coreComp.getCompName():"");
+		map.put("jd_qq_jkqymc_", loanApply.getCompName()!=null?loanApply.getCompName():"");
+//		map.put("jd_qq_khh_", loanApply.getContarctCode()!=null?loanApply.getContarctCode():"");
+//		map.put("jd_qq_hm_", loanApply.getContactAmount()!=null?loanApply.getContactAmount():"");
+//		map.put("jd_qq_zh_", loanApply.getCompLegalPerson()!=null?loanApply.getCompLegalPerson():"");
+		map.put("jd_qq_qsrq_", loanDateStart);
+		map.put("jd_qq_blhtqsrq_", loanDateStart);
 		return map; 
 
 	}
@@ -371,45 +416,50 @@ public class TbContractService extends CrudService<TbContractDao, TbContract> {
 	 * @throws Exception
 	 */
 	@Transactional(readOnly=false)
-	public synchronized boolean signCountarct(String state,String loanId,String compId){
+	public boolean signCountarct(String loanId){
 		boolean flag=false;
 		try {
 			TbContractSign cs=new TbContractSign();
 			cs.setLoanId(loanId);
-			cs.setState(state);
-			TbComp comp=tbCompService.get(compId);
-			List<TbContractSign> list=tbContractSignDao.findList(cs);//获取待签约合同列表
-			for(TbContractSign tbCs:list){
-				String tmp=tbCs.getContractContent();
-				TbSginContract sc=new TbSginContract();
-				sc.setContractId(Long.parseLong(tbCs.getId()));
-				List<TbSginContract> scList=tbSginContractService.findList(sc);//获取签约字段
-				for(TbSginContract scObj:scList){
-					if(StringUtils.isNoneBlank(scObj.getFieldCode())&&StringUtils.isBlank(scObj.getContractValue())){
-						tmp=tmp.replaceAll(scObj.getFieldCode(), "");//替换签约代码为 ""
-					}
-				}
-				File file=new File(tbCs.getUploadPdfpath().substring(0, tbCs.getUploadPdfpath().lastIndexOf("/")+1));
-				if(!file.exists()){//创建签约路径
-					file.mkdirs();
-				}
-				if(Html2PdfUtils.htmlToPdfString(tmp,tbCs.getUploadPdfpath(),fontPath)){//生成签约PDF模板
-					if(tbContractApiService.regSSQ(compId)){//返回注册信息
-						String apiContarctId="";
-						TbContractApiChild contractApiChild=new TbContractApiChild();
-						contractApiChild.setContractId(tbCs.getId());
-						contractApiChild=tbContractApiChildDao.getByEntity(contractApiChild);
-						if(contractApiChild==null){
-							apiContarctId=tbContractApiService.uploadPDF(tbCs.getUploadPdfpath(), compId,tbCs.getId());
-						}else{
-							apiContarctId=contractApiChild.getApiContractId();
-						}
-						if(StringUtils.isNoneBlank(apiContarctId)){
-							tbContractApiService.addSigners(apiContarctId, comp.getLegalPersonPhone(), compId, tbCs.getType());
-
+			cs.setIsSign(0);
+			String compId="";
+			if(tbContractApiService.regSSQ(compId)){//注册企业 并且申请证书  创建印章
+				List<TbContractSign> list=tbContractSignDao.findList(cs);//获取待签约合同列表
+				System.out.println("list.size()"+list.size());
+				for(TbContractSign tbCs:list){
+					String tmp=tbCs.getContractContent();
+					TbSginContract sc=new TbSginContract();
+					sc.setContractId(Long.parseLong(tbCs.getId()));
+					List<TbSginContract> scList=tbSginContractService.findList(sc);//获取签约字段
+					for(TbSginContract scObj:scList){
+						if(StringUtils.isNoneBlank(scObj.getFieldCode())&&StringUtils.isBlank(scObj.getContractValue())){
+							tmp=tmp.replaceAll(scObj.getFieldCode(), "");//替换签约代码为 ""
 						}
 					}
-				} 
+					File file=new File(tbCs.getUploadPdfpath().substring(0, tbCs.getUploadPdfpath().lastIndexOf("/")+1));
+					if(!file.exists()){//创建签约路径
+						file.mkdirs();
+					}
+					flag=Html2PdfUtils.htmlToPdfString(tmp,tbCs.getUploadPdfpath(),fontPath);
+					if(flag){//生成签约PDF模板
+//						tbCs.setContractContent(tmp);
+//						tbContractSignDao.update(tbCs);
+//						String apiContarctId="";
+//						TbContractApiChild contractApiChild=new TbContractApiChild();
+//						contractApiChild.setContractId(tbCs.getId());
+//						contractApiChild=tbContractApiChildDao.getByEntity(contractApiChild);
+//						if(contractApiChild==null){
+//							apiContarctId=tbContractApiService.uploadPDF(tbCs.getUploadPdfpath(), compId,tbCs.getId());
+//						}else{
+//							apiContarctId=contractApiChild.getApiContractId();
+//						}
+//						System.err.println(apiContarctId);
+//						if(StringUtils.isNoneBlank(apiContarctId)){
+//							flag=tbContractApiService.addSigners(apiContarctId, tbCs, compId);
+//
+//						}
+					}
+				}
 			}
 
 		} catch (Exception e) {
@@ -418,6 +468,88 @@ public class TbContractService extends CrudService<TbContractDao, TbContract> {
 		return flag;
 
 	}
+	/**
+	 * 乙方签约
+	 * @param loanId
+	 * @return
+	 * @throws Exception
+	 */
+	@Transactional(readOnly=false)
+	public boolean signCountarctOthers(String loanId){
+		boolean flag=false;
+		// 签署类型 0甲乙双方盖章 1甲方盖章  2甲方签字3甲乙丙三方盖章
+		String compAccount="";
+		String singleAccount="";
+		try {
+			TbContractSign cs=new TbContractSign();
+			cs.setLoanId(loanId);
+			cs.setIsSign(0);
+			TbContractApi api=new TbContractApi();
+			String compId="";
+			api.setCompId(compId);
+			List<TbContractApi> apiList=tbContractApiDao.findList(api);
+			if(apiList!=null&&apiList.size()>0){
+				for(TbContractApi apiItem:apiList){
+					if(apiItem.getSsqType()==1){
+						singleAccount=apiItem.getSsqId();
+					}
+					if(apiItem.getSsqType()==2){
+						compAccount=apiItem.getSsqId();
+
+					}
+				}
+			}
+			List<TbContractSign> list=tbContractSignDao.findList(cs);//获取待签约合同列表
+			if(list!=null&&list.size()>0){
+				for(TbContractSign tbCs:list){
+					TbContractApiChild apiChild=new TbContractApiChild();
+					apiChild.setContractId(tbCs.getId());
+					apiChild=tbContractApiChildDao.getByEntity(apiChild);
+					//tbContractApiService.getSignerStatus(compId,apiChild.getApiContractId());
+					System.err.println(apiChild.getApiContractId());
+					if(tbCs.getSignType()==0||tbCs.getSignType()==1){
+						System.err.println(compAccount);
+						flag=tbContractApiService.signApiContract(compId,apiChild.getApiContractId(),compAccount,tbCs);
+					}
+					if(tbCs.getSignType()==2||tbCs.getSignType()==4){
+						System.err.println(singleAccount);
+						flag=tbContractApiService.signApiContract(compId,apiChild.getApiContractId(),singleAccount,tbCs);
+					}
+					
+					if(flag&&tbContractApiService.overContract(compId, apiChild.getApiContractId())
+					&&tbContractApiService.getDownloadURLs(compId, apiChild.getApiContractId())) {
+						apiChild=tbContractApiChildDao.getByEntity(apiChild);
+						if(StringUtils.isNoneBlank(apiChild.getApiContractAttUrl())&&
+								StringUtils.isNoneBlank(apiChild.getApiContractUrl())) {
+							apiChild=tbContractApiChildDao.getByEntity(apiChild);
+							SimpleDateFormat sdf=new SimpleDateFormat("YYYYMMdd");
+							Date date=new Date();
+							String path=downloadPath+"/"+ sdf.format(date)+"/"+loanId+"/";
+							File file=new File(path);
+							if(!file.exists()){//创建签约路径
+								file.mkdirs();
+							}
+							String path1=path+"/"+tbCs.getShortName()+"_"+System.currentTimeMillis()+"con.pdf";
+							ContarctUtils.downloadNet(response,apiChild.getApiContractUrl(),path1);
+							tbCs.setDownPdfpath(path1);
+							path1=path+"/"+tbCs.getShortName()+"_"+System.currentTimeMillis()+"att.pdf";
+							ContarctUtils.downloadNet(response,apiChild.getApiContractAttUrl(),path1);
+							tbCs.setDownAttpath(path1);
+							tbCs.setIsSign(1);
+							tbContractSignDao.update(tbCs);
+
+						}
+						flag= true;
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return flag;
+
+	}
+
 
 
 	class CreatePDFThead implements Callable<Boolean>{

@@ -20,7 +20,8 @@
   		contract_id,
   		field_name,
   		field_code,
-  		state
+  		remark,
+  		is_edite
 	) 
 	VALUES
   	(
@@ -30,7 +31,8 @@
     	#{contractId},
     	#{fieldName},
     	#{fieldCode},
-    	#{state}
+    	#{remark},
+    	#{isEdite}
   	) ;
 	</insert>
 </mapper>

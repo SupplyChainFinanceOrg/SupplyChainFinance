@@ -18,9 +18,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jeesite.common.config.Global;
 import com.jeesite.common.entity.Page;
+import com.jeesite.common.mybatis.mapper.query.QueryType;
 import com.jeesite.common.web.BaseController;
+import com.jeesite.modules.state.entity.TbProcess;
 import com.jeesite.modules.state.entity.TbProcessLog;
 import com.jeesite.modules.state.service.TbProcessLogService;
+import com.jeesite.modules.sys.utils.UserUtils;
 
 /**
  * tb_process_logController
@@ -45,7 +48,6 @@ public class TbProcessLogController extends BaseController {
 	/**
 	 * 查询列表
 	 */
-	@RequiresPermissions("state:tbProcessLog:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(TbProcessLog tbProcessLog, Model model) {
 		model.addAttribute("tbProcessLog", tbProcessLog);
@@ -55,11 +57,18 @@ public class TbProcessLogController extends BaseController {
 	/**
 	 * 查询列表数据
 	 */
-	@RequiresPermissions("state:tbProcessLog:view")
 	@RequestMapping(value = "listData")
 	@ResponseBody
 	public Page<TbProcessLog> listData(TbProcessLog tbProcessLog, HttpServletRequest request, HttpServletResponse response) {
-		Page<TbProcessLog> page = tbProcessLogService.findPage(new Page<TbProcessLog>(request, response), tbProcessLog); 
+		Page<TbProcessLog> page = new Page<TbProcessLog>(request, response);
+		//tbProcessLog.getSqlMap().getWhere().and("operation_remark", QueryType.IS_NOT_NULL,"");
+		//tbProcessLog.getSqlMap().getWhere().and("operation_remark", QueryType.NE," ");
+		page = tbProcessLogService.findPage(page, tbProcessLog); 
+		if(page!=null&&page.getList()!=null){
+			for(TbProcessLog tb:page.getList()){
+				tb.setUserId(UserUtils.get(tb.getUserId()).getUserName());
+			}
+		}
 		return page;
 	}
 

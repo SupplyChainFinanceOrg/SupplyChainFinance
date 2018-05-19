@@ -222,7 +222,7 @@ public class BestSignDemo {
      * @return
      * @throws Exception
      */
-    public JSONObject applyCert(final String account) throws Exception {
+    public JSONObject applyCert(final String account,final String certType) throws Exception {
         final String path = "/user/applyCert";
 
         @SuppressWarnings("serial")
@@ -230,6 +230,7 @@ public class BestSignDemo {
             {
                 //用户
                 put("account", account);
+                put("certType", certType);
             }
         };
 

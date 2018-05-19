@@ -460,10 +460,14 @@ contractApi :
     fontPath : d:/simsun.ttc
     #合同PDF存储路径
     savePath : d:/contract/uploadpdf
+    #合同PDF下载路径
+    downloadPath : d:/contract/download
     #合同编号
     code : 玖鼎(_)保理第_号
     #默认合同过期时间
     expireTime : 7
+    #默认证书类型
+    certType : ZJCA
     #大雁金服公司账号
     account : ssqsandbox_net@dayanjinfu.com
     #开发者id

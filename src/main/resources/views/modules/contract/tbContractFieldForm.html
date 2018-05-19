@@ -17,16 +17,23 @@
 				if(contractid==scid){ %> 
 				<div class="row">
 				<div class="row">
-					<div class="col-xs-12">
+					<div class="col-xs-10">
 						<div class="form-group">
 							<label class="control-label col-sm-2" title="">
 								<span class="required hide">*</span> ${sc.fieldName}:<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-5">
-								<#form:input name="values" value="${sc.contractValue}" maxlength="100" class="form-control digits"/>
+							<div class="col-sm-6">
+							<% if(sc.isEdite==0){ %>
+								<#form:input name="values" value="${sc.contractValue}" maxlength="100" class="form-control digits"  readonly="true"  /> <% }else{ %>
+								 <#form:input name="values" value="${sc.contractValue}" maxlength="100" class="form-control digits"  /><% } %> 
 								<#form:hidden name="ids" value="${sc.id}" />
-							</div>
+							</div> <span style="color: red;"> <% if(isNotEmpty(sc.remark)){ %>${sc.remark} <% } %> </span>
+							
+							
 						</div>
 					</div>
+					
+					
+					
 				</div>
 				
 			</div>

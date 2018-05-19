@@ -59,7 +59,9 @@ public class TbProcessController extends BaseController {
 	@RequestMapping(value = "listData")
 	@ResponseBody
 	public Page<TbProcess> listData(TbProcess tbProcess, HttpServletRequest request, HttpServletResponse response) {
-		Page<TbProcess> page = tbProcessService.findPage(new Page<TbProcess>(request, response), tbProcess); 
+		Page<TbProcess> page = new Page<TbProcess>(request, response);
+		page = tbProcessService.findPage(page, tbProcess); 
+		
 		return page;
 	}
 
