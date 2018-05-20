@@ -106,9 +106,7 @@ ALTER TABLE `tb_comp`
 ADD COLUMN `regCode`  varchar(30) NULL COMMENT '工商注册号' AFTER `capital_verification_report`,
 ADD COLUMN `orgCode`  varchar(30) NULL COMMENT '组织结构代码' AFTER `regCode`,
 ADD COLUMN `taxCode`  varchar(30) NULL COMMENT '税务登记号' AFTER `orgCode`;
-ALTER TABLE `tb_comp`
 ADD COLUMN `cardNo`  varchar(30) NULL COMMENT '法人号' AFTER `taxCode`;
-
 ---------------------------------------------
 ------------------------------------------------
 ALTER TABLE `tb_loan_apply`
@@ -138,11 +136,11 @@ CHANGE COLUMN `orgCode` `org_code`  varchar(30) CHARACTER SET utf8 COLLATE utf8_
 CHANGE COLUMN `taxCode` `tax_code`  varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '税务登记号' AFTER `org_code`,
 CHANGE COLUMN `cardNo` `card_no`  varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '法人身份证号' AFTER `tax_code`;
 ------------------------------------------------
+ALTER TABLE `jeesite`.`tb_contract_api` ADD COLUMN `file_id` VARCHAR(200) NULL COMMENT '文件id' AFTER `has_seal`; 
 --------------------------------------------------------
 
 ALTER TABLE `tb_process_log`
 ADD COLUMN `comp_id`  varchar(64) NULL COMMENT '企业id' AFTER `logState`
------------------------------------------------------------------------------
 ---------------------------------------------------------------------
 ALTER TABLE `tb_process_log`
 ADD COLUMN `user_name`  varchar(200) NULL COMMENT '操作人' AFTER `comp_id`,

@@ -21,7 +21,8 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="field_name", attrName="fieldName", label="字段名称", queryType=QueryType.LIKE),
 		@Column(name="field_code", attrName="fieldCode", label="字段编码"),
 		@Column(name="field_default_value", attrName="fieldDefaultValue", label="字段默认值"),
-		@Column(name="state", attrName="state", label="借款状态"),
+		@Column(name="is_edite", attrName="isEdite", label="是否可以编辑"),
+		@Column(name="remark", attrName="remark", label="说明"),
 	}, orderBy="a.id ASC"
 )
 public class TbContractField extends DataEntity<TbContractField> {
@@ -31,14 +32,23 @@ public class TbContractField extends DataEntity<TbContractField> {
 	private String fieldName;		// 字段名称.
 	private String fieldCode;       //字段代码
 	private String fieldDefaultValue;//字段默认值
-	private Integer state;//字段默认值
+	private Integer isEdite;//签署状态
+	private String remark;//说明
 	
-	public Integer getState() {
-		return state;
+	public Integer getIsEdite() {
+		return isEdite;
 	}
 
-	public void setState(Integer state) {
-		this.state = state;
+	public void setIsEdite(Integer isEdite) {
+		this.isEdite = isEdite;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 
 	public TbContractField() {

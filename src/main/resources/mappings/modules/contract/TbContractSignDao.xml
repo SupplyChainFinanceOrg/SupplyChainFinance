@@ -14,21 +14,21 @@
 	<insert id ="saveSign" parameterType="TbContractSign" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
 		INSERT INTO jeesite.tb_contract_sign (
   		loan_id,
-  		contract_id,
+  		contract_temp_id,
   		contract_content,
   		upload_pdfpath,
   		operation_time,
-  		state,
-  		short_name
+  		short_name,
+  		sign_type
   		) 
 		VALUES
   		(#{loanId},
-    	#{contractId},
+    	#{contractTempId},
     	#{contractContent},
     	#{uploadPdfpath},
     	now(),
-    	#{state},
-    	#{shortName});
+    	#{shortName},
+    	#{signType});
 		
 	</insert>
 </mapper>

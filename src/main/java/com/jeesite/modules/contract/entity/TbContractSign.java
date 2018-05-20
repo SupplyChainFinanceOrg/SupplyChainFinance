@@ -19,25 +19,63 @@ import com.jeesite.common.mybatis.annotation.Table;
 @Table(name="tb_contract_sign", alias="a", columns={
 		@Column(name="id", attrName="id", label="id", isPK=true),
 		@Column(name="loan_id", attrName="loanId", label="借款id"),
-		@Column(name="contract_id", attrName="contractId", label="合同id"),
+		@Column(name="contract_temp_id", attrName="contractTempId", label="合同id"),
 		@Column(name="contract_content", attrName="contractContent", label="合同内容"),
 		@Column(name="upload_pdfpath", attrName="uploadPdfpath", label="合同模板pdf路径"),
 		@Column(name="operation_time", attrName="operationTime", label="操作时间"),
-		@Column(name="state", attrName="state", label="操作时间"),
 		@Column(name="short_name", attrName="shortName", label="简称"),
-	}, orderBy="a.id asc"
-)
+		@Column(name="sign_type", attrName="signType", label="类型"),
+		@Column(name="is_sign", attrName="isSign", label="是否已签"),
+		@Column(name="down_pdfpath", attrName="downPdfpath", label="下载路径"),
+		@Column(name="down_attpath", attrName="downAttpath", label="downAttpath"),
+}, orderBy="a.id asc"
+		)
 public class TbContractSign extends DataEntity<TbContractSign> {
-	
+
 	private static final long serialVersionUID = 1L;
 	private String loanId;		// 借款id
-	private Long contractId;		// 合同id
+	private Long contractTempId;		// 合同id
 	private String contractContent;		// 合同内容
 	private String uploadPdfpath;// 合同模板pdf路径
 	private Date operationTime;// 操作时间
-	private String state;// 操作时间
 	private String shortName;
+	private Integer signType;		// 签署类型 0甲乙双方盖章 1甲方盖章  2甲方签字3甲乙丙三方盖章
+	private Integer isSign;
+	private String downPdfpath;
+	private String downAttpath;
 	
+	public String getDownAttpath() {
+		return downAttpath;
+	}
+
+	public void setDownAttpath(String downAttpath) {
+		this.downAttpath = downAttpath;
+	}
+
+	public String getDownPdfpath() {
+		return downPdfpath;
+	}
+
+	public void setDownPdfpath(String downPdfpath) {
+		this.downPdfpath = downPdfpath;
+	}
+
+	public Integer getIsSign() {
+		return isSign;
+	}
+
+	public void setIsSign(Integer isSign) {
+		this.isSign = isSign;
+	}
+
+	public Integer getSignType() {
+		return signType;
+	}
+
+	public void setSignType(Integer signType) {
+		this.signType = signType;
+	}
+
 	public String getShortName() {
 		return shortName;
 	}
@@ -48,14 +86,6 @@ public class TbContractSign extends DataEntity<TbContractSign> {
 
 	public TbContractSign() {
 		this(null);
-	}
-
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
 	}
 
 	public String getUploadPdfpath() {
@@ -77,7 +107,7 @@ public class TbContractSign extends DataEntity<TbContractSign> {
 	public TbContractSign(String id){
 		super(id);
 	}
-	
+
 	@Length(min=0, max=64, message="借款id长度不能超过 64 个字符")
 	public String getLoanId() {
 		return loanId;
@@ -86,15 +116,15 @@ public class TbContractSign extends DataEntity<TbContractSign> {
 	public void setLoanId(String loanId) {
 		this.loanId = loanId;
 	}
-	
-	public Long getContractId() {
-		return contractId;
+
+	public Long getContractTempId() {
+		return contractTempId;
 	}
 
-	public void setContractId(Long contractId) {
-		this.contractId = contractId;
+	public void setContractTempId(Long contractTempId) {
+		this.contractTempId = contractTempId;
 	}
-	
+
 	public String getContractContent() {
 		return contractContent;
 	}
@@ -102,5 +132,5 @@ public class TbContractSign extends DataEntity<TbContractSign> {
 	public void setContractContent(String contractContent) {
 		this.contractContent = contractContent;
 	}
-	
+
 }

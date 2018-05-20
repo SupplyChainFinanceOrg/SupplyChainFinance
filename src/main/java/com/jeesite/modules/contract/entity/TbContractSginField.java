@@ -16,7 +16,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
  * @author zhengkj
  * @version 2018-05-08
  */
-@Table(name="tb_sgin_contract", alias="a", columns={
+@Table(name="tb_contract_sgin_field", alias="a", columns={
 		@Column(name="id", attrName="id", label="id", isPK=true),
 		@Column(name="loan_id", attrName="loanId", label="借款id"),
 		@Column(name="contract_field_id", attrName="contractFieldId", label="合同字段id"),
@@ -24,11 +24,12 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="contract_id", attrName="contractId", label="合同id"),
 		@Column(name="field_name", attrName="fieldName", label="字段名称"),
 		@Column(name="field_code", attrName="fieldCode", label="字段代码"),
-		@Column(name="state", attrName="state", label="借款状态"),
+		@Column(name="remark", attrName="remark", label="说明"),
+		@Column(name="is_edite", attrName="isEdite", label="是否可以编辑"),
 	}, 
 orderBy="a.id asc"
 )
-public class TbSginContract extends DataEntity<TbSginContract> {
+public class TbContractSginField extends DataEntity<TbContractSginField> {
 	
 	private static final long serialVersionUID = 1L;
 	private String loanId;		// 借款id
@@ -37,25 +38,33 @@ public class TbSginContract extends DataEntity<TbSginContract> {
 	private Long contractId;		// 合同id
 	private String fieldName;
 	private String fieldCode;		// 签署字段的值
-	private String state;	
+	private Integer isEdite;//签署状态
+	private String remark;//说明
 	
+	public Integer getIsEdite() {
+		return isEdite;
+	}
+
+	public void setIsEdite(Integer isEdite) {
+		this.isEdite = isEdite;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
 	public String getFieldCode() {
 		return fieldCode;
 	}
-
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
-	}
-
 	public void setFieldCode(String fieldCode) {
 		this.fieldCode = fieldCode;
 	}
 
-	public TbSginContract() {
+	public TbContractSginField() {
 		this(null);
 	}
 
@@ -67,7 +76,7 @@ public class TbSginContract extends DataEntity<TbSginContract> {
 		this.fieldName = fieldName;
 	}
 
-	public TbSginContract(String id){
+	public TbContractSginField(String id){
 		super(id);
 	}
 	
@@ -96,7 +105,7 @@ public class TbSginContract extends DataEntity<TbSginContract> {
 	public void setContractValue(String contractValue) {
 		this.contractValue = contractValue;
 	}
-	
+
 	public Long getContractId() {
 		return contractId;
 	}
@@ -104,5 +113,7 @@ public class TbSginContract extends DataEntity<TbSginContract> {
 	public void setContractId(Long contractId) {
 		this.contractId = contractId;
 	}
+
+	
 	
 }

@@ -5,7 +5,7 @@ package com.jeesite.modules.contract.dao;
 
 import com.jeesite.common.dao.CrudDao;
 import com.jeesite.common.mybatis.annotation.MyBatisDao;
-import com.jeesite.modules.contract.entity.TbSginContract;
+import com.jeesite.modules.contract.entity.TbContractSginField;
 
 /**
  * tb_sgin_contractDAO接口
@@ -13,6 +13,6 @@ import com.jeesite.modules.contract.entity.TbSginContract;
  * @version 2018-05-08
  */
 @MyBatisDao
-public interface TbSginContractDao extends CrudDao<TbSginContract> {
-	public void saveByXml(TbSginContract tbSginContract);
+public interface TbContractSginFieldDao extends CrudDao<TbContractSginField> {
+	public void saveByXml(TbContractSginField tbContractSginField);
 }

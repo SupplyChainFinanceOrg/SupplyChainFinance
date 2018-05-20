@@ -18,10 +18,8 @@ import com.jeesite.common.entity.DataEntity;
 import com.jeesite.common.mybatis.annotation.Column;
 import com.jeesite.common.mybatis.annotation.Table;
 import com.jeesite.common.mybatis.mapper.query.QueryType;
-import com.jeesite.modules.control.entity.TbRiskControl;
 import com.jeesite.modules.distribution.entity.TbMoneyDistribution;
 import com.jeesite.modules.lend.entity.TbLend;
-
 /**
  * tb_loan_applyEntity
  * @author z

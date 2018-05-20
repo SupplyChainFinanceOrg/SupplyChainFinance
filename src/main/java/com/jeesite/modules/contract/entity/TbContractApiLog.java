@@ -17,7 +17,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
  */
 @Table(name="tb_contract_api_log", alias="a", columns={
 		@Column(name="id", attrName="id", label="id", isPK=true),
-		@Column(name="compid", attrName="compid", label="企业id"),
+		@Column(name="loan_id", attrName="loanId", label="借款id"),
 		@Column(name="api_name", attrName="apiName", label="接口名称", queryType=QueryType.LIKE),
 		@Column(name="err_code", attrName="errCode", label="错误代码"),
 		@Column(name="err_msg", attrName="errMsg", label="错误消息"),
@@ -27,7 +27,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 public class TbContractApiLog extends DataEntity<TbContractApiLog> {
 	
 	private static final long serialVersionUID = 1L;
-	private String compid;		// 企业id
+	private String loanId;		// 企业id
 	private String apiName;		// 接口名称
 	private String errCode;		// 错误代码
 	private String errMsg;		// 错误消息
@@ -49,15 +49,14 @@ public class TbContractApiLog extends DataEntity<TbContractApiLog> {
 		super(id);
 	}
 	
-	@Length(min=0, max=64, message="企业id长度不能超过 64 个字符")
-	public String getCompid() {
-		return compid;
+	public String getLoanId() {
+		return loanId;
 	}
 
-	public void setCompid(String compid) {
-		this.compid = compid;
+	public void setLoanId(String loanId) {
+		this.loanId = loanId;
 	}
-	
+
 	@Length(min=0, max=200, message="接口名称长度不能超过 200 个字符")
 	public String getApiName() {
 		return apiName;
