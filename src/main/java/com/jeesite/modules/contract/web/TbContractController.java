@@ -160,6 +160,7 @@ public class TbContractController extends BaseController {
 		String loanId=request.getParameter("loanId");
 		TbContractSign contractSign=new TbContractSign();
 		contractSign.setLoanId(loanId);
+		contractSign.setIsSign(0);
 		TbContractTemp contract=new TbContractTemp();
 		contract.setProductId(tbLoanApplyService.get(loanId).getProductId()+"");
 		List<TbContractTemp> contractList=tbContractService.findList(contract);
