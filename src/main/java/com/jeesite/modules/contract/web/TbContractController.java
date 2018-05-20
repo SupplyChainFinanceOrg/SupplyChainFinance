@@ -164,7 +164,6 @@ public class TbContractController extends BaseController {
 		contract.setProductId(tbLoanApplyService.get(loanId).getProductId()+"");
 		List<TbContractTemp> contractList=tbContractService.findList(contract);
 		List<TbContractSign> contractSignList=tbContractSignDao.findList(contractSign);
-		System.err.println(contractSignList.size());
 		if(contractSignList==null||contractSignList.size()==0){
 			contractSignList=tbContractService.contractSetting(loanId,contractList);
 		}
@@ -184,7 +183,7 @@ public class TbContractController extends BaseController {
 	public String parmSetting(HttpServletResponse response,HttpServletRequest request,Model model){
 		String loanId=request.getParameter("loanId");
 		TbContractTemp contract=new TbContractTemp();
-		contract.setProductId(loanId);
+		contract.setProductId(tbLoanApplyService.get(loanId).getProductId()+"");
 		List<TbContractTemp> contractList=tbContractService.findList(contract);
 		Map<String,Object> map=tbContractService.getSettingData(loanId);
 		model.addAttribute("contractList", contractList);
