@@ -7,6 +7,7 @@
 			</div>
 		</div>
 		<#form:form id="inputForm" model="" action="${ctx}/contract/tbContract/submitSettingParm" method="post" class="form-horizontal">
+			<input type="hidden" name="loanId" value="${ploadId}"> 
 			<div class="box-body">
 			<% for(var contract in csList){ %> 
 				<div class="form-unit">${contract.shortName}</div>
@@ -52,3 +53,22 @@
 	</div>
 </div>
 <% } %>
+<script>
+
+$("#inputForm").validate({
+	submitHandler: function(form){
+		js.ajaxSubmitForm($(form), function(data){
+			js.showMessage(data.message);
+			if(data.result == Global.TRUE){
+				//刷新
+				alert('${ctx}/contract/tbContract/contractMain?loanId='+'${ploadId}')
+				location.href='${ctx}/contract/tbContract/contractMain?loanId='+'${ploadId}';
+				/* js.closeCurrentTabPage(function(contentWindow){
+					contentWindow.page();
+				}); */
+			}
+		}, "json");
+    }
+});
+
+</script>

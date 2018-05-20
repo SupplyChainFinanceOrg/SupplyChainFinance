@@ -119,7 +119,7 @@ $('#dataGrid').dataGrid({
 		{header:'操作时间', name:'operationTime', index:'a.operation_time', width:150, align:"center", formatter: function(val, obj, row, act){
 			return val.substring(0,11);
 		}},
-		{header:'${text('操作')}', name:'actions', width:180, sortable:false, title:false, formatter: function(val, obj, row, act){
+		{header:'${text('操作')}', name:'actions', width:240, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 				actions.push('<a href="${ctx}/apply/tbLoanApply/form?id='+row.id+'" class="btnList" title="${text('查看')}">查看</a>&nbsp;');
 				/* if('${userrolecode}'!='jkqy'){
@@ -129,6 +129,11 @@ $('#dataGrid').dataGrid({
 				if(row.applyState==0){
 					actions.push('<a href="${ctx}/apply/tbLoanApply/delete?id='+row.id+'" class="btnList" title="${text('删除')}" data-confirm="${text('确认要删除该借款申请吗？')}">删除</a>&nbsp;');				
 				}
+				if(18>row.applyState&&row.applyState>9){
+					if('${userrolecode}'!='jrjg'){						
+						actions.push('<a href="${ctx}/contract/tbContract/contractMainDetail?loanId='+row.id+'"  class="btnList" title="查看合同" >合同</a>&nbsp;');	
+					}/* 					actions.push('<a href="${ctx}/contract/tbContract/contractMain?loanId='+row.id+'"  class="btnList" title="下载合同" >下载</a>&nbsp;');				
+ */				}
 				<%for(bstate in bottonlist){
 					var nowstatus=bstate.nowstatus;
 					var operationName=bstate.operationName;
@@ -138,7 +143,15 @@ $('#dataGrid').dataGrid({
 						 if('${bstate.pagename}'.length>0){
 							actions.push('<a href="${ctx}/apply/tbLoanApply/'+'${bstate.pagename}'+'?id='+row.id+'"  class="btnList" title="${bstate.operationName}" ">${bstate.operationName}</a>&nbsp;');				 
 						 }else{
-							actions.push('<a href="${ctx}/apply/tbLoanApply/form?looktype=1&id='+row.id+'"  class="btnList" title="${bstate.operationName}" ">${bstate.operationName}</a>&nbsp;');				
+							 if(row.applyState==9||row.applyState==11){								 
+									actions.push('<a href="${ctx}/contract/tbContract/contractMain?loanId='+row.id+'"  class="btnList" title="${bstate.operationName}" ">${bstate.operationName}</a>&nbsp;');				
+							}else if(row.applyState==10){
+									actions.push('<a href="${ctx}/contract/tbContract/contractMain?loanId='+row.id+'&&waytype=two"  class="btnList" title="${bstate.operationName}" ">${bstate.operationName}</a>&nbsp;');				
+							}else if(row.applyState==13){
+									actions.push('<a href="${ctx}/contract/tbContract/contractMain?loanId='+row.id+'&&waytype=three"  class="btnList" title="${bstate.operationName}" ">${bstate.operationName}</a>&nbsp;');				
+							}else{
+							    actions.push('<a href="${ctx}/apply/tbLoanApply/form?looktype=1&id='+row.id+'"  class="btnList" title="${bstate.operationName}" ">${bstate.operationName}</a>&nbsp;');				 
+							 }
 						 }
 					 } 
 				<%}%> 

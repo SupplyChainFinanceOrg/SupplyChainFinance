@@ -3,6 +3,8 @@
  */
 package com.jeesite.modules.apply.web;
 
+import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,15 +22,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.druid.util.StringUtils;
 import com.jeesite.common.config.Global;
 import com.jeesite.common.entity.Page;
+import com.jeesite.common.lang.StringUtils;
 import com.jeesite.common.mybatis.mapper.query.QueryType;
 import com.jeesite.common.web.BaseController;
 import com.jeesite.modules.apply.entity.TbLoanApply;
 import com.jeesite.modules.apply.service.TbLoanApplyService;
 import com.jeesite.modules.attachment.entity.TbLoanAttachment;
 import com.jeesite.modules.attachment.service.TbLoanAttachmentService;
+import com.jeesite.modules.contract.dao.TbContractSignDao;
+import com.jeesite.modules.contract.entity.TbContractSign;
+import com.jeesite.modules.contract.entity.TbContractTemp;
+import com.jeesite.modules.contract.service.TbContractService;
 import com.jeesite.modules.control.entity.TbRiskControl;
 import com.jeesite.modules.control.service.TbRiskControlService;
 import com.jeesite.modules.distribution.entity.TbMoneyDistribution;
@@ -55,6 +61,7 @@ import com.jeesite.modules.sys.service.TbUserService;
 import com.jeesite.modules.sys.utils.UserUtils;
 import com.jeesite.modules.tb.entity.TbComp;
 import com.jeesite.modules.tb.service.TbCompService;
+import com.jeesite.modules.utils.ZipfileUtile;
 
 /**
  * tb_loan_applyController
@@ -64,7 +71,8 @@ import com.jeesite.modules.tb.service.TbCompService;
 @Controller
 @RequestMapping(value = "${adminPath}/apply/tbLoanApply")
 public class TbLoanApplyController extends BaseController {
-
+	@Autowired
+	private TbContractSignDao tbContractSignDao;
 	@Autowired
 	private TbLoanApplyService tbLoanApplyService;
 	@Autowired
@@ -96,6 +104,8 @@ public class TbLoanApplyController extends BaseController {
 	private TbMoneyDistributionService tbMoneyDistributionService;
 	@Autowired
 	private TbLendService tbLendService;
+	@Autowired
+	private TbContractService tbContractService;
 	/**
 	 * 获取数据
 	 */
@@ -864,6 +874,82 @@ public class TbLoanApplyController extends BaseController {
 		return renderResult(Global.TRUE, "操作成功！");
 	}
 	/**
+	 * 平台签
+	 */
+	@RequiresPermissions("apply:tbLoanApply:edit")
+	@PostMapping(value = "saveOneSign")
+	@ResponseBody
+	public String saveOneSign(TbLoanApply tbLoanApply,HttpServletRequest request) {
+			TbLoanApply	oldtbLoanApply=tbLoanApplyService.get(tbLoanApply.getId());
+			//日志
+			//10为合同平台签成功
+			long nextstatus=Long.parseLong(request.getParameter("nextstatus"));
+			String oldstatus=oldtbLoanApply.getApplyState()+"";
+			oldtbLoanApply.setApplyState(nextstatus);
+			String statusstring= oldstatus+"-"+oldtbLoanApply.getApplyState();
+			///oldtbLoanApply.setCoreCompId(tbLoanApply.getCoreCompId());
+			boolean sign  =tbContractService.signCountarct(tbLoanApply.getId());//注册 获取 上上签 并且生成pdf合同模板 进行签约
+			
+			if(sign){
+				tbLoanApplyService.save(oldtbLoanApply);
+				tbProcessLogService.saveLog(Integer.parseInt(oldtbLoanApply.getApplyState()+""), TbProcessLog.APPLY_TYPE,null, oldtbLoanApply.getProductId()+"", oldtbLoanApply.getId(), request.getParameter("operationRemark"), 1, 1, 1,statusstring,tbLoanApply.getCompName());						
+			}else{
+				return renderResult(Global.FALSE, "异常！");
+			}
+			
+		return renderResult(Global.TRUE, "操作成功！");
+	}
+	/**
+	 * 借款企业签
+	 */
+	@RequiresPermissions("apply:tbLoanApply:edit")
+	@PostMapping(value = "saveTwoSign")
+	@ResponseBody
+	public String saveTwoSign(TbLoanApply tbLoanApply,HttpServletRequest request) {
+			TbLoanApply	oldtbLoanApply=tbLoanApplyService.get(tbLoanApply.getId());
+			//日志
+			long nextstatus=Long.parseLong(request.getParameter("nextstatus"));
+			String oldstatus=oldtbLoanApply.getApplyState()+"";
+			oldtbLoanApply.setApplyState(nextstatus);
+			String statusstring= oldstatus+"-"+oldtbLoanApply.getApplyState();
+			boolean sign=false;
+			if(nextstatus==11){
+				sign=true;
+			}else{				
+				sign=tbContractService.signCountarct(tbLoanApply.getId());//注册 获取 上上签 并且生成pdf合同模板 进行签约
+			}			
+			if(sign){
+				tbLoanApplyService.save(oldtbLoanApply);
+				tbProcessLogService.saveLog(Integer.parseInt(oldtbLoanApply.getApplyState()+""), TbProcessLog.APPLY_TYPE,null, oldtbLoanApply.getProductId()+"", oldtbLoanApply.getId(), request.getParameter("operationRemark"), 1, 1, 1,statusstring,tbLoanApply.getCompName());						
+			}else{
+				return renderResult(Global.FALSE, "异常！");
+			}		
+		
+		return renderResult(Global.TRUE, "操作成功！");
+	}
+	/**
+	 * 核心企业签
+	 */
+	@RequiresPermissions("apply:tbLoanApply:edit")
+	@PostMapping(value = "saveThreeSign")
+	@ResponseBody
+	public String saveThreeSign(TbLoanApply tbLoanApply,HttpServletRequest request) {
+			TbLoanApply	oldtbLoanApply=tbLoanApplyService.get(tbLoanApply.getId());
+			//日志
+			long nextstatus=Long.parseLong(request.getParameter("nextstatus"));
+			String oldstatus=oldtbLoanApply.getApplyState()+"";
+			oldtbLoanApply.setApplyState(nextstatus);
+			String statusstring= oldstatus+"-"+oldtbLoanApply.getApplyState();
+			boolean sign=tbContractService.signCountarctByCoreComp(tbLoanApply.getId());//注册 获取 上上签 并且生成pdf合同模板 进行签约
+			if(sign){
+				tbLoanApplyService.save(oldtbLoanApply);
+				tbProcessLogService.saveLog(Integer.parseInt(oldtbLoanApply.getApplyState()+""), TbProcessLog.APPLY_TYPE,null, oldtbLoanApply.getProductId()+"", oldtbLoanApply.getId(), request.getParameter("operationRemark"), 1, 1, 1,statusstring,tbLoanApply.getCompName());						
+			}else{
+				return renderResult(Global.FALSE, "异常！");
+			}
+		return renderResult(Global.TRUE, "操作成功！");
+	}
+	/**
 	 * 删除借款申请
 	 */
 	@RequiresPermissions("apply:tbLoanApply:edit")
@@ -873,5 +959,30 @@ public class TbLoanApplyController extends BaseController {
 		tbLoanApplyService.delete(tbLoanApply);
 		return renderResult(Global.TRUE, "删除借款申请成功！");
 	}
-	
+	@RequestMapping(value = "download")
+	public void download(TbLoanApply tbLoanApply, Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {	    	
+			if(StringUtils.isNotBlank(tbLoanApply.getId())){
+				//获取合同
+				User user =UserUtils.getUser();
+				Role r=new Role();
+				r.setUserCode(user.getUserCode());
+				List<Role> rolelist=roleService.findListByUserCode(r);
+				TbContractSign contractSign=new TbContractSign();
+				contractSign.setLoanId(tbLoanApply.getId());				
+
+				if(rolelist!=null&&rolelist.size()>0&&rolelist.get(0).getRoleCode().equals(TbComp.HXQYROLECODE)){
+					contractSign.setSignType(3);
+				}
+				List<TbContractSign> contractSignList=tbContractSignDao.findList(contractSign);
+
+				String [] filespath=new String[contractSignList.size()];
+				for(int i=0;i<filespath.length;i++){
+					if(StringUtils.isNotBlank(contractSignList.get(i).getUploadPdfpath())){
+						filespath[i]=contractSignList.get(i).getUploadPdfpath();
+					}
+				}			
+				response=ZipfileUtile.downzips(filespath,tbLoanApply.getCompName()+"合同", request, response);
+			}
+												    
+	}
 }
