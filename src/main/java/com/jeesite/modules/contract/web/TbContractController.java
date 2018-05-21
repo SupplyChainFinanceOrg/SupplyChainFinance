@@ -41,6 +41,11 @@ import com.jeesite.modules.contract.service.TbContractApiService;
 import com.jeesite.modules.contract.service.TbContractService;
 import com.jeesite.modules.contract.utils.ContarctUtils;
 import com.jeesite.modules.counter.dao.TbCounterDao;
+import com.jeesite.modules.sys.entity.Role;
+import com.jeesite.modules.sys.entity.User;
+import com.jeesite.modules.sys.service.RoleService;
+import com.jeesite.modules.sys.utils.UserUtils;
+import com.jeesite.modules.tb.entity.TbComp;
 import com.jeesite.modules.tb.service.TbCompService;
 
 /**
@@ -61,7 +66,8 @@ public class TbContractController extends BaseController {
 	@Autowired
 	private TbLoanApplyService tbLoanApplyService;
 
-
+	@Autowired
+	private RoleService roleService;
 
 
 	/**
@@ -160,9 +166,13 @@ public class TbContractController extends BaseController {
 		String loanId=request.getParameter("loanId");
 		TbContractSign contractSign=new TbContractSign();
 		contractSign.setLoanId(loanId);
-		contractSign.setIsSign(0);
+		
 		TbContractTemp contract=new TbContractTemp();
 		contract.setProductId(tbLoanApplyService.get(loanId).getProductId()+"");
+		if("three".equals(request.getParameter("waytype"))){
+			contractSign.setSignType(3);
+			contract.setId("5");
+		}
 		List<TbContractTemp> contractList=tbContractService.findList(contract);
 		List<TbContractSign> contractSignList=tbContractSignDao.findList(contractSign);
 		if(contractSignList==null||contractSignList.size()==0){
@@ -170,8 +180,43 @@ public class TbContractController extends BaseController {
 		}
 		model.addAttribute("contractSignList", contractSignList);
 		model.addAttribute("contractList", contractList);
+		model.addAttribute("contractSign", contractSign);
+		model.addAttribute("tbLoanApply", tbLoanApplyService.get(loanId));	
+		if(StringUtils.isNoneBlank(request.getParameter("waytype"))){
+			//2为借款企业签署
+			return "modules/contract/contractMain"+request.getParameter("waytype");
+		}
 		return "modules/contract/contractMain";
 	}
+	@RequestMapping(value = {"contractMainDetail"})
+	public String contractMainDetail(HttpServletResponse response,HttpServletRequest request,Model model) {
+		String loanId=request.getParameter("loanId");
+		TbContractSign contractSign=new TbContractSign();
+		contractSign.setLoanId(loanId);
+		TbContractTemp contract=new TbContractTemp();
+		contract.setProductId(tbLoanApplyService.get(loanId).getProductId()+"");
+		User user =UserUtils.getUser();
+		Role r=new Role();
+		r.setUserCode(user.getUserCode());
+		List<Role> rolelist=roleService.findListByUserCode(r);
+
+		if(rolelist!=null&&rolelist.size()>0&&TbComp.HXQYROLECODE.equals(rolelist.get(0).getRoleCode())){
+			contractSign.setSignType(3);
+			contract.setId("5");
+		}
+	
+		List<TbContractTemp> contractList=tbContractService.findList(contract);
+		List<TbContractSign> contractSignList=tbContractSignDao.findList(contractSign);
+		if(contractSignList==null||contractSignList.size()==0){
+			contractSignList=tbContractService.contractSetting(loanId,contractList);
+		}
+		model.addAttribute("contractSignList", contractSignList);
+		model.addAttribute("contractList", contractList);
+		model.addAttribute("contractSign", contractSign);
+		model.addAttribute("tbLoanApply", tbLoanApplyService.get(loanId));		
+		return "modules/contract/contractMainDetail";
+	}
+	
 	/**
 	 * 参数设定页面
 	 * @param response
@@ -190,6 +235,7 @@ public class TbContractController extends BaseController {
 		model.addAttribute("contractList", contractList);
 		model.addAttribute("csList", (List<TbContractSign>)map.get("csList"));
 		model.addAttribute("scList", (List<TbContractSginField>)map.get("scList"));
+		model.addAttribute("ploadId", loanId);
 		return "modules/contract/tbContractFieldForm";
 
 	}
@@ -205,7 +251,8 @@ public class TbContractController extends BaseController {
 		String[] ids =request.getParameterValues("ids");
 		String[] values =request.getParameterValues("values");
 		tbContractService.settingParm(ids,values);
-		return "redirect:contractMain"; 
+		String loanId=request.getParameter("loanId");	
+		return "redirect:contractMain?loanId="+loanId; 
 	}
 	/**
 	 * 平台用户一键签约

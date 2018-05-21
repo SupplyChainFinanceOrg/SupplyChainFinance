@@ -5,9 +5,7 @@
 			<div class="box-title">
 				<i class="fa fa-list-alt"></i> 查看合同内容
 			</div>
-			<button class="btn btn-sm btn-primary" name="sigin" style="margin-left: 20px;" onclick="siginOne('10')">一键签约</button>
-			
-			<button style="margin-left: 20px;" name="sigin" onclick="location.href='${ctx}/contract/tbContract/parmSetting?loanId=${contractSign.loanId}'"  class="btn btn-sm btn-primary">设置合同参数</button>
+			<button class="btn btn-sm btn-primary" id="sigin" style="margin-left: 20px;" onclick="siginOne('14')">执回</button>			
 			<ul class="nav nav-tabs pull-right">
 				<% for(var contract in contractList){ %> 
 				<li <% if(contractLP.index==1){ %>class="active" <% } %>><a
@@ -53,9 +51,9 @@
 	});
 	//异步签署
 	function siginOne(nextstatus){
-		$("button[name='sigin']").hide();
+		$("#sigin").hide();
 		var id='${contractSign.loanId}';
-		var urlstr='${ctx}/apply/tbLoanApply/saveOneSign';
+		var urlstr='${ctx}/apply/tbLoanApply/saveThreeSign';
 		$.ajax({ 
 			url: urlstr, 
 			type:"post",
@@ -67,9 +65,10 @@
 						contentWindow.page();
 					}); 
 				}else{
-					js.showMessage('签约异常！');
-					$("button[name='sigin']").show();
+					js.showMessage('执回失败！');
+					$("#sigin").show();
 				}
+					
 	     	 }
 		});
 	}

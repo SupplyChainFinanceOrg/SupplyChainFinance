@@ -27,6 +27,9 @@ jdbc:
   url: jdbc:mysql://127.0.0.1:3306/jeesite?useUnicode=true&characterEncoding=utf-8 
   username: root
   password: root
+  #url: jdbc:mysql://159.65.108.22:3306/jeesite?useUnicode=true&characterEncoding=utf-8 
+  #username: root
+  #password: Gyl2018.b
   testSql: SELECT 1
 #
 #  # Oracle 数据库配置
