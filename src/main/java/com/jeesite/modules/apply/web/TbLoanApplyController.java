@@ -5,6 +5,7 @@ package com.jeesite.modules.apply.web;
 
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -916,7 +917,7 @@ public class TbLoanApplyController extends BaseController {
 			if(nextstatus==11){
 				sign=true;
 			}else{				
-				sign=tbContractService.signCountarct(tbLoanApply.getId());//注册 获取 上上签 并且生成pdf合同模板 进行签约
+				sign=tbContractService.signCountarctByLoanComp(tbLoanApply.getId());//注册 获取 上上签 并且生成pdf合同模板 进行签约
 			}			
 			if(sign){
 				tbLoanApplyService.save(oldtbLoanApply);
@@ -962,6 +963,7 @@ public class TbLoanApplyController extends BaseController {
 	@RequestMapping(value = "download")
 	public void download(TbLoanApply tbLoanApply, Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {	    	
 			if(StringUtils.isNotBlank(tbLoanApply.getId())){
+				String date=new SimpleDateFormat("YYYYMMdd").format(new Date());
 				//获取合同
 				User user =UserUtils.getUser();
 				Role r=new Role();
@@ -979,22 +981,13 @@ public class TbLoanApplyController extends BaseController {
 				for(int i=0;i<contractSignList.size();i++){
 					if(StringUtils.isNotBlank(contractSignList.get(i).getDownPdfpath())){
 						filespath[i]=contractSignList.get(i).getDownPdfpath();
-						filespath[contractSignList.size()+i]=contractSignList.get(i).getDownAttpath();
+					}
+					if(StringUtils.isNotBlank(contractSignList.get(i).getDownAttpath())){
+						filespath[i+contractSignList.size()]=contractSignList.get(i).getDownAttpath();
 					}
 				}			
-				response=ZipfileUtile.downzips(filespath,tbLoanApply.getCompName()+"合同", request, response);
+				response=ZipfileUtile.downzips(filespath,tbLoanApply.getCompName()+date+"合同", request, response);
 			}
 												    
-	}
-	public static void main(String[] args) {
-		String [] filespath=new String[5*2];
-		for(int i=0;i<5;i++){
-			filespath[i]="打印："+i+"con";
-			filespath[i+5]="打印："+i+"att";
-		}	
-		for(String s :filespath){
-			System.err.println(s);
-		}	
-		
 	}
 }
