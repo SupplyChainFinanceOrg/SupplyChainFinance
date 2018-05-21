@@ -199,8 +199,8 @@
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
 								<span class=" " ></span> 公司性质：<i class="fa icon-question hide" ></i></label>
-							<div class="col-sm-8" >							
-								<#form:radio  path="natureId" dictType="nature_type" class="form-control digits "  />						
+							<div class="col-sm-8" >	
+							<span id="anatureId"></span>				
 							</div>
 						</div>
 					</div>
@@ -209,7 +209,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" "></span> 所属行业：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-							<#form:radio path="industry" dictType="industry_type" class="form-control digits " />
+														<span id="aindustry"></span>				
 							</div>
 						</div>
 					</div>
@@ -225,8 +225,8 @@
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
 								<span class=" "></span> 是否特殊行业：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">							
-								<#form:radio path="speciaIndustry" dictType="specia_industry" class="form-control digits " />
+							<div class="col-sm-8">
+							<span id="aspeciaIndustry"></span>							
 							</div>
 						</div>
 					</div>
@@ -371,9 +371,13 @@
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class=" "></span> 借款产品：<i class="fa icon-question hide"></i></label>
+								<span class=" "></span> 产品类型：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-							<#form:radio  path="productId" items="${tbProductlist}" itemLabel="prodctName" itemValue="id" class="form-control " />
+							<% for(pr in tbProductlist){
+							if(pr.id==tbLoanApply.productId+""){
+							%>
+							 ${pr.prodctName}
+							<% }}%>
 							</div>
 						</div>
 					</div>
@@ -382,7 +386,141 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" "></span> 借款期限：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-							<#form:radio  path="loanTime" items="${tbProductBorrowTypelist}" itemLabel="borrowTime" itemValue="id" class="form-control " />							
+							<% for(pr in tbProductBorrowTypelist){
+							if(pr.id==tbLoanApply.loanTime+""){
+							%>
+							${pr.borrowTime}
+							<% }}%>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> 购销合同编号（应收账款）：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								${tbLoanApply.contarctCode}
+							</div>
+						</div>
+					</div>
+						<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> 账款金额：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+							${tbLoanApply.contactAmount}
+							</div>
+						</div>
+					</div>
+					
+				</div>
+				
+				
+				
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> 合同有效期起：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+							${trim(tbLoanApply.urgeDateStart,"yyyy-MM-dd")}						
+							</div>
+						</div>
+					</div>
+						<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> 合同有效期止：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								${trim(tbLoanApply.urgeDateEnd,"yyyy-MM-dd")}						
+							</div>
+						</div>
+					</div>
+					
+				</div>
+				
+				
+				
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> 资金回笼账号：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+							${tbLoanApply.moneyCollectingAccount}
+							</div>
+						</div>
+					</div>
+						<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> 资金回笼开户行：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+							${tbLoanApply.moneyCollectingBank}
+							</div>
+						</div>
+					</div>
+					
+				</div>
+				
+				
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> 资金回笼用户名：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+							${tbLoanApply.moneyCollectingName}
+							</div>
+						</div>
+					</div>
+						
+					
+				</div>
+				
+				<div class="row" >
+				<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class=" "></span> 授权核心企业：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+							<%for(com in comlist){
+							if(com.id==tbLoanApply.coreCompId){						
+							%>
+								${com.compName}
+							<%}}%>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required "></span> 核心企业系统登录地址：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								${tbLoanApply.coreSysUrl}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required "></span> 核心企业系统登录用户名：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								${tbLoanApply.coreSysUsername}
+							
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required "></span> 核心企业系统登录密码：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								${tbLoanApply.coreSysPwd}							
 							</div>
 						</div>
 					</div>
@@ -393,8 +531,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" "></span> 核心企业合作年限：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-							
-								 <#form:radio  path="cooperationId" dictType="time_cooperation" class="form-control  digits" />
+							<span id="acooperationId"></span>
 							
 							</div>
 						</div>
@@ -428,7 +565,8 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" "></span> 企业房产：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:radio path="compHouse" dictType="comp_house" class="form-control  digits" />
+							<span id="acompHouse"></span>
+								
 							</div>
 						</div>
 					</div>
@@ -437,7 +575,8 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" "></span> 企业土地：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.compLand}
+														<span id="acompLand"></span>
+							
 							</div>
 						</div>
 					</div>
@@ -502,7 +641,8 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" "></span> 法人房产情况：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.legalHouse}
+							<span id="alegalHouse"></span>
+								
 							</div>
 						</div>
 					</div>
@@ -511,7 +651,8 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" "></span> 法人车产情况：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								${tbLoanApply.legalCar}
+								<span id="alegalCar"></span>
+							
 							</div>
 						</div>
 					</div>
@@ -522,7 +663,9 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" "></span> 法人婚姻状况：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:radio path="legalMarriage" dictType="marriage" class="form-control  digits" />
+							<span id="alegalMarriage"></span>
+								
+							
 							</div>
 						</div>
 					</div>
@@ -531,7 +674,8 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" "></span> 居住情况：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:radio path="livingSituation" dictType="living" class="form-control  digits" />
+								<span id="alivingSituation"></span>							
+							
 							</div>
 						</div>
 					</div>
@@ -544,11 +688,13 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" "></span> 户籍地址与实际居住地址是否一致：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:radio path="isRprAddress" dictType="is_rpr_address" class="form-control  digits" />
+							<span id="aisRprAddress"></span>							
+							
 							</div>
 						</div>
 					</div>
 				</div>
+				<%if(tbLoanApply.isRprAddress==0){%>
 				<div class="row">
 					<div class="col-xs-6">
 						<div class="form-group">
@@ -562,13 +708,14 @@
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class=" hide"></span> 如与实际居住地址不符 填写户籍地址：<i class="fa icon-question hide"></i></label>
+								<span class=" hide"></span> 户籍地址：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
 								${tbLoanApply.rprAddress}
 							</div>
 						</div>
 					</div>
 				</div>
+				<%}%>
 								<div class="row">
 				
 					<div class="col-xs-6">
@@ -597,7 +744,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" "></span> 家庭联系人1关系：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:radio path="householdContacts1Relationship" dictType="relationship" class="form-control  digits" />
+							<span id="ahouseholdContacts1Relationship"></span>
 							</div>
 						</div>
 					</div>
@@ -606,7 +753,8 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" hide"></span> 家庭联系人2关系：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:radio path="householdContacts2Relationship" dictType="relationship" class="form-control digits" />
+														<span id="ahouseholdContacts2Relationship"></span>
+							
 							</div>
 						</div>
 					</div>
@@ -660,7 +808,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" hide"></span> 其他联系人1关系：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:radio path="otherContacts1Relationship" dictType="other_relationship" class="form-control digits" />
+							<span id="aotherContacts1Relationship"></span>
 							</div>
 						</div>
 					</div>
@@ -669,7 +817,8 @@
 							<label class="control-label col-sm-4" title="">
 								<span class=" hide"></span> 其他联系人2关系：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:radio path="otherContacts2Relationship" dictType="other_relationship" class="form-control digits" />
+														<span id="aotherContacts2Relationship"></span>
+							
 							</div>
 						</div>
 					</div>
@@ -761,51 +910,7 @@
 					</div>
 				
 				</div>
-				<div class="row" >
-				<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class=" "></span> 授权核心企业：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-							<%for(com in comlist){
-							if(com.id==tbLoanApply.coreCompId){						
-							%>
-								${com.compName}
-							<%}}%>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required "></span> 核心企业系统登录地址：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								${tbLoanApply.coreSysUrl}
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required "></span> 核心企业系统登录用户名：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								${tbLoanApply.coreSysUsername}
-							
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required "></span> 核心企业系统登录密码：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								${tbLoanApply.coreSysPwd}							
-							</div>
-						</div>
-					</div>
-				</div>
+				
 				<div class="form-unit">${text('授信情况')}</div>
 				<div class="row" >
 				<div class="col-xs-6">
@@ -974,4 +1079,37 @@ $("#inputForm").validate({
 		}, "json");
     }
 });
+$(function(){
+	detailinfo();	
+})
+function detailinfo(){
+	//公司性质  所属行业  是否特殊								
+	$("#aindustry").text(js.getDictLabel(${@DictUtils.getDictListJson('industry_type')}, '${tbLoanApply.industry}', '${text('未知')}', true)); 
+	$("#anatureId").text(js.getDictLabel(${@DictUtils.getDictListJson('nature_type')}, '${tbLoanApply.natureId}', '${text('未知')}', true)); 
+	$("#aspeciaIndustry").text(js.getDictLabel(${@DictUtils.getDictListJson('specia_industry')}, '${tbLoanApply.speciaIndustry}', '${text('未知')}', true)); 
+//年限
+	$("#acooperationId").text(js.getDictLabel(${@DictUtils.getDictListJson('time_cooperation')}, '${tbLoanApply.cooperationId}', '${text('未知')}', true)); 
+						
+//房产
+//土地
+	$("#acompHouse").text(js.getDictLabel(${@DictUtils.getDictListJson('comp_house')}, '${tbLoanApply.compHouse}', '${text('未知')}', true)); 
+	$("#acompLand").text(js.getDictLabel(${@DictUtils.getDictListJson('comp_land')}, '${tbLoanApply.compLand}', '${text('未知')}', true)); 
+//婚姻
+//居住
+	$("#aisRprAddress").text(js.getDictLabel(${@DictUtils.getDictListJson('is_rpr_address')}, '${tbLoanApply.isRprAddress}', '${text('未知')}', true)); 
+	
+	$("#alegalMarriage").text(js.getDictLabel(${@DictUtils.getDictListJson('marriage')}, '${tbLoanApply.legalMarriage}', '${text('未知')}', true)); 
+	$("#alivingSituation").text(js.getDictLabel(${@DictUtils.getDictListJson('living')}, '${tbLoanApply.livingSituation}', '${text('未知')}', true)); 
+
+	$("#alegalHouse").text(js.getDictLabel(${@DictUtils.getDictListJson('legal_house')}, '${tbLoanApply.legalHouse}', '${text('未知')}', true)); 
+	$("#alegalCar").text(js.getDictLabel(${@DictUtils.getDictListJson('legal_car')}, '${tbLoanApply.legalCar}', '${text('未知')}', true)); 
+	//家关系1、2
+		$("#ahouseholdContacts1Relationship").text(js.getDictLabel(${@DictUtils.getDictListJson('relationship')}, '${tbLoanApply.householdContacts1Relationship}', '${text('未知')}', true)); 
+		$("#ahouseholdContacts2Relationship").text(js.getDictLabel(${@DictUtils.getDictListJson('relationship')}, '${tbLoanApply.householdContacts2Relationship}', '${text('未知')}', true)); 
+//其他关系 1、2
+		$("#aotherContacts1Relationship").text(js.getDictLabel(${@DictUtils.getDictListJson('other_relationship')}, '${tbLoanApply.otherContacts1Relationship}', '${text('未知')}', true)); 
+		$("#aotherContacts2Relationship").text(js.getDictLabel(${@DictUtils.getDictListJson('other_relationship')}, '${tbLoanApply.otherContacts2Relationship}', '${text('未知')}', true)); 
+
+
+}
 </script>

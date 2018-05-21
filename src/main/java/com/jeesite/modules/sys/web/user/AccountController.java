@@ -54,6 +54,7 @@ public class AccountController extends BaseController{
 	}
 	@RequestMapping(value = "reguser")
 	public String reguser(TbComp tbComp, Model model) {
+		tbComp.setSpeciaIndustry(0);
 		model.addAttribute("tbComp", tbComp);
 		return "modules/tb/compReg";
 	}

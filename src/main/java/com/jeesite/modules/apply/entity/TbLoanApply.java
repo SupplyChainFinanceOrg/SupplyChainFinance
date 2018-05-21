@@ -53,7 +53,7 @@ import com.jeesite.modules.lend.entity.TbLend;
 		@Column(name="loan_amount", attrName="loanAmount", label="借款金额"),
 		@Column(name="loan_name", attrName="loanName", label="借款人姓名", queryType=QueryType.LIKE),
 		@Column(name="loan_phone", attrName="loanPhone", label="借款人电话"),
-		@Column(name="product_id", attrName="productId", label="借款产品id"),
+		@Column(name="product_id", attrName="productId", label="产品类型id"),
 		@Column(name="loan_time", attrName="loanTime", label="借款期限 关联产品类型表"),
 		@Column(name="cooperation_id", attrName="cooperationId", label="核心企业合作年限 关联COO表"),
 		@Column(name="loan_use", attrName="loanUse", label="借款用途"),
@@ -148,7 +148,7 @@ public class TbLoanApply extends DataEntity<TbLoanApply> {
 	private String loanAmount;		// 借款金额
 	private String loanName;		// 借款人姓名
 	private String loanPhone;		// 借款人电话
-	private Long productId;		// 借款产品id
+	private Long productId;		// 产品类型id
 	private Long loanTime;		// 借款期限 关联产品类型表
 	private Long cooperationId;		// 核心企业合作年限 关联COO表
 	private String loanUse;		// 借款用途
@@ -191,8 +191,8 @@ public class TbLoanApply extends DataEntity<TbLoanApply> {
 
 	private String contarctCode;
 	private String contactAmount;
-	private String urgeDateStart;
-	private String urgeDateEnd;
+	private Date urgeDateStart;
+	private Date urgeDateEnd;
 	private String moneyCollectingName;
 	private String moneyCollectingBank;
 	private String moneyCollectingAccount;
@@ -304,19 +304,21 @@ public class TbLoanApply extends DataEntity<TbLoanApply> {
 		this.moneyCollectingAccount = moneyCollectingAccount;
 	}
 
-	public String getUrgeDateStart() {
+	
+
+	public Date getUrgeDateStart() {
 		return urgeDateStart;
 	}
 
-	public void setUrgeDateStart(String urgeDateStart) {
+	public void setUrgeDateStart(Date urgeDateStart) {
 		this.urgeDateStart = urgeDateStart;
 	}
 
-	public String getUrgeDateEnd() {
+	public Date getUrgeDateEnd() {
 		return urgeDateEnd;
 	}
 
-	public void setUrgeDateEnd(String urgeDateEnd) {
+	public void setUrgeDateEnd(Date urgeDateEnd) {
 		this.urgeDateEnd = urgeDateEnd;
 	}
 
@@ -585,7 +587,7 @@ public class TbLoanApply extends DataEntity<TbLoanApply> {
 		this.loanPhone = loanPhone;
 	}
 	
-	@NotNull(message="借款产品id不能为空")
+	@NotNull(message="产品类型id不能为空")
 	public Long getProductId() {
 		return productId;
 	}

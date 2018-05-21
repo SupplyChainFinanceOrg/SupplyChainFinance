@@ -31,7 +31,7 @@
 				</div>
 				
 			<!-- 	<div class="form-group">
-					<label class="control-label">借款产品：</label>
+					<label class="control-label">产品类型：</label>
 					<div class="control-inline width-120">
 						<#form:select  path="productId" items="${tbProductlist}" itemLabel="prodctName" itemValue="id" class="form-control" />					
 					</div>
@@ -82,7 +82,7 @@ $('#dataGrid').dataGrid({
 		{header:'借款人', name:'loanName', index:'a.loan_name', width:150, align:"center"},
 		{header:'电话', name:'loanPhone', index:'a.loan_phone', width:150, align:"center"},
 		{header:'借款金额', name:'loanAmount', index:'a.loan_amount', width:150, align:"center"},
-    	{header:'借款产品', name:'productId', index:'a.product_id', width:150, align:"center", formatter: function(val, obj, row, act){
+    	{header:'产品类型', name:'productId', index:'a.product_id', width:150, align:"center", formatter: function(val, obj, row, act){
 			<%for(pr in tbProductlist){%>
 			if('${pr.id}'==val){
 				return '${pr.prodctName}';
@@ -152,4 +152,9 @@ $('#dataGrid').dataGrid({
 		
 	}
 });
+$(function(){
+	if('${ischange}'=='true'){
+		js.showMessage("当前密码为默认密码，请更改密码后再操作！");
+	}
+})
 </script>

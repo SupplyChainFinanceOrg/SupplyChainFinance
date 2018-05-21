@@ -26,6 +26,8 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="attachment_name", attrName="attachmentName", label="附件名称", queryType=QueryType.LIKE),
 		@Column(name="attachment_remar", attrName="attachmentRemar", label="附件备注"),
 		@Column(name="attachment_type", attrName="attachmentType", label="附件类型 0企业 1个人"),
+		@Column(name="required", attrName="required", label="必填"),
+
 	}, orderBy="a.id asc"
 )
 public class TbLoanAttachment extends DataEntity<TbLoanAttachment> {
@@ -37,6 +39,15 @@ public class TbLoanAttachment extends DataEntity<TbLoanAttachment> {
 	private Integer isCoreVisible;		// 0可见 1不可见
 	private Integer isBankVisible;		// 0可见 1不可见
 	private Integer isdel;		// 是否删除 0否 1是
+	private String required;//required为必填
+	
+	public String getRequired() {
+		return required;
+	}
+
+	public void setRequired(String required) {
+		this.required = required;
+	}
 
 	public TbLoanAttachment() {
 		this(null);

@@ -26,9 +26,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.druid.util.StringUtils;
+import com.jeesite.common.codec.DesUtils;
 import com.jeesite.common.config.Global;
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.mybatis.mapper.query.QueryType;
+import com.jeesite.common.shiro.realm.BaseAuthorizingRealm;
 import com.jeesite.common.web.BaseController;
 import com.jeesite.common.web.http.UserAgentUtils;
 import com.jeesite.modules.button.entity.TbButton;
@@ -83,7 +85,7 @@ public class TbCompController extends BaseController {
 	 */
 	@RequiresPermissions("tb:tbComp:view")
 	@RequestMapping(value = {"list", ""})
-	public String list(TbComp tbComp, Model model,HttpServletRequest request, HttpServletResponse response) {
+	public String list(TbComp tbComp, Model model,HttpServletRequest request, HttpServletResponse response) {		
 		User user =UserUtils.getUser();
 		Role r=new Role();
 		r.setUserCode(user.getUserCode());

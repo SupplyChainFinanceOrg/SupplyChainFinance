@@ -27,6 +27,7 @@ import com.jeesite.common.config.Global;
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.lang.StringUtils;
 import com.jeesite.common.mybatis.mapper.query.QueryType;
+import com.jeesite.common.shiro.realm.BaseAuthorizingRealm;
 import com.jeesite.common.web.BaseController;
 import com.jeesite.modules.apply.entity.TbLoanApply;
 import com.jeesite.modules.apply.service.TbLoanApplyService;
@@ -122,6 +123,8 @@ public class TbLoanApplyController extends BaseController {
 	@RequestMapping(value = {"list", ""})
 	public String list(TbLoanApply tbLoanApply, Model model,HttpServletRequest req) {
 		User user =UserUtils.getUser();
+
+
 		Role r=new Role();
 		r.setUserCode(user.getUserCode());
 		List<Role> rolelist=roleService.findListByUserCode(r);
@@ -143,6 +146,7 @@ public class TbLoanApplyController extends BaseController {
 				}
 			}
 		}
+		
 		model.addAttribute("bottonlist", bottonlist);
 		model.addAttribute("tbLoanApply", tbLoanApply);
 		 List<TbProduct>	tbProductlist =new ArrayList<TbProduct>();
@@ -159,6 +163,23 @@ public class TbLoanApplyController extends BaseController {
 		model.addAttribute("comlist", comlist);
 		model.addAttribute("tbProductBorrowTypelist", tbProductBorrowTypeService.findList(new TbProductBorrowType()));
 		model.addAttribute("type", req.getParameter("type"));
+		
+		
+		
+		//判断密码是否为123456
+		boolean ischange=BaseAuthorizingRealm.validatePassword("123456", user.getPassword());
+		if(ischange){
+			TbLoanApply tbl=new TbLoanApply();
+			tbl.setUserId(user.getUserCode());
+			long num=tbLoanApplyService.findCount(tbl);
+			if(num==0){				
+				model.addAttribute("userrolecode", null);
+			}else{
+				ischange=false;
+			}
+		}
+		model.addAttribute("ischange", ischange);
+		
 		if("0".equals(req.getParameter("type"))){
 			return "modules/apply/tbLoanApplyListAll";
 		}
