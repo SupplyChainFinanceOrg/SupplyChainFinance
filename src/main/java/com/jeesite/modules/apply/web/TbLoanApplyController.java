@@ -134,7 +134,7 @@ public class TbLoanApplyController extends BaseController {
 		model.addAttribute("noapply", 0);
 		
 		if(rolelist!=null&&rolelist.size()>0){
-			bottonlist=tbStateService.findList(new TbState(TbState.APPLYTYPE, "1", rolelist.get(0).getRoleCode()));
+			bottonlist=tbStateService.findList(new TbState(TbState.APPLYTYPE, tbLoanApply.getProductId()+"", rolelist.get(0).getRoleCode()));
 			model.addAttribute("userrolecode", rolelist.get(0).getRoleCode());
 			if(TbComp.JKQYROLECODE.equals(rolelist.get(0).getRoleCode())){
 				TbComp mycorp=new TbComp();
@@ -199,7 +199,7 @@ public class TbLoanApplyController extends BaseController {
 		List<TbState> bottonlist=new ArrayList<>();
 		model.addAttribute("userrolecode", null);
 		if(rolelist!=null&&rolelist.size()>0){
-			bottonlist=tbStateService.findList(new TbState(TbState.APPLYTYPE, "1", rolelist.get(0).getRoleCode()));
+			bottonlist=tbStateService.findList(new TbState(TbState.APPLYTYPE, tbLoanApply.getProductId()+"", rolelist.get(0).getRoleCode()));
 			model.addAttribute("userrolecode", rolelist.get(0).getRoleCode());
 		}
 		model.addAttribute("bottonlist", bottonlist);
@@ -237,7 +237,7 @@ public class TbLoanApplyController extends BaseController {
 		List<TbState> bottonlist=new ArrayList<>();
 		model.addAttribute("userrolecode", null);
 		if(rolelist!=null&&rolelist.size()>0){
-			bottonlist=tbStateService.findList(new TbState(TbState.APPLYTYPE, "1", rolelist.get(0).getRoleCode()));
+			bottonlist=tbStateService.findList(new TbState(TbState.APPLYTYPE, tbLoanApply.getProductId()+"", rolelist.get(0).getRoleCode()));
 			model.addAttribute("userrolecode", rolelist.get(0).getRoleCode());
 		}
 		model.addAttribute("bottonlist", bottonlist);
@@ -272,7 +272,7 @@ public class TbLoanApplyController extends BaseController {
 		String type=request.getParameter("type");
 		if(!StringUtils.isEmpty(type)){
 			if("1".equals(type)){
-				String []status={"1","3","4","5","6","7","8"};
+				String []status={"1","3","4","5","6","8"};
 				tbLoanApply.getSqlMap().getWhere().and("apply_state", QueryType.IN,status);
 			}else if("2".equals(type)){
 				String []status={"12","13"};
@@ -281,7 +281,7 @@ public class TbLoanApplyController extends BaseController {
 				String []status={"9","10","11"};
 				tbLoanApply.getSqlMap().getWhere().and("apply_state", QueryType.IN,status);			
 			}else if("4".equals(type)){
-				String []status={"14","15","16"};
+				String []status={"7","14","15","16"};
 				tbLoanApply.getSqlMap().getWhere().and("apply_state", QueryType.IN,status);	
 			}else if("0".equals(type)){
 				//String []status={"1"};
@@ -540,6 +540,16 @@ public class TbLoanApplyController extends BaseController {
 		hxcorplist.add(corp);
 		hxcorplist.addAll(tbCompService.findList(corp));
 		model.addAttribute("hxcorplist", hxcorplist);
+		
+		//金融机构列表
+	    corp=new TbComp();
+		corp.setApplyState((long)1);
+		corp.setCompType((int)TbComp.JRQYTYPE);
+		List<TbComp> jrcorplist=new ArrayList<TbComp>();
+		jrcorplist.add(corp);
+		jrcorplist.addAll(tbCompService.findList(corp));
+		model.addAttribute("jrcorplist", jrcorplist);
+		
 		model.addAttribute("tbLoanApply", tbLoanApply);	
 		//风控评分
 		for(int i=0;i<4;i++){
@@ -707,7 +717,7 @@ public class TbLoanApplyController extends BaseController {
 				}
 				oldtbLoanApply.setRiskScore(total+"");
 			}	
-			if(nextstatus==7){
+			if(nextstatus==5){
 				//提交审核，选择金融机构
 				if(tbLoanApply.getTbMoneyDistribution()!=null){
 					if(oldtbLoanApply.getTbMoneyDistribution()==null||StringUtils.isEmpty(oldtbLoanApply.getTbMoneyDistribution().getId())){

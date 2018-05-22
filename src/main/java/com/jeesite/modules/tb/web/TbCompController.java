@@ -72,6 +72,8 @@ public class TbCompController extends BaseController {
 	private TbProcessService tbProcessService;
 	@Autowired
 	private TbProcessLogService tbProcessLogService;
+	@Autowired 
+	private UserService userService; 
 	/**
 	 * 获取数据
 	 */
@@ -165,7 +167,8 @@ public class TbCompController extends BaseController {
 			//查询老的数据
 			TbComp oldtbComp=tbCompService.get(tbComp.getId());
 			String oldstatus=oldtbComp.getApplyState()+"";
-			if(0==oldtbComp.getApplyState()){
+			System.out.println(request.getParameter("nextstatus"));
+			if(!"2".equals(request.getParameter("nextstatus"))&&0==oldtbComp.getApplyState()){
 				oldtbComp.setApplyState(Long.parseLong(request.getParameter("nextstatus")));
 				tbCompService.saveAndCreate(oldtbComp,true);
 			}else{
@@ -175,7 +178,8 @@ public class TbCompController extends BaseController {
 			
 			tbProcessLogService.saveLog(Integer.parseInt(tbComp.getApplyState()+""), TbProcessLog.APPLY_TYPE,tbComp.getId(),null, null, request.getParameter("operationRemark"), 1, 1, 1,oldstatus+"-"+oldtbComp.getApplyState()+"",tbComp.getCompName());
 			if("2".equals(request.getParameter("nextstatus"))){
-				tbCompService.delete(oldtbComp);
+				tbCompService.delete(oldtbComp); 
+				//userService.delete();
 			}
 		}	
 

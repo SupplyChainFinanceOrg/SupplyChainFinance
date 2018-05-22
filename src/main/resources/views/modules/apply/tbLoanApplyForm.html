@@ -72,7 +72,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class="required">*</span>法人身份证号：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="cardNo" maxlength="50" class="form-control idcard"/>
+								<#form:input path="cardNo" maxlength="50" class="form-control idcard required"/>
 							</div>
 						</div>
 					</div>
@@ -1241,7 +1241,11 @@ $(function(){
 	}
 	//地址
 	$("input[name='isRprAddress']").next().click(function(){
-		$("#isRprAddressinfo").show();
+		if($(this).prev().val()==0){
+			$("#isRprAddressinfo").hide();
+		}else{
+			$("#isRprAddressinfo").show();
+		}
 	})
 	if('${tbLoanApply.isRprAddress}'==1){
 		$("#isRprAddressinfo").show();

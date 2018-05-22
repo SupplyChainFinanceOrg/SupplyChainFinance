@@ -54,11 +54,14 @@
 		$("#sigin").hide();
 		var id='${contractSign.loanId}';
 		var urlstr='${ctx}/apply/tbLoanApply/saveThreeSign';
+		js.loading('请稍等，正在进行中...');
 		$.ajax({ 
 			url: urlstr, 
 			type:"post",
 			data:{'id':id,'nextstatus':nextstatus},
 			success: function(data){
+				js.closeLoading(1000, true);
+
 				if(data.indexOf("true")>-1){
 					js.showMessage('操作成功！');
 					js.closeCurrentTabPage(function(contentWindow){

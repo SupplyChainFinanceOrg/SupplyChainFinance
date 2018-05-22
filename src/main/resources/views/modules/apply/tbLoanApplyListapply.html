@@ -1,9 +1,9 @@
-<% layout('/layouts/default.html', {title: '借款管理', libs: ['dataGrid']}){ %>
+<% layout('/layouts/default.html', {title: '风控管理', libs: ['dataGrid']}){ %>
 <div class="main-content">
 	<div class="box box-main">
 		<div class="box-header">
 			<div class="box-title">
-				<i class="fa fa-list-alt"></i> ${text('借款管理')}
+				<i class="fa fa-list-alt"></i> <span id="title"></span>
 			</div>
 			<div class="box-tools pull-right">
 				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
@@ -139,6 +139,7 @@ $('#dataGrid').dataGrid({
 					var operationName=bstate.operationName;
 					%> 		
 					//alert(row.applyState=='${bstate.nowstatus}')
+					//alert('${bstate.nowstatus}')
 					 if(row.applyState=='${bstate.nowstatus}'){	
 						 if('${bstate.pagename}'.length>0){
 							actions.push('<a href="${ctx}/apply/tbLoanApply/'+'${bstate.pagename}'+'?id='+row.id+'"  class="btnList" title="${bstate.operationName}" ">${bstate.operationName}</a>&nbsp;');				 
@@ -163,4 +164,8 @@ $('#dataGrid').dataGrid({
 		
 	}
 });
+
+$(function(){
+	$("#title").text($(".tabpanel_mover .active", window.parent.document).text());
+})
 </script>

@@ -71,7 +71,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class="required">*</span>法人身份证号：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="cardNo" maxlength="50" class="form-control "/>
+								<#form:input path="cardNo" maxlength="50" class="form-control idcard required"/>
 							</div>
 						</div>
 					</div>
@@ -363,6 +363,7 @@ $(function(){
 	})
 	if('${tbComp.speciaIndustry}'==1){		
 		$("#speciaIndustry2").next().trigger("click");
+		$("#isspecialTradeLicense").attr("style","display:black");
 	}else{
 		$("#isspecialTradeLicense").attr("style","display:none");
 	}
@@ -409,6 +410,16 @@ function change(status,url,remark){
 			    			
 			    		}	
 			    	}
+			    		 if(status==3){
+				    		 for(var i=0;i<$(".form-control").size();i++){
+				    				$(".form-control").eq(i).attr("class",$(".form-control").eq(i).attr("class").replace('required',' '))
+				    			} 
+				    		 for(var i=0;i<$(".wup_input").size();i++){
+				    				$(".wup_input").eq(i).attr("class",$(".wup_input").eq(i).attr("class").replace('required',' '))
+				    		 }
+				    	} 
+			    		
+			    	
 			    	if(isok){
 			    		$("#btnSubmit").trigger('click');
 			    	}			   
@@ -449,9 +460,14 @@ $("#inputForm").validate({
 		js.ajaxSubmitForm($(form), function(data){
 			js.showMessage(data.message);
 			if(data.result == Global.TRUE){
-				js.closeCurrentTabPage(function(contentWindow){
-					contentWindow.page();
-				});
+				if($('#applyState').val()==3){
+					location.reload();
+				}else{
+					js.closeCurrentTabPage(function(contentWindow){
+						contentWindow.page();
+					});
+				}
+				
 			}
 		}, "json");
     }
