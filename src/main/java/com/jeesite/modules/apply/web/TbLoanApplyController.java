@@ -731,7 +731,7 @@ public class TbLoanApplyController extends BaseController {
 				}
 				oldtbLoanApply.setRiskScore(total+"");
 			}	
-			if(nextstatus==5){
+			if(nextstatus==4){
 				//提交审核，选择金融机构
 				if(tbLoanApply.getTbMoneyDistribution()!=null){
 					if(oldtbLoanApply.getTbMoneyDistribution()==null||StringUtils.isEmpty(oldtbLoanApply.getTbMoneyDistribution().getId())){
