@@ -172,7 +172,7 @@ public class TbLoanApplyController extends BaseController {
 			TbLoanApply tbl=new TbLoanApply();
 			tbl.setUserId(user.getUserCode());
 			long num=tbLoanApplyService.findCount(tbl);
-			if(num==0){				
+			if(num==0&&TbComp.HXQYROLECODE.equals(rolelist.get(0).getRoleCode())){				
 				model.addAttribute("userrolecode", null);
 			}else{
 				ischange=false;
