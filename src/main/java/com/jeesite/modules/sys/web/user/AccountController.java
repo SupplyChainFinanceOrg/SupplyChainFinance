@@ -23,7 +23,9 @@ import com.jeesite.common.config.Global;
 import com.jeesite.common.lang.StringUtils;
 import com.jeesite.common.service.ServiceException;
 import com.jeesite.common.web.BaseController;
+import com.jeesite.modules.sys.entity.EmpUser;
 import com.jeesite.modules.sys.entity.User;
+import com.jeesite.modules.sys.service.EmpUserService;
 import com.jeesite.modules.sys.service.UserService;
 import com.jeesite.modules.sys.utils.UserUtils;
 import com.jeesite.modules.sys.utils.ValidCodeUtils;
@@ -44,6 +46,8 @@ public class AccountController extends BaseController{
 
 	@Autowired
 	private TbCompService tbCompService;
+	@Autowired
+	private EmpUserService empUserService;
 	/**
 	 * 忘记密码页面
 	 */
@@ -73,6 +77,13 @@ public class AccountController extends BaseController{
 				phonecheck.setContactPhone(tbComp.getContactPhone());
 				List<TbComp> list=tbCompService.findList(phonecheck);
 				if(list!=null&&list.size()>0){
+					return renderResult(Global.FALSE, "联系人电话已存在，请更换电话！");
+				}
+				//用户判断手机号
+				EmpUser user=new EmpUser();
+				user.setLoginCode(tbComp.getContactPhone());
+				List<EmpUser> userlist=empUserService.findList(user);
+				if(userlist!=null&&userlist.size()>0){
 					return renderResult(Global.FALSE, "联系人电话已存在，请更换电话！");
 				}
 			}
