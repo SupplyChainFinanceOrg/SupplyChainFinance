@@ -127,7 +127,9 @@ $('#dataGrid').dataGrid({
 		{header:'公司性质', name:'natureId', index:'a.nature_id', width:150, align:"center", formatter: function(val, obj, row, act){
 			return js.getDictLabel(${@DictUtils.getDictListJson('nature_type')}, val, '${text('未知')}', true);
 		}},
-		{header:'所属行业', name:'industry', index:'a.industry', width:150, align:"center"},
+		{header:'所属行业', name:'industry', index:'a.industry', width:150, align:"center", formatter: function(val, obj, row, act){
+			return js.getDictLabel(${@DictUtils.getDictListJson('industry_type')}, val, '${text('未知')}', true);
+		}},
 /* 		{header:'员工数量', name:'employeesCount', index:'a.employees_count', width:150, align:"center"},
  */		{header:'企业类型', name:'compType', index:'a.comp_type', width:150, align:"center", formatter: function(val, obj, row, act){
 			return js.getDictLabel(${@DictUtils.getDictListJson('company_type')}, val, '${text('未知')}', true);
