@@ -33,6 +33,8 @@ import com.jeesite.modules.apply.entity.TbLoanApply;
 import com.jeesite.modules.apply.service.TbLoanApplyService;
 import com.jeesite.modules.attachment.entity.TbLoanAttachment;
 import com.jeesite.modules.attachment.service.TbLoanAttachmentService;
+import com.jeesite.modules.button.entity.TbBottonUser;
+import com.jeesite.modules.button.service.TbBottonUserService;
 import com.jeesite.modules.contract.dao.TbContractSignDao;
 import com.jeesite.modules.contract.entity.TbContractSign;
 import com.jeesite.modules.contract.entity.TbContractTemp;
@@ -108,6 +110,8 @@ public class TbLoanApplyController extends BaseController {
 	private TbLendService tbLendService;
 	@Autowired
 	private TbContractService tbContractService;
+	@Autowired
+	private TbBottonUserService tbBottonUserService;
 	/**
 	 * 获取数据
 	 */
@@ -271,7 +275,17 @@ public class TbLoanApplyController extends BaseController {
 	public Page<TbLoanApply> listData(TbLoanApply tbLoanApply, HttpServletRequest request, HttpServletResponse response) {
 		String type=request.getParameter("type");
 		if(!StringUtils.isEmpty(type)){
-			if("1".equals(type)){
+			TbBottonUser tbBottonUser=new TbBottonUser();
+			tbBottonUser.setType(type);
+			List<TbBottonUser> listview =tbBottonUserService.findList(tbBottonUser);
+			if(listview!=null&&listview.size()>0&&StringUtils.isNoneBlank(listview.get(0).getIsstatuss())){
+				String []status=listview.get(0).getIsstatuss().split(",");
+				tbLoanApply.getSqlMap().getWhere().and("apply_state", QueryType.IN,status);
+			}else{
+				String []status={"-1"};
+				tbLoanApply.getSqlMap().getWhere().and("apply_state", QueryType.IN,status);
+			}
+			/*if("1".equals(type)){
 				String []status={"1","3","4","5","6","8"};
 				tbLoanApply.getSqlMap().getWhere().and("apply_state", QueryType.IN,status);
 			}else if("2".equals(type)){
@@ -286,7 +300,7 @@ public class TbLoanApplyController extends BaseController {
 			}else if("0".equals(type)){
 				//String []status={"1"};
 				//tbLoanApply.getSqlMap().getWhere().and("apply_state", QueryType.IN,status);
-			}
+			}*/
 		}
 		User user =UserUtils.getUser();
 		Role r=new Role();

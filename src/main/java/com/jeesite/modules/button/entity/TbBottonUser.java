@@ -22,6 +22,9 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="state_id", attrName="stateId", label="状态id"),
 		@Column(name="source_id", attrName="sourceId", label="资源id"),
 		@Column(name="role_code", attrName="roleCode", label="角色id"),
+		@Column(name="type", attrName="type", label="类型"),
+		@Column(name="url", attrName="url", label="url"),
+		@Column(name="isstatuss", attrName="isstatuss", label="包含状态"),
 	}, orderBy="a.borrow_id DESC"
 )
 public class TbBottonUser extends DataEntity<TbBottonUser> {
@@ -33,7 +36,34 @@ public class TbBottonUser extends DataEntity<TbBottonUser> {
 	private String stateId;		// 状态id
 	private String sourceId;		// 资源id
 	private String roleCode;		// 角色id
-	
+	private String type;
+	private String url;
+	private String isstatuss;//状态
+
+	public String getIsstatuss() {
+		return isstatuss;
+	}
+
+	public void setIsstatuss(String isstatuss) {
+		this.isstatuss = isstatuss;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
 	public TbBottonUser() {
 		this(null);
 	}
