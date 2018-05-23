@@ -691,6 +691,9 @@ public class TbLoanApplyController extends BaseController {
 			if(tbLoanApply.getProductId()==null){
 				tbLoanApply.setProductId(0l);
 			}
+			if(!StringUtils.isEmpty(request.getParameter("nextstatus"))){
+				tbLoanApply.setApplyState(Long.parseLong(request.getParameter("nextstatus")));
+			}
 			tbLoanApplyService.save(tbLoanApply);
 			//日志
 			tbProcessLogService.saveLog(Integer.parseInt(tbLoanApply.getApplyState()+""), TbProcessLog.APPLY_TYPE,null, tbLoanApply.getProductId()+"", tbLoanApply.getId(), request.getParameter("operationRemark"), 1, 1, 1,tbLoanApply.getApplyState()+"",tbLoanApply.getCompName());
