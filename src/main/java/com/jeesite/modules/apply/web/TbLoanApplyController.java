@@ -843,6 +843,27 @@ public class TbLoanApplyController extends BaseController {
 			  //授信企业，授信额度
 			oldtbLoanApply.setCoreCompId(tbLoanApply.getCoreCompId());
 			oldtbLoanApply.setLineCredit(tbLoanApply.getLineCredit());
+			if(nextstatus==5){
+				//提交审核，选择金融机构
+				if(tbLoanApply.getTbMoneyDistribution()!=null){
+					if(oldtbLoanApply.getTbMoneyDistribution()==null||StringUtils.isEmpty(oldtbLoanApply.getTbMoneyDistribution().getId())){
+						TbMoneyDistribution tbmd=new TbMoneyDistribution();
+						tbmd.setId(tbLoanApply.getId());
+						tbmd.setBankCompId(tbLoanApply.getTbMoneyDistribution().getBankCompId());
+						tbmd.setLoanId(tbLoanApply.getId());
+						try {
+							tbMoneyDistributionService.insert(tbmd);
+						} catch (Exception e) {
+							//可能已经存在
+							tbMoneyDistributionService.save(tbmd);
+						}
+					}else{
+						tbLoanApply.getTbMoneyDistribution().setId(tbLoanApply.getId());;
+						tbLoanApply.getTbMoneyDistribution().setLoanId(tbLoanApply.getId());
+						tbMoneyDistributionService.save(tbLoanApply.getTbMoneyDistribution());
+					}
+				}
+			}
 			tbLoanApplyService.save(oldtbLoanApply);
 			tbProcessLogService.saveLog(Integer.parseInt(oldtbLoanApply.getApplyState()+""), TbProcessLog.APPLY_TYPE,null, oldtbLoanApply.getProductId()+"", oldtbLoanApply.getId(), request.getParameter("operationRemark"), 1, 1, 1,statusstring,tbLoanApply.getCompName());			
 		
